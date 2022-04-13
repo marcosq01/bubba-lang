@@ -1,0 +1,16 @@
+prog pruebita2; 
+var  elefante, jirafa, perro : float ; manzana , sandia : int;
+{
+    manzana = "manzanilla";
+    sandia = 2;
+    elefante =  3.08976;
+    manzana=3*5+1;
+    if (sandia < manzana )
+    {
+        print(elefante);
+    }
+else
+{
+    print("muy mal");
+};
+}

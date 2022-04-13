@@ -1,0 +1,4 @@
+prog sapito :  
+main(){
+    print (a) ;
+}
