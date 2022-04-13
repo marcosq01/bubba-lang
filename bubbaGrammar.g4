@@ -62,7 +62,7 @@ func: FUNC type_simple ID LPARENTHESIS funcaux RPARENTHESIS LBRACE body RETURN e
 funcaux: args | ;
 
 classr:
-    CLASS ID class_a LBRACKET varsr class_b RBRACKET SEMICOLON;
+    CLASS ID class_a LBRACE varsr class_b RBRACE SEMICOLON;
 
 class_a:
     EXTENDS ID
@@ -119,7 +119,7 @@ type_simple:
     | STRING;
 
 call:                                                                            
-    ID call_a LPARENTHESIS call_b RPARENTHESIS;                               
+    ID call_a LPARENTHESIS call_b RPARENTHESIS SEMICOLON;                               
                                                                                  
 call_a:                                                                          
     DOT ID                                                                       
@@ -209,7 +209,8 @@ V_INT: DIGIT+;
 V_FLOAT: DIGIT+ DOT DIGIT+;
 
 WS: [ \t\r\n] + -> skip;
-
+COMMENT : '/*' .? '*/' -> skip ;
+LINE_COMMENT : '//' ~[\r\n]* -> skip ;
 ///
 
 

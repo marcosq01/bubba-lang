@@ -11,8 +11,8 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\63")
-        buf.write("\u01f8\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\65")
+        buf.write("\u01f9\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
         buf.write("\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31")
@@ -50,19 +50,19 @@ def serializedATN():
         buf.write("\3\65\3\65\5\65\u01a7\n\65\3\66\3\66\3\66\3\66\5\66\u01ad")
         buf.write("\n\66\3\67\3\67\3\67\3\67\3\67\3\67\38\38\58\u01b7\n8")
         buf.write("\39\39\59\u01bb\n9\3:\3:\3:\3:\3:\3;\3;\3;\5;\u01c5\n")
-        buf.write(";\3<\3<\3=\3=\3=\3=\3=\3=\3>\3>\3>\5>\u01d2\n>\3?\3?\5")
-        buf.write("?\u01d6\n?\3@\3@\3@\3A\3A\3A\5A\u01de\nA\3B\3B\3C\3C\3")
-        buf.write("C\3C\3C\3C\3C\3C\3C\3C\3D\3D\5D\u01ee\nD\3E\3E\3E\3E\3")
-        buf.write("E\3E\5E\u01f6\nE\3E\2\2F\2\4\6\b\n\f\16\20\22\24\26\30")
-        buf.write("\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`b")
-        buf.write("dfhjlnprtvxz|~\u0080\u0082\u0084\u0086\u0088\2\6\3\2\60")
-        buf.write("\61\4\2\31\34#$\3\2\5\7\4\2//\61\62\2\u01e2\2\u008a\3")
-        buf.write("\2\2\2\4\u0096\3\2\2\2\6\u009a\3\2\2\2\b\u00a0\3\2\2\2")
-        buf.write("\n\u00a2\3\2\2\2\f\u00a9\3\2\2\2\16\u00b1\3\2\2\2\20\u00b6")
-        buf.write("\3\2\2\2\22\u00b8\3\2\2\2\24\u00c1\3\2\2\2\26\u00c6\3")
-        buf.write("\2\2\2\30\u00c8\3\2\2\2\32\u00cd\3\2\2\2\34\u00d6\3\2")
-        buf.write("\2\2\36\u00d8\3\2\2\2 \u00dc\3\2\2\2\"\u00e3\3\2\2\2$")
-        buf.write("\u00ec\3\2\2\2&\u00f1\3\2\2\2(\u00f3\3\2\2\2*\u00fc\3")
+        buf.write(";\3<\3<\3=\3=\3=\3=\3=\3=\3=\3>\3>\3>\5>\u01d3\n>\3?\3")
+        buf.write("?\5?\u01d7\n?\3@\3@\3@\3A\3A\3A\5A\u01df\nA\3B\3B\3C\3")
+        buf.write("C\3C\3C\3C\3C\3C\3C\3C\3C\3D\3D\5D\u01ef\nD\3E\3E\3E\3")
+        buf.write("E\3E\3E\5E\u01f7\nE\3E\2\2F\2\4\6\b\n\f\16\20\22\24\26")
+        buf.write("\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\")
+        buf.write("^`bdfhjlnprtvxz|~\u0080\u0082\u0084\u0086\u0088\2\6\3")
+        buf.write("\2\60\61\4\2\31\34#$\3\2\5\7\4\2//\61\62\2\u01e3\2\u008a")
+        buf.write("\3\2\2\2\4\u0096\3\2\2\2\6\u009a\3\2\2\2\b\u00a0\3\2\2")
+        buf.write("\2\n\u00a2\3\2\2\2\f\u00a9\3\2\2\2\16\u00b1\3\2\2\2\20")
+        buf.write("\u00b6\3\2\2\2\22\u00b8\3\2\2\2\24\u00c1\3\2\2\2\26\u00c6")
+        buf.write("\3\2\2\2\30\u00c8\3\2\2\2\32\u00cd\3\2\2\2\34\u00d6\3")
+        buf.write("\2\2\2\36\u00d8\3\2\2\2 \u00dc\3\2\2\2\"\u00e3\3\2\2\2")
+        buf.write("$\u00ec\3\2\2\2&\u00f1\3\2\2\2(\u00f3\3\2\2\2*\u00fc\3")
         buf.write("\2\2\2,\u0101\3\2\2\2.\u0103\3\2\2\2\60\u0108\3\2\2\2")
         buf.write("\62\u0110\3\2\2\2\64\u0112\3\2\2\2\66\u0118\3\2\2\28\u0122")
         buf.write("\3\2\2\2:\u012c\3\2\2\2<\u0131\3\2\2\2>\u0133\3\2\2\2")
@@ -74,9 +74,9 @@ def serializedATN():
         buf.write("d\u019e\3\2\2\2f\u01a0\3\2\2\2h\u01a6\3\2\2\2j\u01ac\3")
         buf.write("\2\2\2l\u01ae\3\2\2\2n\u01b6\3\2\2\2p\u01ba\3\2\2\2r\u01bc")
         buf.write("\3\2\2\2t\u01c4\3\2\2\2v\u01c6\3\2\2\2x\u01c8\3\2\2\2")
-        buf.write("z\u01d1\3\2\2\2|\u01d5\3\2\2\2~\u01d7\3\2\2\2\u0080\u01dd")
-        buf.write("\3\2\2\2\u0082\u01df\3\2\2\2\u0084\u01e1\3\2\2\2\u0086")
-        buf.write("\u01ed\3\2\2\2\u0088\u01f5\3\2\2\2\u008a\u008b\7\3\2\2")
+        buf.write("z\u01d2\3\2\2\2|\u01d6\3\2\2\2~\u01d8\3\2\2\2\u0080\u01de")
+        buf.write("\3\2\2\2\u0082\u01e0\3\2\2\2\u0084\u01e2\3\2\2\2\u0086")
+        buf.write("\u01ee\3\2\2\2\u0088\u01f6\3\2\2\2\u008a\u008b\7\3\2\2")
         buf.write("\u008b\u008c\7\60\2\2\u008c\u008d\7\36\2\2\u008d\u008e")
         buf.write("\5\4\3\2\u008e\u008f\5\6\4\2\u008f\u0090\5\b\5\2\u0090")
         buf.write("\u0091\5\n\6\2\u0091\3\3\2\2\2\u0092\u0093\5X-\2\u0093")
@@ -172,8 +172,8 @@ def serializedATN():
         buf.write("\21\2\2\u016eU\3\2\2\2\u016f\u0172\5r:\2\u0170\u0172\3")
         buf.write("\2\2\2\u0171\u016f\3\2\2\2\u0171\u0170\3\2\2\2\u0172W")
         buf.write("\3\2\2\2\u0173\u0174\7)\2\2\u0174\u0175\7\60\2\2\u0175")
-        buf.write("\u0176\5Z.\2\u0176\u0177\7\22\2\2\u0177\u0178\5l\67\2")
-        buf.write("\u0178\u0179\5\\/\2\u0179\u017a\7\23\2\2\u017a\u017b\7")
+        buf.write("\u0176\5Z.\2\u0176\u0177\7\20\2\2\u0177\u0178\5l\67\2")
+        buf.write("\u0178\u0179\5\\/\2\u0179\u017a\7\21\2\2\u017a\u017b\7")
         buf.write("\24\2\2\u017bY\3\2\2\2\u017c\u017d\7*\2\2\u017d\u0180")
         buf.write("\7\60\2\2\u017e\u0180\3\2\2\2\u017f\u017c\3\2\2\2\u017f")
         buf.write("\u017e\3\2\2\2\u0180[\3\2\2\2\u0181\u0184\5\u0088E\2\u0182")
@@ -206,27 +206,28 @@ def serializedATN():
         buf.write("\2\2\u01c4\u01c3\3\2\2\2\u01c5u\3\2\2\2\u01c6\u01c7\t")
         buf.write("\4\2\2\u01c7w\3\2\2\2\u01c8\u01c9\7\60\2\2\u01c9\u01ca")
         buf.write("\5z>\2\u01ca\u01cb\7\16\2\2\u01cb\u01cc\5|?\2\u01cc\u01cd")
-        buf.write("\7\17\2\2\u01cdy\3\2\2\2\u01ce\u01cf\7\f\2\2\u01cf\u01d2")
-        buf.write("\7\60\2\2\u01d0\u01d2\3\2\2\2\u01d1\u01ce\3\2\2\2\u01d1")
-        buf.write("\u01d0\3\2\2\2\u01d2{\3\2\2\2\u01d3\u01d6\5~@\2\u01d4")
-        buf.write("\u01d6\3\2\2\2\u01d5\u01d3\3\2\2\2\u01d5\u01d4\3\2\2\2")
-        buf.write("\u01d6}\3\2\2\2\u01d7\u01d8\5P)\2\u01d8\u01d9\5\u0080")
-        buf.write("A\2\u01d9\177\3\2\2\2\u01da\u01db\7\r\2\2\u01db\u01de")
-        buf.write("\5~@\2\u01dc\u01de\3\2\2\2\u01dd\u01da\3\2\2\2\u01dd\u01dc")
-        buf.write("\3\2\2\2\u01de\u0081\3\2\2\2\u01df\u01e0\t\5\2\2\u01e0")
-        buf.write("\u0083\3\2\2\2\u01e1\u01e2\7+\2\2\u01e2\u01e3\7,\2\2\u01e3")
-        buf.write("\u01e4\7\60\2\2\u01e4\u01e5\7\16\2\2\u01e5\u01e6\5\u0086")
-        buf.write("D\2\u01e6\u01e7\7\17\2\2\u01e7\u01e8\7\20\2\2\u01e8\u01e9")
-        buf.write("\5f\64\2\u01e9\u01ea\7\21\2\2\u01ea\u0085\3\2\2\2\u01eb")
-        buf.write("\u01ee\5r:\2\u01ec\u01ee\3\2\2\2\u01ed\u01eb\3\2\2\2\u01ed")
-        buf.write("\u01ec\3\2\2\2\u01ee\u0087\3\2\2\2\u01ef\u01f0\5\u0084")
-        buf.write("C\2\u01f0\u01f1\5\u0088E\2\u01f1\u01f6\3\2\2\2\u01f2\u01f3")
-        buf.write("\5T+\2\u01f3\u01f4\5\u0088E\2\u01f4\u01f6\3\2\2\2\u01f5")
-        buf.write("\u01ef\3\2\2\2\u01f5\u01f2\3\2\2\2\u01f6\u0089\3\2\2\2")
-        buf.write("&\u0096\u009a\u00a0\u00b6\u00c6\u00cd\u00d6\u00e3\u00ec")
-        buf.write("\u00f1\u0101\u0110\u0118\u0122\u012c\u0131\u013b\u0145")
-        buf.write("\u014e\u0158\u0160\u0171\u017f\u0183\u0191\u019e\u01a6")
-        buf.write("\u01ac\u01b6\u01ba\u01c4\u01d1\u01d5\u01dd\u01ed\u01f5")
+        buf.write("\7\17\2\2\u01cd\u01ce\7\24\2\2\u01cey\3\2\2\2\u01cf\u01d0")
+        buf.write("\7\f\2\2\u01d0\u01d3\7\60\2\2\u01d1\u01d3\3\2\2\2\u01d2")
+        buf.write("\u01cf\3\2\2\2\u01d2\u01d1\3\2\2\2\u01d3{\3\2\2\2\u01d4")
+        buf.write("\u01d7\5~@\2\u01d5\u01d7\3\2\2\2\u01d6\u01d4\3\2\2\2\u01d6")
+        buf.write("\u01d5\3\2\2\2\u01d7}\3\2\2\2\u01d8\u01d9\5P)\2\u01d9")
+        buf.write("\u01da\5\u0080A\2\u01da\177\3\2\2\2\u01db\u01dc\7\r\2")
+        buf.write("\2\u01dc\u01df\5~@\2\u01dd\u01df\3\2\2\2\u01de\u01db\3")
+        buf.write("\2\2\2\u01de\u01dd\3\2\2\2\u01df\u0081\3\2\2\2\u01e0\u01e1")
+        buf.write("\t\5\2\2\u01e1\u0083\3\2\2\2\u01e2\u01e3\7+\2\2\u01e3")
+        buf.write("\u01e4\7,\2\2\u01e4\u01e5\7\60\2\2\u01e5\u01e6\7\16\2")
+        buf.write("\2\u01e6\u01e7\5\u0086D\2\u01e7\u01e8\7\17\2\2\u01e8\u01e9")
+        buf.write("\7\20\2\2\u01e9\u01ea\5f\64\2\u01ea\u01eb\7\21\2\2\u01eb")
+        buf.write("\u0085\3\2\2\2\u01ec\u01ef\5r:\2\u01ed\u01ef\3\2\2\2\u01ee")
+        buf.write("\u01ec\3\2\2\2\u01ee\u01ed\3\2\2\2\u01ef\u0087\3\2\2\2")
+        buf.write("\u01f0\u01f1\5\u0084C\2\u01f1\u01f2\5\u0088E\2\u01f2\u01f7")
+        buf.write("\3\2\2\2\u01f3\u01f4\5T+\2\u01f4\u01f5\5\u0088E\2\u01f5")
+        buf.write("\u01f7\3\2\2\2\u01f6\u01f0\3\2\2\2\u01f6\u01f3\3\2\2\2")
+        buf.write("\u01f7\u0089\3\2\2\2&\u0096\u009a\u00a0\u00b6\u00c6\u00cd")
+        buf.write("\u00d6\u00e3\u00ec\u00f1\u0101\u0110\u0118\u0122\u012c")
+        buf.write("\u0131\u013b\u0145\u014e\u0158\u0160\u0171\u017f\u0183")
+        buf.write("\u0191\u019e\u01a6\u01ac\u01b6\u01ba\u01c4\u01d2\u01d6")
+        buf.write("\u01de\u01ee\u01f6")
         return buf.getvalue()
 
 
@@ -257,7 +258,7 @@ class bubbaGrammarParser ( Parser ):
                       "AND", "OR", "NOT", "EQEQUAL", "NOTEQUAL", "WHILE", 
                       "FOR", "STEP", "RETURN", "CLASS", "EXTENDS", "FUNC", 
                       "VOID", "INPUT", "TO", "V_STRING", "ID", "V_INT", 
-                      "V_FLOAT", "WS" ]
+                      "V_FLOAT", "WS", "COMMENT", "LINE_COMMENT" ]
 
     RULE_program = 0
     RULE_paux = 1
@@ -391,6 +392,8 @@ class bubbaGrammarParser ( Parser ):
     V_INT=47
     V_FLOAT=48
     WS=49
+    COMMENT=50
+    LINE_COMMENT=51
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -3077,8 +3080,8 @@ class bubbaGrammarParser ( Parser ):
             return self.getTypedRuleContext(bubbaGrammarParser.Class_aContext,0)
 
 
-        def LBRACKET(self):
-            return self.getToken(bubbaGrammarParser.LBRACKET, 0)
+        def LBRACE(self):
+            return self.getToken(bubbaGrammarParser.LBRACE, 0)
 
         def varsr(self):
             return self.getTypedRuleContext(bubbaGrammarParser.VarsrContext,0)
@@ -3088,8 +3091,8 @@ class bubbaGrammarParser ( Parser ):
             return self.getTypedRuleContext(bubbaGrammarParser.Class_bContext,0)
 
 
-        def RBRACKET(self):
-            return self.getToken(bubbaGrammarParser.RBRACKET, 0)
+        def RBRACE(self):
+            return self.getToken(bubbaGrammarParser.RBRACE, 0)
 
         def SEMICOLON(self):
             return self.getToken(bubbaGrammarParser.SEMICOLON, 0)
@@ -3121,13 +3124,13 @@ class bubbaGrammarParser ( Parser ):
             self.state = 371
             self.class_a()
             self.state = 372
-            self.match(bubbaGrammarParser.LBRACKET)
+            self.match(bubbaGrammarParser.LBRACE)
             self.state = 373
             self.varsr()
             self.state = 374
             self.class_b()
             self.state = 375
-            self.match(bubbaGrammarParser.RBRACKET)
+            self.match(bubbaGrammarParser.RBRACE)
             self.state = 376
             self.match(bubbaGrammarParser.SEMICOLON)
         except RecognitionException as re:
@@ -3181,7 +3184,7 @@ class bubbaGrammarParser ( Parser ):
                 self.state = 379
                 self.match(bubbaGrammarParser.ID)
                 pass
-            elif token in [bubbaGrammarParser.LBRACKET]:
+            elif token in [bubbaGrammarParser.LBRACE]:
                 self.enterOuterAlt(localctx, 2)
 
                 pass
@@ -3235,7 +3238,7 @@ class bubbaGrammarParser ( Parser ):
                 self.state = 383
                 self.methods()
                 pass
-            elif token in [bubbaGrammarParser.RBRACKET]:
+            elif token in [bubbaGrammarParser.RBRACE]:
                 self.enterOuterAlt(localctx, 2)
 
                 pass
@@ -3843,7 +3846,7 @@ class bubbaGrammarParser ( Parser ):
                 self.state = 438
                 self.varsr()
                 pass
-            elif token in [bubbaGrammarParser.MAIN, bubbaGrammarParser.PRINT, bubbaGrammarParser.IF, bubbaGrammarParser.RBRACKET, bubbaGrammarParser.WHILE, bubbaGrammarParser.FOR, bubbaGrammarParser.FUNC, bubbaGrammarParser.INPUT, bubbaGrammarParser.ID]:
+            elif token in [bubbaGrammarParser.MAIN, bubbaGrammarParser.PRINT, bubbaGrammarParser.IF, bubbaGrammarParser.RBRACE, bubbaGrammarParser.WHILE, bubbaGrammarParser.FOR, bubbaGrammarParser.FUNC, bubbaGrammarParser.INPUT, bubbaGrammarParser.ID]:
                 self.enterOuterAlt(localctx, 2)
 
                 pass
@@ -4053,6 +4056,9 @@ class bubbaGrammarParser ( Parser ):
         def RPARENTHESIS(self):
             return self.getToken(bubbaGrammarParser.RPARENTHESIS, 0)
 
+        def SEMICOLON(self):
+            return self.getToken(bubbaGrammarParser.SEMICOLON, 0)
+
         def getRuleIndex(self):
             return bubbaGrammarParser.RULE_call
 
@@ -4083,6 +4089,8 @@ class bubbaGrammarParser ( Parser ):
             self.call_b()
             self.state = 458
             self.match(bubbaGrammarParser.RPARENTHESIS)
+            self.state = 459
+            self.match(bubbaGrammarParser.SEMICOLON)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -4124,14 +4132,14 @@ class bubbaGrammarParser ( Parser ):
         localctx = bubbaGrammarParser.Call_aContext(self, self._ctx, self.state)
         self.enterRule(localctx, 120, self.RULE_call_a)
         try:
-            self.state = 463
+            self.state = 464
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [bubbaGrammarParser.DOT]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 460
-                self.match(bubbaGrammarParser.DOT)
                 self.state = 461
+                self.match(bubbaGrammarParser.DOT)
+                self.state = 462
                 self.match(bubbaGrammarParser.ID)
                 pass
             elif token in [bubbaGrammarParser.LPARENTHESIS]:
@@ -4180,12 +4188,12 @@ class bubbaGrammarParser ( Parser ):
         localctx = bubbaGrammarParser.Call_bContext(self, self._ctx, self.state)
         self.enterRule(localctx, 122, self.RULE_call_b)
         try:
-            self.state = 467
+            self.state = 468
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [bubbaGrammarParser.LPARENTHESIS, bubbaGrammarParser.ADD, bubbaGrammarParser.MINUS, bubbaGrammarParser.V_STRING, bubbaGrammarParser.ID, bubbaGrammarParser.V_INT, bubbaGrammarParser.V_FLOAT]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 465
+                self.state = 466
                 self.params()
                 pass
             elif token in [bubbaGrammarParser.RPARENTHESIS]:
@@ -4239,9 +4247,9 @@ class bubbaGrammarParser ( Parser ):
         self.enterRule(localctx, 124, self.RULE_params)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 469
-            self.expression()
             self.state = 470
+            self.expression()
+            self.state = 471
             self.params_a()
         except RecognitionException as re:
             localctx.exception = re
@@ -4285,14 +4293,14 @@ class bubbaGrammarParser ( Parser ):
         localctx = bubbaGrammarParser.Params_aContext(self, self._ctx, self.state)
         self.enterRule(localctx, 126, self.RULE_params_a)
         try:
-            self.state = 475
+            self.state = 476
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [bubbaGrammarParser.COMMA]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 472
-                self.match(bubbaGrammarParser.COMMA)
                 self.state = 473
+                self.match(bubbaGrammarParser.COMMA)
+                self.state = 474
                 self.params()
                 pass
             elif token in [bubbaGrammarParser.RPARENTHESIS]:
@@ -4348,7 +4356,7 @@ class bubbaGrammarParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 477
+            self.state = 478
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << bubbaGrammarParser.V_STRING) | (1 << bubbaGrammarParser.V_INT) | (1 << bubbaGrammarParser.V_FLOAT))) != 0)):
                 self._errHandler.recoverInline(self)
@@ -4420,23 +4428,23 @@ class bubbaGrammarParser ( Parser ):
         self.enterRule(localctx, 130, self.RULE_void)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 479
-            self.match(bubbaGrammarParser.FUNC)
             self.state = 480
-            self.match(bubbaGrammarParser.VOID)
+            self.match(bubbaGrammarParser.FUNC)
             self.state = 481
-            self.match(bubbaGrammarParser.ID)
+            self.match(bubbaGrammarParser.VOID)
             self.state = 482
-            self.match(bubbaGrammarParser.LPARENTHESIS)
+            self.match(bubbaGrammarParser.ID)
             self.state = 483
-            self.void_a()
+            self.match(bubbaGrammarParser.LPARENTHESIS)
             self.state = 484
-            self.match(bubbaGrammarParser.RPARENTHESIS)
+            self.void_a()
             self.state = 485
-            self.match(bubbaGrammarParser.LBRACE)
+            self.match(bubbaGrammarParser.RPARENTHESIS)
             self.state = 486
-            self.body()
+            self.match(bubbaGrammarParser.LBRACE)
             self.state = 487
+            self.body()
+            self.state = 488
             self.match(bubbaGrammarParser.RBRACE)
         except RecognitionException as re:
             localctx.exception = re
@@ -4477,12 +4485,12 @@ class bubbaGrammarParser ( Parser ):
         localctx = bubbaGrammarParser.Void_aContext(self, self._ctx, self.state)
         self.enterRule(localctx, 132, self.RULE_void_a)
         try:
-            self.state = 491
+            self.state = 492
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [bubbaGrammarParser.FLOAT, bubbaGrammarParser.INT, bubbaGrammarParser.STRING]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 489
+                self.state = 490
                 self.args()
                 pass
             elif token in [bubbaGrammarParser.RPARENTHESIS]:
@@ -4539,22 +4547,22 @@ class bubbaGrammarParser ( Parser ):
         localctx = bubbaGrammarParser.MethodsContext(self, self._ctx, self.state)
         self.enterRule(localctx, 134, self.RULE_methods)
         try:
-            self.state = 499
+            self.state = 500
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,35,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 493
-                self.void()
                 self.state = 494
+                self.void()
+                self.state = 495
                 self.methods()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 496
-                self.func()
                 self.state = 497
+                self.func()
+                self.state = 498
                 self.methods()
                 pass
 
