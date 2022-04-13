@@ -1,5 +1,6 @@
 prog gato:
 
+//crear clases
 class animal {
     vars int: edad, altura;
     vars float: xd;
