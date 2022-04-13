@@ -203,7 +203,7 @@ TO:'to';
 fragment DIGIT: [0-9];
 fragment LETTER: [A-Za-z];
 
-V_STRING: QUOTE [^QUOTE]*  QUOTE;
+V_STRING: QUOTE ~ [QUOTE]*  QUOTE;
 ID: (LETTER DIGIT*)+;
 V_INT: DIGIT+;
 V_FLOAT: DIGIT+ DOT DIGIT+;
