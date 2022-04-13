@@ -18,4 +18,4 @@ Con la gramática y los tokens terminados, procedimos a usar algún generador de
 En nuestro caso usamos ANTLR para el lenguaje Python (el que se usará para el compilador).
 
 Pasar la gramática a ANTLR fue tarea fácil ya que la sintaxis es muy parecida. Se crearon algunos archivos de prueba con lenguaje Bubba, para poner a prueba la gramática.
-
+El archivo test.py imprime los errores(si existen) de cada uno de los archivos prueba.
