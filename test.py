@@ -9,7 +9,7 @@ import sys
 
 
 def main():
-    listTests = ["test.txt","test2.txt","test3.txt", "test4.txt"]
+    listTests = ["test.txt","test2.txt","test3.txt", "test4.txt", "test5.txt"]
     for x in listTests:
         print( '\n'+ x +' Errors:\n')
         parser = bubbaGrammarParser(CommonTokenStream(bubbaGrammarLexer(FileStream(x))))

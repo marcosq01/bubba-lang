@@ -1,0 +1,9 @@
+prog karen:
+
+func int f() {
+    print("hola");
+}
+
+main() {
+    vars int: a[rwer][1];
+}

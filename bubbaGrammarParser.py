@@ -1,4 +1,4 @@
-# Generated from bubbaGrammar.g4 by ANTLR 4.9.3
+# Generated from bubbaGrammar.g4 by ANTLR 4.9
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -397,7 +397,7 @@ class bubbaGrammarParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.9.3")
+        self.checkVersion("4.9")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -405,7 +405,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ProgramContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -480,7 +479,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class PauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -540,7 +538,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Paux2Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -594,7 +591,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Paux3Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -654,7 +650,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class MainContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -721,7 +716,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class WhilerContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -794,7 +788,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class WhileauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -842,7 +835,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Whileaux2Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -896,7 +888,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ForrContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -975,7 +966,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ForauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1025,7 +1015,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Foraux2Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1084,7 +1073,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Foraux3Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1132,7 +1120,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Foraux4Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1186,7 +1173,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class StatementContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1295,7 +1281,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class LidContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1347,7 +1332,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class LidauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1395,7 +1379,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class LauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1459,7 +1442,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Laux2Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1534,7 +1516,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class MauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1592,7 +1573,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class CondContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1671,7 +1651,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class CondauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1719,7 +1698,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Condaux2Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1773,7 +1751,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Condaux3Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1830,7 +1807,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class AssignContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1883,7 +1859,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class AssignauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1947,7 +1922,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class FactorContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1995,7 +1969,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class FauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2056,7 +2029,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Faux2Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2150,7 +2122,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Faux3Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2233,7 +2204,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Faux4Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2292,7 +2262,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class TermContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2340,7 +2309,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class TermauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2409,7 +2377,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ExpContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2457,7 +2424,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ExpauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2526,7 +2492,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class AexpContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2574,7 +2539,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class AexpauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2634,7 +2598,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class AexpsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2696,7 +2659,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class BexpContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2744,7 +2706,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class BexpauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2803,7 +2764,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2851,7 +2811,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ExpressionauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2910,7 +2869,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class FuncContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3010,7 +2968,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class FuncauxContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3064,7 +3021,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ClassrContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3143,7 +3099,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Class_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3201,7 +3156,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Class_bContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3255,7 +3209,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class OutputContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3323,7 +3276,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Output_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3388,7 +3340,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class InputrContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3455,7 +3406,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Input_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3519,7 +3469,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class BodyContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3573,7 +3522,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Body_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3627,7 +3575,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Body_bContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3687,7 +3634,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class VarsrContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3751,7 +3697,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Vars_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3809,7 +3754,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Vars_bContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3863,7 +3807,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ArgsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3921,7 +3864,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Args_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3980,7 +3922,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Type_simpleContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4033,7 +3974,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class CallContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4101,7 +4041,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Call_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4159,7 +4098,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Call_bContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4213,7 +4151,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class ParamsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4261,7 +4198,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Params_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4320,7 +4256,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Var_cteContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4373,7 +4308,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class VoidContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4456,7 +4390,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class Void_aContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4510,7 +4443,6 @@ class bubbaGrammarParser ( Parser ):
 
 
     class MethodsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)

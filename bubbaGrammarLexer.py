@@ -1,11 +1,8 @@
-# Generated from bubbaGrammar.g4 by ANTLR 4.9.3
+# Generated from bubbaGrammar.g4 by ANTLR 4.9
 from antlr4 import *
 from io import StringIO
+from typing.io import TextIO
 import sys
-if sys.version_info[1] > 5:
-    from typing import TextIO
-else:
-    from typing.io import TextIO
 
 
 
@@ -44,7 +41,7 @@ def serializedATN():
         buf.write("\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22#\23%\24")
         buf.write("\'\25)\26+\27-\30/\31\61\32\63\33\65\34\67\359\36;\37")
         buf.write("= ?!A\"C#E$G%I&K\'M(O)Q*S+U,W-Y.[\2]\2_/a\60c\61e\62g")
-        buf.write("\63i\64k\65\3\2\7\3\2\62;\4\2C\\c|\7\2GGQQSSVW``\5\2\13")
+        buf.write("\63i\64k\65\3\2\7\3\2\62;\4\2C\\c|\6\2GGQQSSVW\5\2\13")
         buf.write("\f\17\17\"\"\4\2\f\f\17\17\2\u0155\2\3\3\2\2\2\2\5\3\2")
         buf.write("\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2")
         buf.write("\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2")
@@ -122,7 +119,7 @@ def serializedATN():
         buf.write("\7w\2\2\u0105\u0106\7v\2\2\u0106X\3\2\2\2\u0107\u0108")
         buf.write("\7v\2\2\u0108\u0109\7q\2\2\u0109Z\3\2\2\2\u010a\u010b")
         buf.write("\t\2\2\2\u010b\\\3\2\2\2\u010c\u010d\t\3\2\2\u010d^\3")
-        buf.write("\2\2\2\u010e\u0112\5;\36\2\u010f\u0111\t\4\2\2\u0110\u010f")
+        buf.write("\2\2\2\u010e\u0112\5;\36\2\u010f\u0111\n\4\2\2\u0110\u010f")
         buf.write("\3\2\2\2\u0111\u0114\3\2\2\2\u0112\u0110\3\2\2\2\u0112")
         buf.write("\u0113\3\2\2\2\u0113\u0115\3\2\2\2\u0114\u0112\3\2\2\2")
         buf.write("\u0115\u0116\5;\36\2\u0116`\3\2\2\2\u0117\u011b\5]/\2")
@@ -247,7 +244,7 @@ class bubbaGrammarLexer(Lexer):
 
     def __init__(self, input=None, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.9.3")
+        self.checkVersion("4.9")
         self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
         self._actions = None
         self._predicates = None
