@@ -1,0 +1,15 @@
+prog gato:
+
+class animal {
+    vars int: edad, altura;
+    vars float: xd;
+};
+
+class gato {
+    vars string: hola;
+};
+
+main() {
+    vars int: a;
+    f(a);
+}
