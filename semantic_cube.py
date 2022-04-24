@@ -4,8 +4,6 @@ class semantic_cube():
     def __init__(self):
         self.cube = {
             
-            # None es error
-
             'int' : {
                 'int' : {
                     '+' : 'int',
@@ -32,22 +30,22 @@ class semantic_cube():
                     '<=' : 'int',
                     '!=' : 'int',
                     '=' : 'int',
-                    '&&' : None,
-                    '||' : None
+                    '&&' : 'error',
+                    '||' : 'error'
                 },
                 'string' : {
-                    '+' : None,
-                    '-' : None,
-                    '*' : None,
-                    '/' : None,
-                    '>' : None,
-                    '>=' : None,
-                    '<' : None,
-                    '<=' : None,
-                    '!=' : None,
-                    '=' : None,
-                    '&&' : None,
-                    '||' : None
+                    '+' : 'error',
+                    '-' : 'error',
+                    '*' : 'error',
+                    '/' : 'error',
+                    '>' : 'error',
+                    '>=' : 'error',
+                    '<' : 'error',
+                    '<=' : 'error',
+                    '!=' : 'error',
+                    '=' : 'error',
+                    '&&' : 'error',
+                    '||' : 'error'
                 }
             },
 
@@ -63,8 +61,8 @@ class semantic_cube():
                     '<=' : 'int',
                     '!=' : 'int',
                     '=' : 'int',
-                    '&&' : None,
-                    '||' : None
+                    '&&' : 'error',
+                    '||' : 'error'
                 },
                 'float' : {
                     '+' : 'float',
@@ -77,67 +75,67 @@ class semantic_cube():
                     '<=' : 'int',
                     '!=' : 'int',
                     '=' : 'int',
-                    '&&' : None,
-                    '||' : None
+                    '&&' : 'error',
+                    '||' : 'error'
                 },
                 'string' : {
-                    '+' : None,
-                    '-' : None,
-                    '*' : None,
-                    '/' : None,
-                    '>' : None,
-                    '>=' : None,
-                    '<' : None,
-                    '<=' : None,
-                    '!=' : None,
-                    '=' : None,
-                    '&&' : None,
-                    '||' : None
+                    '+' : 'error',
+                    '-' : 'error',
+                    '*' : 'error',
+                    '/' : 'error',
+                    '>' : 'error',
+                    '>=' : 'error',
+                    '<' : 'error',
+                    '<=' : 'error',
+                    '!=' : 'error',
+                    '=' : 'error',
+                    '&&' : 'error',
+                    '||' : 'error'
                 }
             },
 
             'string' : {
                 'int' : {
-                    '+' : None,
-                    '-' : None,
-                    '*' : None,
-                    '/' : None,
-                    '>' : None,
-                    '>=' : None,
-                    '<' : None,
-                    '<=' : None,
-                    '!=' : None,
-                    '=' : None,
-                    '&&' : None,
-                    '||' : None
+                    '+' : 'error',
+                    '-' : 'error',
+                    '*' : 'error',
+                    '/' : 'error',
+                    '>' : 'error',
+                    '>=' : 'error',
+                    '<' : 'error',
+                    '<=' : 'error',
+                    '!=' : 'error',
+                    '=' : 'error',
+                    '&&' : 'error',
+                    '||' : 'error'
                 },
                 'float' : {
-                    '+' : None,
-                    '-' : None,
-                    '*' : None,
-                    '/' : None,
-                    '>' : None,
-                    '>=' : None,
-                    '<' : None,
-                    '<=' : None,
-                    '!=' : None,
-                    '=' : None,
-                    '&&' : None,
-                    '||' : None
+                    '+' : 'error',
+                    '-' : 'error',
+                    '*' : 'error',
+                    '/' : 'error',
+                    '>' : 'error',
+                    '>=' : 'error',
+                    '<' : 'error',
+                    '<=' : 'error',
+                    '!=' : 'error',
+                    '=' : 'error',
+                    '&&' : 'error',
+                    '||' : 'error'
                 },
                 'string' : {
-                    '+' : None,
-                    '-' : None,
-                    '*' : None,
-                    '/' : None,
+                    '+' : 'error',
+                    '-' : 'error',
+                    '*' : 'error',
+                    '/' : 'error',
                     '>' : 'int',
                     '>=' : 'int',
                     '<' : 'int',
                     '<=' : 'int',
                     '!=' : 'int',
                     '=' : 'int',
-                    '&&' : None,
-                    '||' : None
+                    '&&' : 'error',
+                    '||' : 'error'
                 }
             }
         }
