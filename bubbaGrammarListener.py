@@ -1,4 +1,4 @@
-# Generated from bubbaGrammar.g4 by ANTLR 4.9
+# Generated from bubbaGrammar.g4 by ANTLR 4.9.3
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .bubbaGrammarParser import bubbaGrammarParser
@@ -179,6 +179,42 @@ class bubbaGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by bubbaGrammarParser#var.
+    def enterVar(self, ctx:bubbaGrammarParser.VarContext):
+        pass
+
+    # Exit a parse tree produced by bubbaGrammarParser#var.
+    def exitVar(self, ctx:bubbaGrammarParser.VarContext):
+        pass
+
+
+    # Enter a parse tree produced by bubbaGrammarParser#varaux.
+    def enterVaraux(self, ctx:bubbaGrammarParser.VarauxContext):
+        pass
+
+    # Exit a parse tree produced by bubbaGrammarParser#varaux.
+    def exitVaraux(self, ctx:bubbaGrammarParser.VarauxContext):
+        pass
+
+
+    # Enter a parse tree produced by bubbaGrammarParser#varaux2.
+    def enterVaraux2(self, ctx:bubbaGrammarParser.Varaux2Context):
+        pass
+
+    # Exit a parse tree produced by bubbaGrammarParser#varaux2.
+    def exitVaraux2(self, ctx:bubbaGrammarParser.Varaux2Context):
+        pass
+
+
+    # Enter a parse tree produced by bubbaGrammarParser#varaux3.
+    def enterVaraux3(self, ctx:bubbaGrammarParser.Varaux3Context):
+        pass
+
+    # Exit a parse tree produced by bubbaGrammarParser#varaux3.
+    def exitVaraux3(self, ctx:bubbaGrammarParser.Varaux3Context):
+        pass
+
+
     # Enter a parse tree produced by bubbaGrammarParser#cond.
     def enterCond(self, ctx:bubbaGrammarParser.CondContext):
         pass
@@ -224,15 +260,6 @@ class bubbaGrammarListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by bubbaGrammarParser#assignaux.
-    def enterAssignaux(self, ctx:bubbaGrammarParser.AssignauxContext):
-        pass
-
-    # Exit a parse tree produced by bubbaGrammarParser#assignaux.
-    def exitAssignaux(self, ctx:bubbaGrammarParser.AssignauxContext):
-        pass
-
-
     # Enter a parse tree produced by bubbaGrammarParser#factor.
     def enterFactor(self, ctx:bubbaGrammarParser.FactorContext):
         pass
@@ -257,24 +284,6 @@ class bubbaGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by bubbaGrammarParser#faux2.
     def exitFaux2(self, ctx:bubbaGrammarParser.Faux2Context):
-        pass
-
-
-    # Enter a parse tree produced by bubbaGrammarParser#faux3.
-    def enterFaux3(self, ctx:bubbaGrammarParser.Faux3Context):
-        pass
-
-    # Exit a parse tree produced by bubbaGrammarParser#faux3.
-    def exitFaux3(self, ctx:bubbaGrammarParser.Faux3Context):
-        pass
-
-
-    # Enter a parse tree produced by bubbaGrammarParser#faux4.
-    def enterFaux4(self, ctx:bubbaGrammarParser.Faux4Context):
-        pass
-
-    # Exit a parse tree produced by bubbaGrammarParser#faux4.
-    def exitFaux4(self, ctx:bubbaGrammarParser.Faux4Context):
         pass
 
 

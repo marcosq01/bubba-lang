@@ -20,7 +20,7 @@ foraux2: STEP foraux | ;
 foraux3: statement foraux4;
 foraux4: foraux3 | ;
 
-statement: assign | call | cond| forr| whiler| output| inputr;
+statement: assign | call SEMICOLON| cond| forr| whiler| output| inputr;
 
 lid: ID lidaux SEMICOLON;
 lidaux: laux laux2;
@@ -28,19 +28,21 @@ laux: COMMA ID laux| ;
 laux2: LBRACKET V_INT maux RBRACKET laux | ;
 maux: COMMA V_INT | ;
 
+var : ID varaux varaux2 ;
+varaux: DOT ID  | ;
+varaux2: LBRACKET expression varaux3 RBRACKET | ;
+varaux3: COMMA expression | ;
+
 cond: IF LPARENTHESIS expression RPARENTHESIS LBRACE condaux RBRACE condaux3;
 condaux: statement condaux2;
 condaux2: condaux| ;
 condaux3: ELSE LBRACE condaux RBRACE;
 
-assign: assignaux EQUAL expression;
-assignaux : ID DOT ID | ID ;
+assign: var EQUAL expression SEMICOLON;
 
 factor: faux faux2;
 faux: ADD | MINUS | ;
-faux2: var_cte| call|LPARENTHESIS expression RPARENTHESIS| ID faux3;
-faux3:LBRACKET expression faux4 RBRACKET | DOT ID| ;
-faux4: COMMA expression | ;
+faux2: var_cte| call|LPARENTHESIS expression RPARENTHESIS| var;
 
 term: factor termaux;
 termaux: STAR term | SLASH term | ;
@@ -80,10 +82,10 @@ output_a:
     | ;
 
 inputr:
-    INPUT LPARENTHESIS ID input_a RPARENTHESIS SEMICOLON;
+    INPUT LPARENTHESIS var input_a RPARENTHESIS SEMICOLON;
 
 input_a:
-    COMMA ID input_a
+    COMMA var input_a
     | ;
 
 body:
@@ -119,7 +121,7 @@ type_simple:
     | STRING;
 
 call:                                                                            
-    ID call_a LPARENTHESIS call_b RPARENTHESIS SEMICOLON;                               
+    ID call_a LPARENTHESIS call_b RPARENTHESIS;                               
                                                                                  
 call_a:                                                                          
     DOT ID                                                                       

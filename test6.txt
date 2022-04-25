@@ -1,0 +1,8 @@
+prog arrays:
+
+
+main() {
+    vars int: a[3,1];
+    a[5] = 8;
+    input(b, c[8], d[f()], carro.motor);
+}
