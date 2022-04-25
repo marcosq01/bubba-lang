@@ -19,3 +19,7 @@ En nuestro caso usamos ANTLR para el lenguaje Python (el que se usará para el c
 
 Pasar la gramática a ANTLR fue tarea fácil ya que la sintaxis es muy parecida. Se crearon algunos archivos de prueba con lenguaje Bubba, para poner a prueba la gramática.
 El archivo test.py imprime los errores(si existen) de cada uno de los archivos prueba.
+
+### Avance 2
+
+En este avance construímos el cubo semántico, para este mismo decidimos utilizar un diccionario para poder acceder facilmente a los valores. Además de ello corregimos algunos errores de acceso a las valores de arreglos dentro de la gramática. Se hizo un diseño de la tabla de directorio de variables pero no tuvimos tiempo de  implementarlo.
