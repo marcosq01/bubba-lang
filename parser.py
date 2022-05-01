@@ -3,6 +3,7 @@
 from ply import yacc
 from lexer import tokens
 #
+from stack import Stack
 from semantic_cube import SemanticCube
 from quadruple import Quadruple
 from vars_table import VarsTable, VariableContext
@@ -14,6 +15,25 @@ from function_directory import FunctionDirectory, FunctionContext
 # TODO algunas reglas tienen mal el orden (se ejecutan las de la derecha primero)
 # .    o sea esta bien la sintaxis pero en el orden de shift estan mal (queremos
 # .    que vaya de derecha a izquierda
+
+
+
+# Algunas variables de utilidad (stacks, listas, tablas, etc):
+# por el momento son muy simples pero despues se anadiran mas propiedades
+
+function_directory = FunctionDirectory()
+
+# este puede contener (+, -, /, *)
+operator_stack = Stack()
+
+# este puede contener (a, b, 1, var, etc)
+operands_stack = Stack()
+
+# estos serian cuadruplos para 'main' (por el momento)
+quadruples = []
+
+
+
 
 def p_program(p):
     'program : PROG ID COLON paux paux2 paux3 mainr'
