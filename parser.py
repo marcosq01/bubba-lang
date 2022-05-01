@@ -1,22 +1,24 @@
 
-from re import A
+#
 from ply import yacc
 from lexer import tokens
-
+#
 from semantic_cube import SemanticCube
 from quadruple import Quadruple
 from vars_table import VarsTable, VariableContext
 from function_directory import FunctionDirectory, FunctionContext
-
+#
 
 
 # TODO agregar precedence en caso de ser necesario
-# TODO agregar puntos neuralgicos SOLO los que son necesarios
-#      hasta el momento
+# TODO algunas reglas tienen mal el orden (se ejecutan las de la derecha primero)
+# .    o sea esta bien la sintaxis pero en el orden de shift estan mal (queremos
+# .    que vaya de derecha a izquierda
 
 def p_program(p):
-    'program : PROG ID COLON paux paux2 paux3 main'
+    'program : PROG ID COLON paux paux2 paux3 mainr'
     print("programa", p[2], "creado")
+    p[0] = p[2]
 
 
 def p_paux(p):
@@ -35,13 +37,13 @@ def p_paux2(p):
 
 def p_paux3(p):
     '''
-        paux3 : methods paux3
+        paux3 : paux3 methods
               | empty
     '''
     pass
 
-def p_main(p):
-    'main : MAIN LPAR RPAR LBRACE body RBRACE'
+def p_mainr(p):
+    'mainr : MAIN LPAR RPAR LBRACE body RBRACE'
     pass
 
 def p_whiler(p):
@@ -73,7 +75,6 @@ def p_statement(p):
                   | call SEMICOLON
                   | if
                   | if_else
-                  | expression
                   | forr
                   | whiler
                   | output
@@ -83,33 +84,19 @@ def p_statement(p):
     pass
 
 def p_lid(p):
-    'lid : ID lidaux SEMICOLON'
-    pass
-
-def p_lidaux(p):
-    'lidaux : laux laux2'
-    pass
-
-def p_laux(p):
     '''
-        laux : COMMA ID laux
-             | empty    
+        lid : var_dec 
+            | var_dec COMMA lid 
     '''
     pass
 
-def p_laux2(p):
+def p_var_dec(p):
     '''
-        laux2 : LBRACKET VINTEGER maux RBRACKET laux
-              | empty
+        var_dec : ID
+                | ID LBRACKET VINTEGER RBRACKET
+                | ID LBRACKET VINTEGER COMMA VINTEGER RBRACKET
     '''
-    pass
-
-def p_maux(p):
-    '''
-        maux : COMMA VINTEGER
-             | empty
-    '''
-    pass
+    v.append(p[1])
 
 def p_var(p):
     'var : ID varaux varaux2'
@@ -141,96 +128,74 @@ def p_assign(p):
     pass
 
 def p_factor(p):
-    'factor : faux faux2'
-    pass
-
-def p_faux(p):
     '''
-        faux : PLUS
-             | MINUS
-             | empty
+        factor : MINUS factor_val
+               | PLUS factor_val
+               | factor_val
     '''
     pass
 
-def p_faux2(p):
+def p_factor_val(p):
     '''
-        faux2 : var_cte
-             | call
-             | LPAR expression RPAR
-             | var
+        factor_val : LPAR expression RPAR
+                   | var_cte
+                   | call
+                   | var
     '''
     pass
 
 def p_term(p):
-    'term : factor termaux'
-    pass
-
-def p_termaux(p):
     '''
-        termaux : MUL term
-                | DIV term
-                | empty
+        term : factor
+             | factor MUL term
+             | factor DIV term
     '''
     pass
 
 def p_exp(p):
-    'exp : term expaux'
-    pass
-
-def p_expaux(p):
     '''
-        expaux : PLUS exp
-               | MINUS exp
-               | empty
+        exp : term
+            | term PLUS exp
+            | term MINUS exp
     '''
     pass
 
 def p_aexp(p):
-    'aexp : exp aexpaux'
+    '''
+        aexp : exp
+             | exp aexp_rel_ops exp
+    '''
+
     pass
 
-def p_aexpaux(p):
-    '''
-        aexpaux : aexps exp
-                | empty
-    '''
-    pass
 
-def p_aexps(p):
+def p_aexp_rel_ops(p):
     '''
-        aexps : GREATER
-              | LESS
-              | EQEQUAL
-              | NOTEQUAL
-              | GREATEREQ
-              | LESSEQ
+        aexp_rel_ops : GREATER
+                     | LESS
+                     | EQEQUAL
+                     | NOTEQUAL
+                     | GREATEREQ
+                     | LESSEQ
     '''
     pass
 
 def p_bexp(p):
-    'bexp : aexp bexpaux'
-    pass
-
-def p_bexpaux(p):
     '''
-        bexpaux : AND bexp
-                | empty
+        bexp : aexp
+             | aexp AND bexp
     '''
     pass
 
 def p_expression(p):
-    'expression : bexp expressionaux'
-    pass
-
-def p_expressionaux(p):
     '''
-        expressionaux : OR expression
-                      | empty
+        expression : bexp
+                   | bexp OR expression
     '''
     pass
 
 def p_funcr(p):
-    'funcr : FUNC type_simple ID LPAR funcaux RPAR LBRACE body RETURN expression SEMICOLON RBRACE'
+    'funcr : FUNC type_simple ID LPAR funcaux RPAR LBRACE body RBRACE'
     pass
 
 def p_funcaux(p):
@@ -241,22 +206,14 @@ def p_funcaux(p):
     pass
 
 def p_classr(p):
-    'classr : CLASS ID class_a LBRACE varsr class_b RBRACE SEMICOLON'
+    'classr : CLASS ID class_extends LBRACE varsr methods RBRACE SEMICOLON'
     pass
 
-def p_class_a(p):
+def p_class_extends(p):
     '''
-        class_a : EXTENDS ID
-                | empty
+        class_extends : EXTENDS ID
+                      | empty
     '''
-    pass
-
-def p_class_b(p):
-    '''
-        class_b : methods
-                | empty
-    '''
-    pass
 
 def p_output(p):
     'output : PRINT LPAR expression output_a RPAR SEMICOLON'
@@ -291,22 +248,41 @@ def p_body_a(p):
     '''
     pass
 
-def p_vars(p):
-    'varsr : VARS vars_a COLON lid vars_b'
+def p_varsr(p):
+    '''
+        varsr : VARS vars_a
+    '''
     pass
+
+v = []
 
 def p_vars_a(p):
     '''
-        vars_a : ID
-               | type_simple
+        vars_a : vars_a var_type np COLON lid SEMICOLON
+               | var_type np COLON lid SEMICOLON
     '''
-    pass
+    global v
+    if (len(p) == 6):
+        print(6)
+        print(v)
+        v = []
+    elif len(p) == 7:
+        print(7)
+        print(v)
+        v = []
 
-def p_vars_b(p):
+def p_np(p):
+    'np :'
+    print("type: ", p[-1])
+
+def p_var_type(p):
     '''
-        vars_b : varsr
-               | empty
+        var_type : INT
+                 | FLOAT
+                 | STRING
+                 | ID
     '''
+    p[0] = p[1]
     pass
 
 def p_args(p):
@@ -329,31 +305,22 @@ def p_type_simple(p):
     pass
 
 def p_call(p):
-    'call : ID call_a LPAR call_b LPAR'
-    pass
-
-def p_call_a(p):
     '''
-        call_a : DOT ID
-               | empty
+        call : ID call_b
+             | ID DOT ID call_b
     '''
     pass
 
 def p_call_b(p):
     '''
-        call_b : params
-               | empty
+        call_b : LPAR params RPAR
+               | LPAR RPAR
     '''
-    pass
 
 def p_params(p):
-    'params : expression params_a'
-    pass
-
-def p_params_a(p):
     '''
-        params_a : COMMA params
-                 | empty
+        params : expression COMMA params
+               | expression
     '''
     pass
 
@@ -378,8 +345,8 @@ def p_void_a(p):
 
 def p_methods(p):
     '''
-        methods : voidr
-                | funcr
+        methods : methods voidr 
+                | methods funcr 
                 | empty
     '''
     pass
@@ -395,17 +362,18 @@ def p_if(p):
 
 def p_returnr(p):
     '''
-        returnr : expression
-                | empty
+        returnr : RETURN expression SEMICOLON
+                | RETURN SEMICOLON
     '''
     pass
 
 def p_stmts(p): 
     '''
-        stmts : statement stmts
+        stmts : stmts statement
               | empty
     '''
     pass
+
 
 
 
@@ -422,14 +390,21 @@ def p_error(p):
     print("Syntax error.")
 
 
-
 parser = yacc.yacc()
 
+
+
+# correr un ejemplo 
+
 s = ''' 
-prog sapito ;
+
+prog karen:
+
+main() {
+    vars int : a, b, c; float:x,y,y[1];
+}
 '''
 
 result = parser.parse(s)
 
 print(result)
-
