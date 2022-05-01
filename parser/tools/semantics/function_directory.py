@@ -1,4 +1,4 @@
-from vars_table import VariableContext, VarsTable
+from tools.semantics.vars_table import VariableContext, VarsTable
 
 def print_funcs_from_directory(directory):
     for x in directory.directory:

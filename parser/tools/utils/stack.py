@@ -1,5 +1,13 @@
+# Este es un stack cualquiera
 
-# estructura deitemsk
+# Tiene funciones:
+#       
+#    -  push
+#    -  pop
+#    -  empty
+#    -  pop
+#    -  top
+#    -  print
 
 class Stack():
 
@@ -21,4 +29,7 @@ class Stack():
         if not self.items.empty():
             return self.items.pop()
         return None
+
+    def print(self):
+        print(self.items)
 

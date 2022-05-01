@@ -7,3 +7,7 @@ func int f() {
 main() {
     vars int: a[rwer][1];
 }
+
+
+
+vars int : a;

@@ -155,11 +155,18 @@ lexer = lex.lex()
 
 
 # Test it out
+
 # data = '''
 # # 
-# prog sapito :  
-# main(){
-#     print (a) ;
+# prog karen:
+
+# func int f() {
+#     a(1, 2, 3);
+# }
+
+# main() {
+#     vars int : a;
+#     a = 4;
 # }
 # '''
 

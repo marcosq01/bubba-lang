@@ -1,0 +1,8 @@
+prog sapito :  
+main(){
+    vars int : a, b, c;
+         float : x, y, z;
+
+         
+    print (a) ;
+}

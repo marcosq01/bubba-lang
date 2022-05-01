@@ -3,11 +3,11 @@
 from ply import yacc
 from lexer import tokens
 #
-from stack import Stack
-from semantic_cube import SemanticCube
-from quadruple import Quadruple
-from vars_table import VarsTable, VariableContext
-from function_directory import FunctionDirectory, FunctionContext
+from tools.utils.stack import Stack
+from tools.semantics.semantic_cube import SemanticCube
+from tools.semantics.quadruple import Quadruple
+from tools.semantics.vars_table import VarsTable, VariableContext
+from tools.semantics.function_directory import FunctionDirectory, FunctionContext
 #
 
 
@@ -34,10 +34,12 @@ quadruples = []
 
 
 
+# -----------------------------------------------------------------
+# Gramatica
+
 
 def p_program(p):
     'program : PROG ID COLON paux paux2 paux3 mainr'
-    print("programa", p[2], "creado")
     p[0] = p[2]
 
 
@@ -282,14 +284,8 @@ def p_vars_a(p):
                | var_type np COLON lid SEMICOLON
     '''
     global v
-    if (len(p) == 6):
-        print(6)
-        print(v)
-        v = []
-    elif len(p) == 7:
-        print(7)
-        print(v)
-        v = []
+    print(v)
+    v = []
 
 def p_np(p):
     'np :'
@@ -303,7 +299,6 @@ def p_var_type(p):
                  | ID
     '''
     p[0] = p[1]
-    pass
 
 def p_args(p):
     'args : type_simple COLON ID args_a'
@@ -396,6 +391,15 @@ def p_stmts(p):
 
 
 
+# Puntos neuralgicos ----------------------------------------------
+
+# empiezan con p_x_*(p):
+
+
+
+
+
+
 
 
 
@@ -412,19 +416,10 @@ def p_error(p):
 
 parser = yacc.yacc()
 
+f = open("./tests/test.txt")
 
 
 # correr un ejemplo 
-
-s = ''' 
-
-prog karen:
-
-main() {
-    vars int : a, b, c; float:x,y,y[1];
-}
-'''
+s = f.read()
 
 result = parser.parse(s)
-
-print(result)
