@@ -1,5 +1,5 @@
 
-class semantic_cube():
+class SemanticCube():
 
     def __init__(self):
         self.cube = {
