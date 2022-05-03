@@ -2,7 +2,7 @@
 
 ## Breve descripción del lenguaje
 
-Hola
+Lenguaje de tipado estático orientado a objetos.
 
 ### Avance 0
 
