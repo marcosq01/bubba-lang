@@ -1,8 +1,19 @@
 prog sapito :  
-main(){
-    vars int : a, b, c;
-         float : x, y, z;
 
-         
-    print (a) ;
+vars {
+    int : sapitoglobal;
+}
+
+
+func void f(string : soyunparametro, int : numero) {
+    vars {
+        int : sapitoglobal;
+    }
+}
+
+main () {
+    vars {
+        int : n;
+        string : name;
+    }
 }

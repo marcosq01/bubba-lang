@@ -113,6 +113,11 @@ def t_COMMENT(t):
     pass
     # No return value. Token discarded
 
+def t_ID(t):
+    r'[a-zA-Z][a-zA-Z\d]*'
+    t.type = reserved.get(t.value, 'ID')
+    return t
+
 # VFLOAT debe ir antes de INTEGER
 def t_VFLOAT(t):
     r'[0-9]+\.[0-9]+'
@@ -128,10 +133,6 @@ def t_VINTEGER(t):
         print("error")
     return t
 
-def t_ID(t):
-    r'[a-zA-Z][a-zA-Z\d]*'
-    t.type = reserved.get(t.value, 'ID')
-    return t
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -154,19 +155,22 @@ lexer = lex.lex()
 
 
 
-# Test it out
+# # Test it out
 
 # data = '''
 # # 
-# prog karen:
+# prog sapito :  
 
-# func int f() {
-#     a(1, 2, 3);
+# func int f(int : x) {
+#     vars float : f;
+#           int : fasa;
+#     a = 10;
 # }
 
-# main() {
-#     vars int : a;
-#     a = 4;
+
+# main () {
+#     vars int : x;
+#     x = 20;
 # }
 # '''
 

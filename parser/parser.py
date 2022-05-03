@@ -8,13 +8,14 @@ from tools.semantics.semantic_cube import SemanticCube
 from tools.semantics.quadruple import Quadruple
 from tools.semantics.vars_table import VarsTable, VariableContext
 from tools.semantics.function_directory import FunctionDirectory, FunctionContext
+from tools.error import Error
 #
 
 
 # TODO agregar precedence en caso de ser necesario
 # TODO algunas reglas tienen mal el orden (se ejecutan las de la derecha primero)
 # .    o sea esta bien la sintaxis pero en el orden de shift estan mal (queremos
-# .    que vaya de derecha a izquierda
+# .    que vaya de izquierda a derecha
 
 
 
@@ -33,15 +34,21 @@ operands_stack = Stack()
 quadruples = []
 
 
+program_name = None
+current_type_var_declaration = None
+
+current_function = None
+current_vars_table = None
+current_function_type = None
+
 
 # -----------------------------------------------------------------
 # Gramatica
 
-
 def p_program(p):
-    'program : PROG ID COLON paux paux2 paux3 mainr'
-    p[0] = p[2]
-
+    'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
+    function_directory.print()
+    pass
 
 def p_paux(p):
     '''
@@ -50,22 +57,30 @@ def p_paux(p):
     '''
     pass
 
-def p_paux2(p):
+def p_program_vars(p):
     '''
-        paux2 : varsr 
-              | empty
+        program_vars : varsr 
+                     | empty
     '''
     pass
 
-def p_paux3(p):
+def p_program_funcs(p):
     '''
-        paux3 : paux3 methods
-              | empty
+        program_funcs : mainr
+                      | funcs mainr
     '''
     pass
+
+def p_funcs(p):
+    '''
+        funcs : funcr
+              | funcs funcr
+    '''
+    pass
+
 
 def p_mainr(p):
-    'mainr : MAIN LPAR RPAR LBRACE body RBRACE'
+    'mainr : MAIN x_add_main_to_func_dir LPAR RPAR LBRACE body RBRACE'
     pass
 
 def p_whiler(p):
@@ -103,12 +118,11 @@ def p_statement(p):
                   | inputr
                   | returnr
     '''
-    pass
 
 def p_lid(p):
     '''
-        lid : var_dec 
-            | var_dec COMMA lid 
+        lid : var_dec x_declare_variable 
+            | var_dec x_declare_variable COMMA lid 
     '''
     pass
 
@@ -118,36 +132,36 @@ def p_var_dec(p):
                 | ID LBRACKET VINTEGER RBRACKET
                 | ID LBRACKET VINTEGER COMMA VINTEGER RBRACKET
     '''
-    v.append(p[1])
+    # return var_id
+    p[0] = p[1]
+
+
 
 def p_var(p):
-    'var : ID varaux varaux2'
-    pass
-
-def p_varaux(p):
     '''
-        varaux : DOT ID
-               | empty
+        var : var_id 
+            | var_id var_brackets
     '''
     pass
 
-def p_varaux2(p):
+def p_var_id(p):
     '''
-        varaux2 : LBRACKET expression varaux3 RBRACKET
-                | empty
+        var_id : ID
+               | ID DOT ID
     '''
     pass
 
-def p_varaux3(p):
+def p_var_brackets(p):
     '''
-        varaux3 : COMMA expression
-                | empty
+        var_brackets : LBRACKET expression RBRACKET
+                     | LBRACKET expression COMMA expression RBRACKET
     '''
     pass
 
 def p_assign(p):
     'assign : var EQUAL expression SEMICOLON'
     pass
+
 
 def p_factor(p):
     '''
@@ -217,15 +231,27 @@ def p_expression(p):
     pass
 
 def p_funcr(p):
-    'funcr : FUNC type_simple ID LPAR funcaux RPAR LBRACE body RBRACE'
+    '''
+        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR LBRACE body RBRACE
+              | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR params RPAR LBRACE body RBRACE
+    '''
     pass
 
-def p_funcaux(p):
+def p_params(p):
     '''
-        funcaux : args
-                | empty
+        params : type_simple x_var_dec_set_curr_type COLON ID x_declare_variable
+               | type_simple x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
     '''
     pass
+
+def p_func_type(p):
+    '''
+        func_type : INT
+                  | FLOAT
+                  | STRING
+                  | VOID
+    '''
+    p[0] = p[1]
 
 def p_classr(p):
     'classr : CLASS ID class_extends LBRACE varsr methods RBRACE SEMICOLON'
@@ -260,19 +286,18 @@ def p_input_a(p):
     pass
 
 def p_body(p):
-    'body : body_a stmts'
-    pass
-
-def p_body_a(p):
     '''
-        body_a : varsr
-               | empty
+        body : varsr stmts
+             | varsr
+             | stmts
+             | empty
     '''
     pass
 
+# TODO Vars tiene que estar entre {} , cambiarlo despues porque hay problema aqui
 def p_varsr(p):
     '''
-        varsr : VARS vars_a
+        varsr : VARS x_set_current_vars_table LBRACE vars_a RBRACE
     '''
     pass
 
@@ -280,16 +305,10 @@ v = []
 
 def p_vars_a(p):
     '''
-        vars_a : vars_a var_type np COLON lid SEMICOLON
-               | var_type np COLON lid SEMICOLON
+        vars_a : var_type x_var_dec_set_curr_type COLON lid SEMICOLON
+               | vars_a var_type x_var_dec_set_curr_type COLON lid SEMICOLON
     '''
-    global v
-    print(v)
-    v = []
-
-def p_np(p):
-    'np :'
-    print("type: ", p[-1])
+    pass
 
 def p_var_type(p):
     '''
@@ -300,42 +319,33 @@ def p_var_type(p):
     '''
     p[0] = p[1]
 
-def p_args(p):
-    'args : type_simple COLON ID args_a'
-    pass
-
-def p_args_a(p):
-    '''
-        args_a : COMMA args
-               | empty
-    '''
-    pass
-
 def p_type_simple(p):
     '''
         type_simple : INT
                     | FLOAT
                     | STRING
     '''
+    p[0] = p[1]
     pass
 
 def p_call(p):
     '''
-        call : ID call_b
-             | ID DOT ID call_b
+        call : call_id LPAR RPAR
+             | call_id LPAR args RPAR
     '''
     pass
 
-def p_call_b(p):
+def p_call_id(p):
     '''
-        call_b : LPAR params RPAR
-               | LPAR RPAR
+        call_id : ID
+                | ID DOT ID
     '''
+    pass
 
-def p_params(p):
+def p_args(p):
     '''
-        params : expression COMMA params
-               | expression
+        args : expression
+             | expression COMMA args
     '''
     pass
 
@@ -347,22 +357,11 @@ def p_var_cte(p):
     '''
     pass
 
-def p_voidr(p):
-    'voidr : FUNC VOID ID LPAR void_a RPAR LBRACE body RBRACE'
-    pass
-
-def p_void_a(p):
-    '''
-        void_a : args
-               | empty
-    '''
-    pass
 
 def p_methods(p):
     '''
-        methods : methods voidr 
-                | methods funcr 
-                | empty
+        methods : methods funcr 
+                | funcr
     '''
     pass
 
@@ -384,8 +383,8 @@ def p_returnr(p):
 
 def p_stmts(p): 
     '''
-        stmts : stmts statement
-              | empty
+        stmts : statement
+              | stmts statement
     '''
     pass
 
@@ -396,6 +395,89 @@ def p_stmts(p):
 # empiezan con p_x_*(p):
 
 
+def p_x_add_prog_to_funcdir(p):
+    'x_add_prog_to_funcdir :'
+    # Obtener el nombre del programa
+    global program_name
+    program_name = p[-1]
+
+    # 'Funcion' actual es program_name
+    # esto es para guardar las variables globales
+    global current_function 
+
+    # Insertar el programa como si fuera una funcion, este tiene
+    # la tabla de variables globales
+    function_directory.insert_function(FunctionContext(program_name, 'program', VarsTable()))
+    print(function_directory.__dict__)
+
+    # La funcion actual es 'programa'
+    current_function = function_directory.search_function(program_name)
+
+
+
+# Actualizar current_type para la creacion de variables
+def p_x_var_dec_set_curr_type(p):
+    'x_var_dec_set_curr_type : '
+    global current_type_var_declaration
+    current_type_var_declaration = p[-1]
+    print(current_type_var_declaration)
+
+
+def p_x_declare_variable(p):
+    'x_declare_variable :'
+    var_name = p[-1]
+    print(var_name)
+    # Esto por mientras es para variables que no son arreglos
+    # Tenemos que buscar la variable en la tabla de variables actual
+    # Si ya existe, marcamos error
+    if current_vars_table.has_var(var_name):
+        Error("Variable doblemente declarada.")
+    else:
+        # Ponemos la variable en la tabla de variables
+        var = VariableContext(p[-1], current_type_var_declaration, 1) 
+        current_vars_table.insert_var(var)
+        print("TABLA VARIABLES: ")
+        print(current_vars_table.__dict__)
+
+
+def p_x_set_current_vars_table(p):
+    'x_set_current_vars_table :'
+    global current_vars_table
+    current_vars_table = current_function.get_vars_table()
+
+def p_x_set_current_function_type(p):
+    'x_set_current_function_type :'
+    global current_function_type
+    current_function_type = p[-1]
+
+def p_x_insert_new_function(p):
+    'x_insert_new_function :'
+    func_name = p[-1]
+
+    # Revisar que no haya sido declarada otra funcion con este nombre
+    # o que no sea main
+    if function_directory.has_function(func_name):
+        Error("Funcion ya ha sido declarada")
+
+    # Agregarla al directorio de funciones
+    global current_vars_table
+    global current_function
+    current_vars_table = VarsTable()
+    current_function = FunctionContext(func_name, current_function_type, current_vars_table)
+    function_directory.insert_function(current_function)
+    print("Nueva funcion: ")
+    print(function_directory.__dict__)
+ 
+def p_x_add_main_to_func_dir(p):
+    'x_add_main_to_func_dir :'
+    if function_directory.has_function('main'):
+        Error("Funcion ya ha sido declarada")
+    
+    global current_vars_table, current_function
+    current_vars_table = VarsTable()
+    current_function = FunctionContext('main', 'main', current_vars_table)
+    function_directory.insert_function(current_function)
+    
 
 
 
@@ -411,7 +493,9 @@ def p_empty(p):
     pass
 
 def p_error(p):
-    print("Syntax error.")
+    print("Syntax error on line", p.lexer.lineno)
+    # TODO el numero de lineas
+    exit()
 
 
 parser = yacc.yacc()

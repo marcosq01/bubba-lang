@@ -9,10 +9,9 @@ def print_vars_from_table(table):
 # para los arreglos y clases tendremos que anadir mas cosas
 # pero por mientras con esto
 class VariableContext:
-    def __init__(self, name, type, scope, address):
+    def __init__(self, name, type, address):
         self.name = name
         self.type = type
-        self.scope = scope
         self.address = address
 
 
@@ -26,10 +25,7 @@ class VarsTable:
     def insert_var(self, var : VariableContext):
         # no hace falta validar si existe la variable
         # porque ya se verificó antes (supuestamente)
-        if var.name in self.table:
-            return  False
         self.table[var.name] = var
-        return True
 
     # regresa toda la info de la variable, None si no
     def search_var(self, name):
@@ -41,6 +37,11 @@ class VarsTable:
     def has_var(self, name):
         return name in self.table
 
+    def print(self):
+        for var in self.table:
+            v = self.table[var]
+            print("nombre_variable:", v.name, "type_variable:", v.type, "address_var:", v.address)
+            
 
 
 

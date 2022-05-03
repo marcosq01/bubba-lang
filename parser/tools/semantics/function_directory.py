@@ -6,10 +6,14 @@ def print_funcs_from_directory(directory):
 
 
 class FunctionContext:
+    # TODO anadir el address de la funcion
     def __init__(self, name, type, vars_table) -> None:
         self.name = name
         self.type = type
         self.vars_table = vars_table
+    
+    def get_vars_table(self):
+        return self.vars_table
 
 
 class FunctionDirectory:
@@ -24,7 +28,7 @@ class FunctionDirectory:
 
     # regresa booleano si existe o no la funcion
     def has_function(self, func_name):
-        return func_name in self
+        return func_name in self.directory
 
     # regresa toda la info de la funcion
     def search_function(self, func_name):
@@ -32,6 +36,16 @@ class FunctionDirectory:
             return self.directory[func_name]
         else:
             return None
+    
+    def print(self):
+        for f in self.directory:
+            print("Funcion:", f, " type:", self.directory[f].type)
+            
+            # print tabla variables
+            self.directory[f].vars_table.print()
+            print(" ")
+
+
             
 if __name__ == "__main__":
     func_dir = FunctionDirectory()
