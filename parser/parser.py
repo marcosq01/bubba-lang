@@ -9,18 +9,25 @@ from tools.semantics.quadruple import Quadruple
 from tools.semantics.vars_table import VarsTable, VariableContext
 from tools.semantics.function_directory import FunctionDirectory, FunctionContext
 from tools.error import Error
+from tools.address_manager import AddressManager
 #
 
 
 # TODO agregar precedence en caso de ser necesario
 # TODO algunas reglas tienen mal el orden (se ejecutan las de la derecha primero)
-# .    o sea esta bien la sintaxis pero en el orden de shift estan mal (queremos
-# .    que vaya de izquierda a derecha
-
-
+#      o sea esta bien la sintaxis pero en el orden de shift estan mal (queremos
+#      que vaya de izquierda a derecha
+# TODO revisar que en funciones NO VOID tengan al menos un return
+# TODO las constantes
+# TODO las temporales
+# TODO los cuadruplos de las expresiones
+# TODO checar los tipos con los operandos y operadores
 
 # Algunas variables de utilidad (stacks, listas, tablas, etc):
 # por el momento son muy simples pero despues se anadiran mas propiedades
+
+# Cubo semantico
+cube = SemanticCube()
 
 function_directory = FunctionDirectory()
 
@@ -30,8 +37,15 @@ operator_stack = Stack()
 # este puede contener (a, b, 1, var, etc)
 operands_stack = Stack()
 
+# stack para los types del stack de operandos
+types_stack = Stack()
+
 # estos serian cuadruplos para 'main' (por el momento)
 quadruples = []
+
+# el administrador de direcciones
+addr_manager = AddressManager()
+
 
 
 program_name = None
@@ -201,7 +215,6 @@ def p_aexp(p):
         aexp : exp
              | exp aexp_rel_ops exp
     '''
-
     pass
 
 
@@ -434,7 +447,35 @@ def p_x_declare_variable(p):
         Error("Variable doblemente declarada.")
     else:
         # Ponemos la variable en la tabla de variables
-        var = VariableContext(p[-1], current_type_var_declaration, 1) 
+        addr = None
+        # del directorio sacar el tipo
+        t_func = current_function.type
+        t_var = current_type_var_declaration
+        scope = None
+        print("TFUNC Y TVAR")
+        print(t_func, t_var)
+        # estas son las globales
+        if t_func == 'program':
+            if t_var == 'int':
+                addr = addr_manager.get_global_int(1)
+            elif t_var == 'float':
+                addr = addr_manager.get_global_float(1)
+            elif t_var == 'string':
+                addr = addr_manager.get_global_string(1)
+
+        # estas son las locales
+        else:
+            if t_var == 'int':
+                addr = addr_manager.get_local_int(1)
+            elif t_var == 'float':
+                addr = addr_manager.get_local_float(1)
+            elif t_var == 'string':
+                addr = addr_manager.get_local_string(1)
+
+        # TODO clases y arreglos
+
+
+        var = VariableContext(p[-1], current_type_var_declaration, addr) 
         current_vars_table.insert_var(var)
         print("TABLA VARIABLES: ")
         print(current_vars_table.__dict__)
@@ -449,6 +490,7 @@ def p_x_set_current_function_type(p):
     'x_set_current_function_type :'
     global current_function_type
     current_function_type = p[-1]
+
 
 def p_x_insert_new_function(p):
     'x_insert_new_function :'
@@ -467,6 +509,9 @@ def p_x_insert_new_function(p):
     function_directory.insert_function(current_function)
     print("Nueva funcion: ")
     print(function_directory.__dict__)
+
+    # actualizar las direcciones locales y temporales 
+    addr_manager.reset()
  
 def p_x_add_main_to_func_dir(p):
     'x_add_main_to_func_dir :'
@@ -477,6 +522,7 @@ def p_x_add_main_to_func_dir(p):
     current_vars_table = VarsTable()
     current_function = FunctionContext('main', 'main', current_vars_table)
     function_directory.insert_function(current_function)
+    addr_manager.reset()
     
 
 
