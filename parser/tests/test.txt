@@ -1,19 +1,29 @@
 prog sapito :  
 
 vars {
-    int : sapitoglobal;
+    int : x, a, c;
+    float : y, fsdfs; 
 }
 
 
 func void f(string : soyunparametro, int : numero) {
     vars {
-        int : sapitoglobal;
+        int : n, l;
+        float : f, g;
     }
 }
 
+func void dsf(string : asdf, int : fsd) {
+    vars {
+        int : n, l;
+        float : f, g;
+    }
+}
+
+
 main () {
     vars {
-        int : n;
-        string : name;
+        int : x;
+        float : y;
     }
 }
