@@ -18,6 +18,7 @@ func void dsf(string : asdf, int : fsd) {
         int : n, l;
         float : f, g;
     }
+    n = n + l;
 }
 
 

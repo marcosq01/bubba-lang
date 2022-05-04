@@ -1,5 +1,6 @@
 
 #
+import types
 from ply import yacc
 from lexer import tokens
 #
@@ -156,14 +157,14 @@ def p_var(p):
         var : var_id 
             | var_id var_brackets
     '''
-    pass
+    p[0]=p[1]
 
 def p_var_id(p):
     '''
         var_id : ID
                | ID DOT ID
     '''
-    pass
+    p[0]=p[1]
 
 def p_var_brackets(p):
     '''
@@ -181,7 +182,7 @@ def p_factor(p):
     '''
         factor : MINUS factor_val
                | PLUS factor_val
-               | factor_val
+               | factor_val 
     '''
     pass
 
@@ -190,23 +191,23 @@ def p_factor_val(p):
         factor_val : LPAR expression RPAR
                    | var_cte
                    | call
-                   | var
+                   | var x_add_Var_to_stack
     '''
     pass
 
 def p_term(p):
     '''
-        term : factor
-             | factor MUL term
-             | factor DIV term
+        term : factor x_pop_MulD_of_stack
+             | factor MUL x_add_MulD_to_stack term
+             | factor DIV x_add_MulD_to_stack term
     '''
     pass
 
 def p_exp(p):
     '''
-        exp : term
-            | term PLUS exp
-            | term MINUS exp
+        exp : term x_pop_PLUSM_of_stack
+            | term PLUS x_add_PLUSM_to_stack exp
+            | term MINUS x_add_PLUSM_to_stack exp
     '''
     pass
 
@@ -524,6 +525,87 @@ def p_x_add_main_to_func_dir(p):
     function_directory.insert_function(current_function)
     addr_manager.reset()
     
+# Agregar la variable a nuestra pila
+def p_x_add_Var_to_stack(p):
+    'x_add_Var_to_stack :'
+    #Buscar la variable en el directorio
+    varData= current_vars_table.search_var(p[-1])
+    #pushear la direccion al stack de operandos
+    operands_stack.push(varData.address)
+    #pushear el tipo al stack de tipos
+    types_stack.push(varData.type)
+
+
+# Agregar * / a la pila
+def p_x_add_MulD_to_stack(p):
+    'x_add_MulD_to_stack :'
+    #pushear la direccion al stack de operadores el * o /
+    operator_stack.push(p[-1])
+
+# Agregar + - a la pila
+def p_x_add_PLUSM_to_stack(p):
+    'x_add_PLUSM_to_stack :'
+    #pushear la direccion al stack de operadores el + o -
+    operator_stack.push(p[-1])
+
+# Popea * / de la pila
+def p_x_pop_MulD_of_stack(p):
+    'x_pop_MulD_of_stack :'
+    if(operator_stack.top() == '*' or operator_stack.top() == '/'):
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+        else:
+            Error("Tipos no compartibles")
+
+# Popea + - de la pila
+def p_x_pop_PLUSM_of_stack(p):
+    'x_pop_PLUSM_of_stack :'
+    operands_stack.print()
+    operator_stack.print()
+    if(operator_stack.top() == '+' or operator_stack.top() == '-'):
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+            print(quadruples[-1].__dict__)
+        else:
+            Error("Tipos no compartibles")
+            
+
+
+
+
 
 
 
