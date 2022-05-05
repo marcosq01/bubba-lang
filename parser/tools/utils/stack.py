@@ -21,12 +21,12 @@ class Stack():
         self.items.append(item)
     
     def top(self):
-        if not self.items.empty():
+        if self.items:
             return self.items[-1]
         return None
     
     def pop(self):
-        if not self.items.empty():
+        if self.items:
             return self.items.pop()
         return None
 

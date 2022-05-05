@@ -1,5 +1,7 @@
 
 #
+from distutils.log import ERROR
+import types
 from ply import yacc
 from lexer import tokens
 #
@@ -62,6 +64,8 @@ current_function_type = None
 def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
     function_directory.print()
+    for i in quadruples:
+        print(i.__dict__)
     pass
 
 def p_paux(p):
@@ -153,17 +157,17 @@ def p_var_dec(p):
 
 def p_var(p):
     '''
-        var : var_id 
+        var : var_id x_add_Var_to_stack
             | var_id var_brackets
     '''
-    pass
+    p[0]=p[1]
 
 def p_var_id(p):
     '''
         var_id : ID
                | ID DOT ID
     '''
-    pass
+    p[0]=p[1]
 
 def p_var_brackets(p):
     '''
@@ -173,7 +177,7 @@ def p_var_brackets(p):
     pass
 
 def p_assign(p):
-    'assign : var EQUAL expression SEMICOLON'
+    'assign : var EQUAL x_add_op_to_stack expression x_assignment_op SEMICOLON'
     pass
 
 
@@ -181,13 +185,13 @@ def p_factor(p):
     '''
         factor : MINUS factor_val
                | PLUS factor_val
-               | factor_val
+               | factor_val 
     '''
     pass
 
 def p_factor_val(p):
     '''
-        factor_val : LPAR expression RPAR
+        factor_val : LPAR x_add_op_to_stack expression RPAR x_pop_Lpar_from_stack 
                    | var_cte
                    | call
                    | var
@@ -196,24 +200,24 @@ def p_factor_val(p):
 
 def p_term(p):
     '''
-        term : factor
-             | factor MUL term
-             | factor DIV term
+        term : factor x_pop_MulD_of_stack
+             | factor x_pop_MulD_of_stack MUL x_add_op_to_stack term
+             | factor x_pop_MulD_of_stack DIV x_add_op_to_stack term
     '''
     pass
 
 def p_exp(p):
     '''
-        exp : term
-            | term PLUS exp
-            | term MINUS exp
+        exp : term x_pop_PLUSM_of_stack
+            | term x_pop_PLUSM_of_stack PLUS x_add_op_to_stack exp
+            | term x_pop_PLUSM_of_stack MINUS x_add_op_to_stack exp
     '''
     pass
 
 def p_aexp(p):
     '''
-        aexp : exp
-             | exp aexp_rel_ops exp
+        aexp : exp 
+             | exp aexp_rel_ops x_add_op_to_stack exp x_comparison_op
     '''
     pass
 
@@ -227,19 +231,19 @@ def p_aexp_rel_ops(p):
                      | GREATEREQ
                      | LESSEQ
     '''
-    pass
+    p[0] = p[1]
 
 def p_bexp(p):
     '''
-        bexp : aexp
-             | aexp AND bexp
+        bexp : aexp x_AND_op
+             | aexp AND x_add_op_to_stack bexp x_AND_op
     '''
     pass
 
 def p_expression(p):
     '''
-        expression : bexp
-                   | bexp OR expression
+        expression : bexp x_OR_op 
+                   | bexp OR x_add_op_to_stack expression x_OR_op 
     '''
     pass
 
@@ -524,10 +528,192 @@ def p_x_add_main_to_func_dir(p):
     function_directory.insert_function(current_function)
     addr_manager.reset()
     
+# Agregar la variable a nuestra pila
+def p_x_add_Var_to_stack(p):
+    'x_add_Var_to_stack :'
+    #Buscar la variable en el directorio
+    varname = p[-1]
+    #Revisar que la variable se encuentra en las vars locales
+    if current_vars_table.has_var(varname):
+        #guardar la variable del directorio
+        varData = current_vars_table.search_var(varname)
+    else:
+        #Obtener la tabla de variables globales
+        globalfunc = function_directory.search_function(program_name)
+        globalvars = globalfunc.get_vars_table()
+        #Revisar que la variable se encuentra en las vars globales
+        if globalvars.has_var(varname):
+            #guardar la variable del directorio
+            varData = globalvars.search_var(varname)
+        #Si no existe se marca error
+        else:
+            print(varname)
+            Error ("Variable no ha sido declarada")
+
+    #pushear la direccion al stack de operandos
+    operands_stack.push(varData.address)
+    #pushear el tipo al stack de tipos
+    types_stack.push(varData.type)
 
 
 
+#Agregar operador al stack
+def p_x_add_op_to_stack(p):
+    'x_add_op_to_stack :'
+    #pushear el operador al stack de operador
+    operator_stack.push(p[-1])
 
+# Popea * / de la pila
+def p_x_pop_MulD_of_stack(p):
+    'x_pop_MulD_of_stack :'
+    if(operator_stack.top() == '*' or operator_stack.top() == '/'):
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+        else:
+            Error("Tipos no compartibles")
+
+# Popea + - de la pila
+def p_x_pop_PLUSM_of_stack(p):
+    'x_pop_PLUSM_of_stack :'
+    if(operator_stack.top() == '+' or operator_stack.top() == '-'):
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+
+        else:
+            Error("Tipos no compartibles")
+
+def p_x_assignment_op(p):
+    'x_assignment_op :'
+    if(operator_stack.top() == '='):
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+
+        if(ft!='error'):
+            #Para la asignacion se debe seguir el patron
+            # = expresion None VaraAsignar
+            quadruples.append(Quadruple(op,r,None,l))
+        else:
+            Error("Tipos no compartibles")
+
+def p_x_comparison_op(p):
+    'x_comparison_op :'
+    if(operator_stack.top() in [">", "<", "!=","==", ">=", "<="]):
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+        else:
+            Error("Tipos no compartibles")
+            
+def p_x_AND_op(p):
+    'x_AND_op :'
+    if operator_stack.top() == "&&":
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+        else:
+            Error("Tipos no compartibles")
+
+def p_x_OR_op(p):
+    'x_OR_op :'
+
+    if operator_stack.top() == "||":
+        r = operands_stack.pop()
+        l = operands_stack.pop()
+        rt = types_stack.pop()
+        lt = types_stack.pop()
+        op = operator_stack.pop()
+        ft = cube.type_check(lt,rt,op)
+
+
+        if(ft!='error'):
+            if (ft=='int'):
+                result =  addr_manager.get_temp_int(1)
+            elif (ft=='float'):
+                result =  addr_manager.get_temp_float(1)
+            else :
+                 result =  addr_manager.get_temp_string(1)
+            
+            quadruples.append(Quadruple(op,l,r,result))
+            operands_stack.push(result)
+            types_stack.push(ft)
+        else:
+            Error("Tipos no compartibles")
+
+#Agregar operador al stack
+def p_x_pop_Lpar_from_stack(p):
+    'x_pop_Lpar_from_stack :'
+    #pushear el operador al stack de operador
+    operator_stack.pop()
 
 
 

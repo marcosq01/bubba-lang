@@ -23,7 +23,9 @@ func void dsf(string : asdf, int : fsd) {
 
 main () {
     vars {
-        int : x;
+        int : AUX, A, B, C,D, E,F,G,H,J,K,L;
         float : y;
     }
+    AUX = ((A+B)*C+D*E*F+K/H*J)+G*L+H+J>(A-C*D)/F;
+
 }
