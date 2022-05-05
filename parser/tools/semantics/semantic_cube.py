@@ -1,6 +1,6 @@
 
 class SemanticCube():
-
+ # TODO agregar el == y cambiar las multiplicaciones de int y float
     def __init__(self):
         self.cube = {
             
