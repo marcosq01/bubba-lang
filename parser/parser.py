@@ -1,7 +1,6 @@
 
-#
-from distutils.log import ERROR
-import types
+
+from tools.semantics.constants_table import Constant, ConstantsTable
 from ply import yacc
 from lexer import tokens
 #
@@ -48,6 +47,9 @@ jumps_stack = Stack()
 # estos serian cuadruplos para 'main' (por el momento)
 quadruples = []
 
+#Tabla de constantes
+constants_Table = ConstantsTable()
+
 # el administrador de direcciones
 addr_manager = AddressManager()
 
@@ -69,6 +71,8 @@ def p_program(p):
     function_directory.print()
     for i in range(len(quadruples)):
         print(i, quadruples[i].__dict__)
+    for i in constants_Table.table:
+        print(constants_Table.table[i].__dict__)
     pass
 
 def p_paux(p):
@@ -371,9 +375,9 @@ def p_args(p):
 
 def p_var_cte(p):
     '''
-        var_cte : VINTEGER
-                | VFLOAT
-                | VSTRING
+        var_cte : VINTEGER x_add_constants_table_i
+                | VFLOAT x_add_constants_table_f
+                | VSTRING x_add_constants_table_s
     '''
     pass
 
@@ -758,6 +762,43 @@ def p_x_end_while(p):
     quadruples.append(Quadruple("goto", None, None, returnW))
     q=quadruples[end]
     q.set_result(len(quadruples))
+
+def p_x_add_constants_table_i(p):
+    'x_add_constants_table_i :'
+    c = p[-1]
+    if not constants_Table.has_constant(c):
+        a = addr_manager.get_const_int(1)
+        constants_Table.add_constant(c, a)
+    else:
+        aux= constants_Table.get_constant(c)
+        a= aux.address
+    operands_stack.push(a)
+    types_stack.push('int')
+
+
+def p_x_add_constants_table_f(p):
+    'x_add_constants_table_f :'
+    c = p[-1]
+    if not constants_Table.has_constant(c):
+        a = addr_manager.get_const_float(1)
+        constants_Table.add_constant(c, a)
+    else:
+        aux= constants_Table.get_constant(c)
+        a= aux.address
+    operands_stack.push(a)
+    types_stack.push('float')
+
+def p_x_add_constants_table_s(p):
+    'x_add_constants_table_s :'
+    c = p[-1]
+    if not constants_Table.has_constant(c):
+        a = addr_manager.get_const_string(1)
+        constants_Table.add_constant(c, a)
+    else:
+        aux= constants_Table.get_constant(c)
+        a= aux.address
+    operands_stack.push(a)
+    types_stack.push('string')
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
