@@ -263,11 +263,10 @@ def p_funcr(p):
 
 def p_params(p):
     '''
-        params : type_simple x_add_param_signature x_var_dec_set_curr_type COLON ID x_declare_variable
-               | type_simple x_add_param_signature x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
+        params : type_simple x_var_dec_set_curr_type COLON ID x_declare_variable
+               | type_simple x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
     '''
     pass
-
 
 def p_func_type(p):
     '''
@@ -764,14 +763,6 @@ def p_x_end_while(p):
     q=quadruples[end]
     q.set_result(len(quadruples))
 
-<<<<<<< HEAD
-
-def p_x_add_param_signature(p):
-    'x_add_param_signature :'
-    t = p[-1]
-    current_function.add_parameter(t)
-    p[0]=t
-=======
 def p_x_add_constants_table_i(p):
     'x_add_constants_table_i :'
     c = p[-1]
@@ -808,7 +799,6 @@ def p_x_add_constants_table_s(p):
         a= aux.address
     operands_stack.push(a)
     types_stack.push('string')
->>>>>>> origin/condicionales
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
