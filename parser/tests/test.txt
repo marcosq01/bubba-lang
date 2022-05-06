@@ -36,4 +36,8 @@ main () {
         C=C*C;
     };
      A = C*B;
+
+     while(A>B){
+         C=C*D;
+     }
 }

@@ -105,7 +105,7 @@ def p_mainr(p):
     pass
 
 def p_whiler(p):
-    'whiler : WHILE LPAR expression RPAR LBRACE stmts RBRACE'
+    'whiler : WHILE x_while_start LPAR expression RPAR x_generate_gotoF LBRACE stmts RBRACE x_end_while'
     pass
 
 def p_forr(p):
@@ -387,11 +387,11 @@ def p_methods(p):
 
 
 def p_if_else(p):
-    'if_else : IF LPAR expression x_evaluateIf RPAR LBRACE stmts RBRACE x_else ELSE LBRACE stmts RBRACE SEMICOLON x_end_if'
+    'if_else : IF LPAR expression RPAR x_generate_gotoF LBRACE stmts RBRACE x_else ELSE LBRACE stmts RBRACE SEMICOLON x_end_if'
     pass
 
 def p_if(p):
-    'if : IF LPAR expression x_evaluateIf RPAR LBRACE stmts RBRACE SEMICOLON x_end_if'
+    'if : IF LPAR expression RPAR x_generate_gotoF LBRACE stmts RBRACE SEMICOLON x_end_if'
     pass
 
 def p_returnr(p):
@@ -718,18 +718,6 @@ def p_x_pop_Lpar_from_stack(p):
       #popear el operador
     operator_stack.pop()
 
-#revisar la evalucion del if y meter el goto
-def p_x_evaluateIf(p):
-    'x_evaluateIf :'
-    # revisar que la expresion sea int
-    print("hola")
-    typecond = types_stack.pop()
-    valuecond = operands_stack.pop()
-    if typecond!= 'int':
-        Error("Tipo de condición no válida")
-        #guardar el cuadruplo con el salto
-    quadruples.append(Quadruple("gotof", valuecond, None, None))
-    jumps_stack.push(len(quadruples)-1)
 
 def p_x_end_if(p):
     'x_end_if :'
@@ -747,6 +735,29 @@ def p_x_else(p):
     q=quadruples[false]
     q.set_result(len(quadruples))
 
+def p_x_while_start(p):
+    'x_while_start :'
+    jumps_stack.push(len(quadruples))
+
+def p_x_generate_gotoF(p):
+    'x_generate_gotoF :'
+    # revisar que la expresion sea int
+    typecond = types_stack.pop()
+    valuecond = operands_stack.pop()
+    if typecond!= 'int':
+        Error("Tipo de condición no válida")
+        #guardar el cuadruplo con el salto
+    quadruples.append(Quadruple("gotof", valuecond, None, None))
+    jumps_stack.push(len(quadruples)-1)
+
+def p_x_end_while(p):
+    'x_end_while :'
+    # sacamos el salto
+    end = jumps_stack.pop()
+    returnW= jumps_stack.pop()
+    quadruples.append(Quadruple("goto", None, None, returnW))
+    q=quadruples[end]
+    q.set_result(len(quadruples))
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
