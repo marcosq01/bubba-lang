@@ -11,9 +11,17 @@ class FunctionContext:
         self.name = name
         self.type = type
         self.vars_table = vars_table
+        self.signature = []
     
     def get_vars_table(self):
         return self.vars_table
+    
+    def get_parameters(self):
+        return self.signature
+    
+    def add_parameter(self, p):
+        self.signature.append(p)
+
 
 
 class FunctionDirectory:
@@ -40,7 +48,7 @@ class FunctionDirectory:
     def print(self):
         for f in self.directory:
             print("Funcion:", f, " type:", self.directory[f].type)
-            
+            print("Parametros:", self.directory[f].signature)
             # print tabla variables
             self.directory[f].vars_table.print()
             print(" ")

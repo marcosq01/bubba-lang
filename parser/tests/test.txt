@@ -6,7 +6,7 @@ vars {
 }
 
 
-func void f(string : soyunparametro, int : numero) {
+func void f(string : soyunparametro, int : numero, int: j, int: hg, float:pop) {
     vars {
         int : n, l;
         float : f, g;
@@ -27,7 +27,7 @@ main () {
         float : y;
     }
     AUX = ((((A))))+B;
-    B= C+D;
+    B= 9+D+8.9+9+10;
     if (A+B){
         B= C+D;
         D = D*D;
