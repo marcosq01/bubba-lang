@@ -8,3 +8,7 @@ class Quadruple:
         self.right = right
         self.result = result
 
+    def set_result(self, x):
+        self.result = x
+
+
