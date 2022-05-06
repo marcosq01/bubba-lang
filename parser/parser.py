@@ -42,6 +42,9 @@ operands_stack = Stack()
 # stack para los types del stack de operandos
 types_stack = Stack()
 
+# Stack para los staltos
+jumps_stack = Stack()
+
 # estos serian cuadruplos para 'main' (por el momento)
 quadruples = []
 
@@ -64,8 +67,8 @@ current_function_type = None
 def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
     function_directory.print()
-    for i in quadruples:
-        print(i.__dict__)
+    for i in range(len(quadruples)):
+        print(i, quadruples[i].__dict__)
     pass
 
 def p_paux(p):
@@ -384,11 +387,11 @@ def p_methods(p):
 
 
 def p_if_else(p):
-    'if_else : IF LPAR expression RPAR LBRACE stmts RBRACE ELSE LBRACE stmts RBRACE SEMICOLON'
+    'if_else : IF LPAR expression x_evaluateIf RPAR LBRACE stmts RBRACE x_else ELSE LBRACE stmts RBRACE SEMICOLON x_end_if'
     pass
 
 def p_if(p):
-    'if : IF LPAR expression RPAR LBRACE stmts RBRACE SEMICOLON'
+    'if : IF LPAR expression x_evaluateIf RPAR LBRACE stmts RBRACE SEMICOLON x_end_if'
     pass
 
 def p_returnr(p):
@@ -709,13 +712,40 @@ def p_x_OR_op(p):
         else:
             Error("Tipos no compartibles")
 
-#Agregar operador al stack
+#quitar parentesis izquierdo del stack
 def p_x_pop_Lpar_from_stack(p):
     'x_pop_Lpar_from_stack :'
-    #pushear el operador al stack de operador
+      #popear el operador
     operator_stack.pop()
 
+#revisar la evalucion del if y meter el goto
+def p_x_evaluateIf(p):
+    'x_evaluateIf :'
+    # revisar que la expresion sea int
+    print("hola")
+    typecond = types_stack.pop()
+    valuecond = operands_stack.pop()
+    if typecond!= 'int':
+        Error("Tipo de condición no válida")
+        #guardar el cuadruplo con el salto
+    quadruples.append(Quadruple("gotof", valuecond, None, None))
+    jumps_stack.push(len(quadruples)-1)
 
+def p_x_end_if(p):
+    'x_end_if :'
+    # sacamos el salto
+    end = jumps_stack.pop()
+    q=quadruples[end]
+    q.set_result(len(quadruples))
+
+
+def p_x_else(p):
+    'x_else :'
+    quadruples.append(Quadruple("goto", None, None, None))
+    false = jumps_stack.pop()
+    jumps_stack.push(len(quadruples)-1)
+    q=quadruples[false]
+    q.set_result(len(quadruples))
 
 
 # esta regla es para mas claridad en el codigo (gramatica)
