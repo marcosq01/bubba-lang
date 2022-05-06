@@ -6,7 +6,7 @@ vars {
 }
 
 
-func void f(string : soyunparametro, int : numero) {
+func void f(string : soyunparametro, int : numero, int: j, int: hg, float:pop) {
     vars {
         int : n, l;
         float : f, g;

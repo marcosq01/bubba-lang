@@ -259,10 +259,11 @@ def p_funcr(p):
 
 def p_params(p):
     '''
-        params : type_simple x_var_dec_set_curr_type COLON ID x_declare_variable
-               | type_simple x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
+        params : type_simple x_add_param_signature x_var_dec_set_curr_type COLON ID x_declare_variable
+               | type_simple x_add_param_signature x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
     '''
     pass
+
 
 def p_func_type(p):
     '''
@@ -758,6 +759,13 @@ def p_x_end_while(p):
     quadruples.append(Quadruple("goto", None, None, returnW))
     q=quadruples[end]
     q.set_result(len(quadruples))
+
+
+def p_x_add_param_signature(p):
+    'x_add_param_signature :'
+    t = p[-1]
+    current_function.add_parameter(t)
+    p[0]=t
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
