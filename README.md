@@ -27,3 +27,8 @@ En este avance construímos el cubo semántico, para este mismo decidimos utiliz
 ### Avance 3
 
 En este avance si creamos la estructura del directorio de variables, la estructura de los cuádruplos e incluso un avance de la estructura del directorio de funciones. Comenzamos a implementar los puntos neurálgicos: para la declaración de variables, checar errores de tipos, generación de cuádruplos para estatutos lineales.
+
+
+### Avance 4
+
+En este avance implementamos el directorio de funciones, modificamos el manejo de las variables para ahora guardar la dirección y así mismo delimitamos los números de direcciones. Generamos los cuádruplos para los condicionales y el while, creamos e implementamos la tabla de constantes y guardamos los tipos de parámetros de las funciones.
