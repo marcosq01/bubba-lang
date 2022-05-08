@@ -23,3 +23,7 @@ El archivo test.py imprime los errores(si existen) de cada uno de los archivos p
 ### Avance 2
 
 En este avance construímos el cubo semántico, para este mismo decidimos utilizar un diccionario para poder acceder facilmente a los valores. Además de ello corregimos algunos errores de acceso a las valores de arreglos dentro de la gramática. Se hizo un diseño de la tabla de directorio de variables pero no tuvimos tiempo de  implementarlo.
+
+### Avance 3
+
+En este avance si creamos la estructura del directorio de variables, la estructura de los cuádruplos e incluso un avance de la estructura del directorio de funciones. Comenzamos a implementar los puntos neurálgicos: para la declaración de variables, checar errores de tipos, generación de cuádruplos para estatutos lineales.
