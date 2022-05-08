@@ -432,7 +432,6 @@ def p_x_add_prog_to_funcdir(p):
     # Insertar el programa como si fuera una funcion, este tiene
     # la tabla de variables globales
     function_directory.insert_function(FunctionContext(program_name, 'program', VarsTable()))
-    print(function_directory.__dict__)
 
     # La funcion actual es 'programa'
     current_function = function_directory.search_function(program_name)
@@ -444,13 +443,11 @@ def p_x_var_dec_set_curr_type(p):
     'x_var_dec_set_curr_type : '
     global current_type_var_declaration
     current_type_var_declaration = p[-1]
-    print(current_type_var_declaration)
 
 
 def p_x_declare_variable(p):
     'x_declare_variable :'
     var_name = p[-1]
-    print(var_name)
     # Esto por mientras es para variables que no son arreglos
     # Tenemos que buscar la variable en la tabla de variables actual
     # Si ya existe, marcamos error
@@ -463,8 +460,6 @@ def p_x_declare_variable(p):
         t_func = current_function.type
         t_var = current_type_var_declaration
         scope = None
-        print("TFUNC Y TVAR")
-        print(t_func, t_var)
         # estas son las globales
         if t_func == 'program':
             if t_var == 'int':
@@ -488,8 +483,6 @@ def p_x_declare_variable(p):
 
         var = VariableContext(p[-1], current_type_var_declaration, addr) 
         current_vars_table.insert_var(var)
-        print("TABLA VARIABLES: ")
-        print(current_vars_table.__dict__)
 
 
 def p_x_set_current_vars_table(p):
@@ -518,8 +511,6 @@ def p_x_insert_new_function(p):
     current_vars_table = VarsTable()
     current_function = FunctionContext(func_name, current_function_type, current_vars_table)
     function_directory.insert_function(current_function)
-    print("Nueva funcion: ")
-    print(function_directory.__dict__)
 
     # actualizar las direcciones locales y temporales 
     addr_manager.reset()
