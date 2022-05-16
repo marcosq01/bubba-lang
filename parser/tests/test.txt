@@ -25,7 +25,10 @@ main () {
     vars {
         int : AUX, A, B, C,D, E,F,G,H,J,K,L;
         float : y;
+        string: a;
     }
+
+    dsf(a,a);
     AUX = ((((A))))+B;
     B= 9+D+8.9+9+10;
     if (A+B){
