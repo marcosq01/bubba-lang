@@ -105,7 +105,7 @@ def p_funcs(p):
 
 
 def p_mainr(p):
-    'mainr : MAIN x_add_main_to_func_dir LPAR RPAR LBRACE body RBRACE'
+    'mainr : MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr LBRACE body RBRACE'
     pass
 
 def p_whiler(p):
@@ -256,8 +256,8 @@ def p_expression(p):
 
 def p_funcr(p):
     '''
-        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR LBRACE body RBRACE
-              | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR params RPAR LBRACE body RBRACE
+        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
+              | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR params RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
     '''
     pass
 
@@ -473,10 +473,13 @@ def p_x_declare_variable(p):
         else:
             if t_var == 'int':
                 addr = addr_manager.get_local_int(1)
+                current_function.local_int_counter += 1
             elif t_var == 'float':
                 addr = addr_manager.get_local_float(1)
+                current_function.local_float_counter += 1
             elif t_var == 'string':
                 addr = addr_manager.get_local_string(1)
+                current_function.local_string_counter += 1
 
         # TODO clases y arreglos
 
@@ -575,11 +578,14 @@ def p_x_pop_MulD_of_stack(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
+                current_function.temp_int_counter += 1
             elif (ft=='float'):
                 result =  addr_manager.get_temp_float(1)
+                current_function.temp_float_counter += 1
             else :
-                 result =  addr_manager.get_temp_string(1)
-            
+                result =  addr_manager.get_temp_string(1)
+                current_function.temp_string_counter += 1
+
             quadruples.append(Quadruple(op,l,r,result))
             operands_stack.push(result)
             types_stack.push(ft)
@@ -601,11 +607,14 @@ def p_x_pop_PLUSM_of_stack(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
+                current_function.temp_int_counter += 1
             elif (ft=='float'):
                 result =  addr_manager.get_temp_float(1)
+                current_function.temp_float_counter += 1
             else :
-                 result =  addr_manager.get_temp_string(1)
-            
+                result =  addr_manager.get_temp_string(1)
+                current_function.temp_string_counter += 1
+
             quadruples.append(Quadruple(op,l,r,result))
             operands_stack.push(result)
             types_stack.push(ft)
@@ -645,11 +654,14 @@ def p_x_comparison_op(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
+                current_function.temp_int_counter += 1
             elif (ft=='float'):
                 result =  addr_manager.get_temp_float(1)
-            else :
-                 result =  addr_manager.get_temp_string(1)
-            
+                current_function.temp_float_counter += 1
+            else:
+                result =  addr_manager.get_temp_string(1)
+                current_function.temp_string_counter += 1
+
             quadruples.append(Quadruple(op,l,r,result))
             operands_stack.push(result)
             types_stack.push(ft)
@@ -670,10 +682,16 @@ def p_x_AND_op(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
+                current_function.temp_int_counter += 1
+
             elif (ft=='float'):
                 result =  addr_manager.get_temp_float(1)
-            else :
-                 result =  addr_manager.get_temp_string(1)
+                current_function.temp_float_counter += 1
+
+            else:
+                result =  addr_manager.get_temp_string(1)
+                current_function.temp_string_counter += 1
+
             
             quadruples.append(Quadruple(op,l,r,result))
             operands_stack.push(result)
@@ -696,10 +714,14 @@ def p_x_OR_op(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
+                current_function.temp_int_counter += 1
             elif (ft=='float'):
                 result =  addr_manager.get_temp_float(1)
-            else :
-                 result =  addr_manager.get_temp_string(1)
+                current_function.temp_float_counter += 1
+            else:
+                result =  addr_manager.get_temp_string(1)
+                current_function.temp_string_counter += 1
+
             
             quadruples.append(Quadruple(op,l,r,result))
             operands_stack.push(result)
@@ -790,6 +812,14 @@ def p_x_add_constants_table_s(p):
         a= aux.address
     operands_stack.push(a)
     types_stack.push('string')
+
+def p_x_func_init_addr(p):
+    'x_func_init_addr :'
+    current_function.initial_address = len(quadruples)
+
+def p_x_add_endfunc(p):
+    'x_add_endfunc :'
+    quadruples.append(Quadruple('endfunc', None, None, None))
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada

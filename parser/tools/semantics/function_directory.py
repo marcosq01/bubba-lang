@@ -12,6 +12,13 @@ class FunctionContext:
         self.type = type
         self.vars_table = vars_table
         self.signature = []
+        self.initial_address = None
+        self.temp_int_counter = 0
+        self.temp_float_counter = 0
+        self.temp_string_counter = 0
+        self.local_int_counter = 0
+        self.local_float_counter = 0
+        self.local_string_counter = 0
     
     def get_vars_table(self):
         return self.vars_table
@@ -49,6 +56,13 @@ class FunctionDirectory:
         for f in self.directory:
             print("Funcion:", f, " type:", self.directory[f].type)
             print("Parametros:", self.directory[f].signature)
+            print("Initial address:", self.directory[f].initial_address)
+            print("Local int", self.directory[f].local_int_counter)
+            print("Local float", self.directory[f].local_float_counter)
+            print("Local string", self.directory[f].local_string_counter)
+            print("Temp int", self.directory[f].temp_int_counter)
+            print("Temp float", self.directory[f].temp_float_counter)
+            print("Temp string", self.directory[f].temp_string_counter)
             # print tabla variables
             self.directory[f].vars_table.print()
             print(" ")
