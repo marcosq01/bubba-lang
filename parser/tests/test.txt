@@ -28,7 +28,7 @@ main () {
         string: a;
     }
 
-    dsf(a,a);
+    f();
     AUX = ((((A))))+B;
     B= 9+D+8.9+9+10;
     if (A+B){

@@ -842,24 +842,23 @@ def p_x_check_parameters(p):
     argument= operands_stack.pop()
     argumentType= types_stack.pop()
     f = function_directory.search_function(current_function_call_name)
-    print("HOLAAAAAAA")
-
-    print(f.name)
+    if function_args_pointer >= len(f.signature):
+        Error("Demasiados argumentos para llamada a funcion \"" + f.name + "\"")
     if f.signature[function_args_pointer] ==argumentType:
         quadruples.append(Quadruple('parameter', argument, None,function_args_pointer))
         function_args_pointer +=1
+    else:
+        Error("Tipos incompatibles en llamada a funcion \"" + f.name + "\"")
 
 def p_x_points_null(p):
     'x_points_null :'
     f = function_directory.search_function(current_function_call_name)
     if not function_args_pointer >= len(f.signature):
-        Error("Numero de argumentos inconsistente")
+        Error("Numero de argumentos inconsistente en llamada a funcion \"" + f.name + "\"")
     quadruples.append(Quadruple('gosub', current_function_call_name, None,f.initial_address))
 
 def p_x_add_param(p):
     'x_add_param :'
-    print("FUNCIOOOOON")
-    print(current_function.__dict__)
     c= current_function.signature
     c.append(p[-1])
     p[0] = p[-1]
