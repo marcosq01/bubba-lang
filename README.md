@@ -32,3 +32,7 @@ En este avance si creamos la estructura del directorio de variables, la estructu
 ### Avance 4
 
 En este avance implementamos el directorio de funciones, modificamos el manejo de las variables para ahora guardar la dirección y así mismo delimitamos los números de direcciones. Generamos los cuádruplos para los condicionales y el while, creamos e implementamos la tabla de constantes y guardamos los tipos de parámetros de las funciones.
+
+### Avance 5
+
+En este avance trabajamos con la llamada de funciones, implementamos la revisión de existencia de las funciones, realizamos la revisión de argumentos contra parámetros y la creación de los cuádruplos. 
