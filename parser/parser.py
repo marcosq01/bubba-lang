@@ -1,5 +1,6 @@
 
 
+from distutils.log import error
 from tools.semantics.constants_table import Constant, ConstantsTable
 from ply import yacc
 from lexer import tokens
@@ -61,6 +62,9 @@ current_type_var_declaration = None
 current_function = None
 current_vars_table = None
 current_function_type = None
+
+function_args_pointer = 0
+current_function_call_name = None
 
 
 # -----------------------------------------------------------------
@@ -263,8 +267,8 @@ def p_funcr(p):
 
 def p_params(p):
     '''
-        params : type_simple x_var_dec_set_curr_type COLON ID x_declare_variable
-               | type_simple x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
+        params : type_simple x_add_param x_var_dec_set_curr_type COLON ID x_declare_variable
+               | type_simple x_add_param x_var_dec_set_curr_type COLON ID x_declare_variable COMMA params
     '''
     pass
 
@@ -354,8 +358,8 @@ def p_type_simple(p):
 
 def p_call(p):
     '''
-        call : call_id LPAR RPAR
-             | call_id LPAR args RPAR
+        call : call_id x_verify_func LPAR x_points_null RPAR
+             | call_id x_verify_func LPAR args x_points_null RPAR
     '''
     pass
 
@@ -364,12 +368,12 @@ def p_call_id(p):
         call_id : ID
                 | ID DOT ID
     '''
-    pass
+    p[0]=p[1]
 
 def p_args(p):
     '''
-        args : expression
-             | expression COMMA args
+        args : expression x_check_parameters
+             | expression x_check_parameters COMMA args
     '''
     pass
 
@@ -820,6 +824,49 @@ def p_x_func_init_addr(p):
 def p_x_add_endfunc(p):
     'x_add_endfunc :'
     quadruples.append(Quadruple('endfunc', None, None, None))
+
+def p_x_verify_func(p):
+    'x_verify_func :'
+    if function_directory.has_function(p[-1]):
+        global current_function_call_name
+        global function_args_pointer
+        function_args_pointer = 0
+        current_function_call_name = p[-1]
+        quadruples.append(Quadruple('era', None, None, p[-1]))
+    else:
+        Error("Función no existe")
+
+def p_x_check_parameters(p):
+    'x_check_parameters :'
+    global function_args_pointer
+    argument= operands_stack.pop()
+    argumentType= types_stack.pop()
+    f = function_directory.search_function(current_function_call_name)
+    if function_args_pointer >= len(f.signature):
+        Error("Demasiados argumentos para llamada a funcion \"" + f.name + "\"")
+    if f.signature[function_args_pointer] ==argumentType:
+        quadruples.append(Quadruple('parameter', argument, None,function_args_pointer))
+        function_args_pointer +=1
+    else:
+        Error("Tipos incompatibles en llamada a funcion \"" + f.name + "\"")
+
+def p_x_points_null(p):
+    'x_points_null :'
+    f = function_directory.search_function(current_function_call_name)
+    if not function_args_pointer >= len(f.signature):
+        Error("Numero de argumentos inconsistente en llamada a funcion \"" + f.name + "\"")
+    quadruples.append(Quadruple('gosub', current_function_call_name, None,f.initial_address))
+
+def p_x_add_param(p):
+    'x_add_param :'
+    c= current_function.signature
+    c.append(p[-1])
+    p[0] = p[-1]
+
+
+
+    
+
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
