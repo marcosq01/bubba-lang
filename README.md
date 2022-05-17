@@ -35,4 +35,7 @@ En este avance implementamos el directorio de funciones, modificamos el manejo d
 
 ### Avance 5
 
-En este avance trabajamos con la llamada de funciones, implementamos la revisión de existencia de las funciones, realizamos la revisión de argumentos contra parámetros y la creación de los cuádruplos. 
+En este avance se añadió la generación de cuádruplos correspondientes a la declaración y a la llamada de funciones (era, gosub, parameter, endfunc).
+También se hizo la contabilización de variables locales y temporales por cada tipo de dato en cada función.
+Esta información se utilizará más adelante para el manejo de memoria de la máquina virtual. En las llamadas a funciones se lleva a cabo la verificación de que los argumentos sean los correctos (tipos) con respecto a los parámetros que recibe la función que está siendo llamada.
+Para el próximo avance se agregará lo necesario para el return statement de las funciones que no son tipo void.
