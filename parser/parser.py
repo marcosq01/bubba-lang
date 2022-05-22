@@ -874,12 +874,7 @@ def p_x_print_expr(p):
 def p_x_funcr_return(p):
     'x_funcr_return :'
     global current_function_return
-    current_function_return = 1
-
-def p_x_has_return(p):
-    'x_has_return :'
-    global current_function_return
-    current_function_return = 1   
+    current_function_return = 1  
 
 
 
