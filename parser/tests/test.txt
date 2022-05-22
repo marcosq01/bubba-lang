@@ -27,8 +27,8 @@ main () {
         float : y;
         string: a;
     }
+    print (9+10, A, 3*9);
 
-    f();
     AUX = ((((A))))+B;
     B= 9+D+8.9+9+10;
     if (A+B){

@@ -292,12 +292,12 @@ def p_class_extends(p):
     '''
 
 def p_output(p):
-    'output : PRINT LPAR expression output_a RPAR SEMICOLON'
+    'output : PRINT LPAR expression x_print_expr output_a RPAR SEMICOLON'
     pass
 
 def p_output_a(p):
     '''
-        output_a : COMMA expression output_a
+        output_a : COMMA expression x_print_expr output_a
                  | empty
     '''
     pass
@@ -862,6 +862,10 @@ def p_x_add_param(p):
     c= current_function.signature
     c.append(p[-1])
     p[0] = p[-1]
+
+def p_x_print_expr(p):
+    'x_print_expr :'
+    quadruples.append(Quadruple('print', None, None,operands_stack.top()))
 
 
 
