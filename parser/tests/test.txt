@@ -20,15 +20,21 @@ func void dsf(string : asdf, int : fsd) {
     }
 }
 
-
+func int segundo(int : osos) {
+    vars {
+        int :osito;
+        float : osote;
+    }
+    return osito;
+}
 main () {
     vars {
         int : AUX, A, B, C,D, E,F,G,H,J,K,L;
         float : y;
         string: a;
     }
+    print (9+10, A, 3*9);
 
-    f();
     AUX = ((((A))))+B;
     B= 9+D+8.9+9+10;
     if (A+B){

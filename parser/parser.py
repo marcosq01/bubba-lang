@@ -1,6 +1,7 @@
 
 
 from distutils.log import error
+from doctest import ELLIPSIS_MARKER
 from tools.semantics.constants_table import Constant, ConstantsTable
 from ply import yacc
 from lexer import tokens
@@ -65,6 +66,7 @@ current_function_type = None
 
 function_args_pointer = 0
 current_function_call_name = None
+current_function_return=0 
 
 
 # -----------------------------------------------------------------
@@ -260,7 +262,7 @@ def p_expression(p):
 
 def p_funcr(p):
     '''
-        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
+        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc 
               | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR params RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
     '''
     pass
@@ -292,12 +294,12 @@ def p_class_extends(p):
     '''
 
 def p_output(p):
-    'output : PRINT LPAR expression output_a RPAR SEMICOLON'
+    'output : PRINT LPAR expression x_print_expr output_a RPAR SEMICOLON'
     pass
 
 def p_output_a(p):
     '''
-        output_a : COMMA expression output_a
+        output_a : COMMA expression x_print_expr output_a
                  | empty
     '''
     pass
@@ -404,7 +406,7 @@ def p_if(p):
 
 def p_returnr(p):
     '''
-        returnr : RETURN expression SEMICOLON
+        returnr : RETURN expression SEMICOLON x_funcr_return
                 | RETURN SEMICOLON
     '''
     pass
@@ -823,6 +825,8 @@ def p_x_func_init_addr(p):
 
 def p_x_add_endfunc(p):
     'x_add_endfunc :'
+    if(current_function_type!= "void" and not current_function_return):
+     Error("La función no regresa ningún valor")
     quadruples.append(Quadruple('endfunc', None, None, None))
 
 def p_x_verify_func(p):
@@ -863,9 +867,17 @@ def p_x_add_param(p):
     c.append(p[-1])
     p[0] = p[-1]
 
+def p_x_print_expr(p):
+    'x_print_expr :'
+    quadruples.append(Quadruple('print', None, None,operands_stack.top()))
+
+def p_x_funcr_return(p):
+    'x_funcr_return :'
+    global current_function_return
+    current_function_return = 1  
 
 
-    
+
 
 
 # esta regla es para mas claridad en el codigo (gramatica)
