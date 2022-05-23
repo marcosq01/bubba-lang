@@ -63,6 +63,8 @@ current_type_var_declaration = None
 current_function = None
 current_vars_table = None
 current_function_type = None
+current_var_name = None
+current_var = None
 
 function_args_pointer = 0
 current_function_call_name = None
@@ -152,28 +154,45 @@ def p_statement(p):
 
 def p_lid(p):
     '''
-        lid : var_dec x_declare_variable 
-            | var_dec x_declare_variable COMMA lid 
+        lid : var_dec
+            | var_dec COMMA lid 
     '''
     pass
 
 def p_var_dec(p):
     '''
-        var_dec : ID
-                | ID LBRACKET VINTEGER RBRACKET
-                | ID LBRACKET VINTEGER COMMA VINTEGER RBRACKET
+        var_dec : ID x_declare_variable 
+                | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len RBRACKET 
+                | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len COMMA VINTEGER x_set_second_len RBRACKET
     '''
     # return var_id
     p[0] = p[1]
 
+def p_x_set_first_len(p):
+    'x_set_first_len :'
+    var = current_vars_table.search_var(current_var_name)
+    var.first_len = p[-1]
+    
+def p_x_set_second_len(p):
+    'x_set_second_len :'
+    var = current_vars_table.search_var(current_var_name)
+    var.second_len = p[-1]
+    var.is_array = 2
 
+    # if varData.is_array != 0:
+    #     Error("Variable \'" + varData.name + "\' es un arreglo")
 
 def p_var(p):
     '''
-        var : var_id x_add_Var_to_stack
-            | var_id var_brackets
+        var : var_id x_add_Var_to_stack x_check_var_dimension_normal
+            | var_id x_add_Var_to_stack var_brackets
     '''
     p[0]=p[1]
+
+def p_x_check_var_dimension_normal(p):
+    'x_check_var_dimension_normal :'
+    if current_var.is_array != 0:
+        Error("Variable \'" + current_var.name + "\' es un arreglo")
 
 def p_var_id(p):
     '''
@@ -182,12 +201,28 @@ def p_var_id(p):
     '''
     p[0]=p[1]
 
+
 def p_var_brackets(p):
     '''
-        var_brackets : LBRACKET expression RBRACKET
-                     | LBRACKET expression COMMA expression RBRACKET
+        var_brackets : LBRACKET x_check_first_dimension expression RBRACKET
+                     | LBRACKET x_check_first_dimension expression COMMA x_check_second_dimension expression RBRACKET
     '''
     pass
+
+def p_x_check_first_dimension(p):
+    'x_check_first_dimension :'
+    print("FIRST", current_var.is_array)
+    if current_var.is_array < 1:
+        # TODO mensaje de error
+        Error("Variable \'" + current_var.name + "\' dimensiones no coinciden")
+
+        
+def p_x_check_second_dimension(p):
+    'x_check_second_dimension :'
+    print("KAREN", current_var.is_array)
+    if current_var.is_array < 2:
+        # TODO mensaje de error
+        Error("Variable \'" + current_var.name + "\' dimensiones no coinciden")
 
 def p_assign(p):
     'assign : var EQUAL x_add_op_to_stack expression x_assignment_op SEMICOLON'
@@ -454,6 +489,8 @@ def p_x_var_dec_set_curr_type(p):
 def p_x_declare_variable(p):
     'x_declare_variable :'
     var_name = p[-1]
+    global current_var_name
+    current_var_name = var_name
     # Esto por mientras es para variables que no son arreglos
     # Tenemos que buscar la variable en la tabla de variables actual
     # Si ya existe, marcamos error
@@ -492,6 +529,7 @@ def p_x_declare_variable(p):
 
         var = VariableContext(p[-1], current_type_var_declaration, addr) 
         current_vars_table.insert_var(var)
+    p[0] = var_name
 
 
 def p_x_set_current_vars_table(p):
@@ -557,6 +595,9 @@ def p_x_add_Var_to_stack(p):
             print(varname)
             Error ("Variable no ha sido declarada")
 
+    global current_var_name, current_var
+    current_var_name = varname
+    current_var = varData
     #pushear la direccion al stack de operandos
     operands_stack.push(varData.address)
     #pushear el tipo al stack de tipos
@@ -877,8 +918,11 @@ def p_x_funcr_return(p):
     current_function_return = 1  
 
 
-
-
+def p_x_set_is_array_1d(p):
+    'x_set_is_array_1d :'
+    var = current_vars_table.search_var(p[-1])
+    var.is_array = 1
+    
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
