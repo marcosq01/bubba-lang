@@ -15,7 +15,7 @@ class VariableContext:
         self.address = address
         self.is_array = 0
         self.first_len = 0
-        self.second_len = 0
+        self.second_len = None
 
 
 

@@ -49,4 +49,9 @@ main () {
      while(A>B){
          C=C*D;
      }
+
+
+
+    a = x + mat[ c + arr[a + 3, x] , p]
+
 }

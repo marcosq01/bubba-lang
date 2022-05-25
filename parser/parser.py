@@ -2,6 +2,7 @@
 
 from distutils.log import error
 from doctest import ELLIPSIS_MARKER
+from re import I
 from tools.semantics.constants_table import Constant, ConstantsTable
 from ply import yacc
 from lexer import tokens
@@ -56,7 +57,6 @@ constants_Table = ConstantsTable()
 addr_manager = AddressManager()
 
 
-
 program_name = None
 current_type_var_declaration = None
 
@@ -66,9 +66,16 @@ current_function_type = None
 current_var_name = None
 current_var = None
 
+# Este stack es para los accesos a elementos de matrices que estan anidados
+# ejemplo: matriz[x, a + arr[0, 1]]
+vars_stack = Stack()
+
+
 function_args_pointer = 0
 current_function_call_name = None
 current_function_return=0 
+
+
 
 
 # -----------------------------------------------------------------
@@ -81,7 +88,6 @@ def p_program(p):
         print(i, quadruples[i].__dict__)
     for i in constants_Table.table:
         print(constants_Table.table[i].__dict__)
-    pass
 
 def p_paux(p):
     '''
@@ -162,25 +168,11 @@ def p_lid(p):
 def p_var_dec(p):
     '''
         var_dec : ID x_declare_variable 
-                | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len RBRACKET 
-                | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len COMMA VINTEGER x_set_second_len RBRACKET
+                | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len x_add_constant_arr_size RBRACKET x_array_get_addrs
+                | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len x_add_constant_arr_size COMMA VINTEGER x_set_second_len x_add_constant_arr_size RBRACKET x_matrix_get_addrs
     '''
-    # return var_id
     p[0] = p[1]
 
-def p_x_set_first_len(p):
-    'x_set_first_len :'
-    var = current_vars_table.search_var(current_var_name)
-    var.first_len = p[-1]
-    
-def p_x_set_second_len(p):
-    'x_set_second_len :'
-    var = current_vars_table.search_var(current_var_name)
-    var.second_len = p[-1]
-    var.is_array = 2
-
-    # if varData.is_array != 0:
-    #     Error("Variable \'" + varData.name + "\' es un arreglo")
 
 def p_var(p):
     '''
@@ -189,10 +181,6 @@ def p_var(p):
     '''
     p[0]=p[1]
 
-def p_x_check_var_dimension_normal(p):
-    'x_check_var_dimension_normal :'
-    if current_var.is_array != 0:
-        Error("Variable \'" + current_var.name + "\' es un arreglo")
 
 def p_var_id(p):
     '''
@@ -204,25 +192,10 @@ def p_var_id(p):
 
 def p_var_brackets(p):
     '''
-        var_brackets : LBRACKET x_check_first_dimension expression RBRACKET
-                     | LBRACKET x_check_first_dimension expression COMMA x_check_second_dimension expression RBRACKET
+        var_brackets : x_push_vars_stack LBRACKET x_check_first_dimension expression RBRACKET x_is_array x_check_first_bounds x_end_array_bracket x_pop_vars_stack
+                     | x_push_vars_stack LBRACKET x_check_first_dimension expression COMMA x_check_second_dimension x_check_first_bounds expression RBRACKET x_check_second_bounds x_end_matrix_bracket x_pop_vars_stack
     '''
     pass
-
-def p_x_check_first_dimension(p):
-    'x_check_first_dimension :'
-    print("FIRST", current_var.is_array)
-    if current_var.is_array < 1:
-        # TODO mensaje de error
-        Error("Variable \'" + current_var.name + "\' dimensiones no coinciden")
-
-        
-def p_x_check_second_dimension(p):
-    'x_check_second_dimension :'
-    print("KAREN", current_var.is_array)
-    if current_var.is_array < 2:
-        # TODO mensaje de error
-        Error("Variable \'" + current_var.name + "\' dimensiones no coinciden")
 
 def p_assign(p):
     'assign : var EQUAL x_add_op_to_stack expression x_assignment_op SEMICOLON'
@@ -529,6 +502,9 @@ def p_x_declare_variable(p):
 
         var = VariableContext(p[-1], current_type_var_declaration, addr) 
         current_vars_table.insert_var(var)
+    
+    global current_var
+    current_var = var
     p[0] = var_name
 
 
@@ -602,6 +578,9 @@ def p_x_add_Var_to_stack(p):
     operands_stack.push(varData.address)
     #pushear el tipo al stack de tipos
     types_stack.push(varData.type)
+
+    # return nombre de la variable
+    p[0] = varname
 
 
 
@@ -823,6 +802,14 @@ def p_x_end_while(p):
     q=quadruples[end]
     q.set_result(len(quadruples))
 
+def p_x_add_constant_arr_size(p):
+    'x_add_constant_arr_size :'
+    c = p[-1]
+    if not constants_Table.has_constant(c):
+        a = addr_manager.get_const_int(1)
+        constants_Table.add_constant(c, a)
+
+
 def p_x_add_constants_table_i(p):
     'x_add_constants_table_i :'
     c = p[-1]
@@ -922,7 +909,208 @@ def p_x_set_is_array_1d(p):
     'x_set_is_array_1d :'
     var = current_vars_table.search_var(p[-1])
     var.is_array = 1
+
+
+
+# TODO asignar bien todas las direcciones en arreglos y matrices
+
+def p_x_array_get_addrs(p):
+    'x_array_get_addrs :'
+    # cuantos tiene el array
+    n = current_var.first_len
+    # type de la variable
+    t = current_var.type
+    # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
+    if t == 'int':
+        addr_manager.get_local_int(n - 1)
+    elif t == 'float':
+        addr_manager.get_local_float(n - 1)
+    elif t == 'string':
+        addr_manager.get_local_string(n - 1)
+
+
+def p_x_matrix_get_addrs(p):
+    'x_matrix_get_addrs :'
+    # cuantos tiene la matriz
+    n = current_var.first_len
+    m = current_var.second_len
+    # type de la variable
+    t = current_var.type
+    # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
+    if t == 'int':
+        addr_manager.get_local_int(n * m - 1)
+    elif t == 'float':
+        addr_manager.get_local_float(n * m - 1)
+    elif t == 'string':
+        addr_manager.get_local_string(n * m - 1)
+
+def p_x_set_first_len(p):
+    'x_set_first_len :'
+    var = current_vars_table.search_var(current_var_name)
+    var.first_len = p[-1]
+    p[0] = p[-1]
     
+def p_x_set_second_len(p):
+    'x_set_second_len :'
+    var = current_vars_table.search_var(current_var_name)
+    var.second_len = p[-1]
+    var.is_array = 2
+    p[0] = p[-1]
+    
+
+def p_x_check_var_dimension_normal(p):
+    'x_check_var_dimension_normal :'
+    global current_var
+    if current_var.is_array != 0:
+        Error("Variable \'" + current_var.name + "\' es un arreglo")
+    current_var = vars_stack.top()
+    
+
+def p_x_is_array(p):
+    'x_is_array :'
+    if current_var.is_array != 1:
+        Error("Dimensiones de la variable \'" + current_var.name + "\' no coinciden") 
+
+
+def p_x_check_first_bounds(p):
+    'x_check_first_bounds :'
+    # primero checar las dimensiones
+    # por ejemplo tenemos variable B[1,2] y una expresion B[1]
+    expr = operands_stack.top()
+    expr_type = types_stack.top()
+    # operands_stack.pop()
+    # types_stack.pop()
+
+    if expr_type != 'int':
+        Error("Expresión dentro de indexación debe ser tipo int")
+
+    # necesito la constante del tamano del array (primera dimension y segunda dimension)
+    first_len = current_var.first_len
+    constant_first_len = constants_Table.get_constant(first_len)
+    addr_first_len = constant_first_len.address
+    
+    # generar el cuadruplo de 'verify'
+
+    q = Quadruple('verify', addr_first_len, None, expr)
+    quadruples.append(q)
+
+
+def p_x_check_second_bounds(p):
+    'x_check_second_bounds :'
+    # primero checar las dimensiones
+    # por ejemplo tenemos variable B[1,2] y una expresion B[1]
+    expr = operands_stack.top()
+    expr_type = types_stack.top()
+    # operands_stack.pop()
+    # types_stack.pop()
+
+    if expr_type != 'int':
+        Error("Expresión dentro de indexación debe ser tipo int")
+
+    # necesito la constante del tamano del array (primera dimension y segunda dimension)
+
+    second_len = current_var.second_len
+    constant_second_len = constants_Table.get_constant(second_len)
+
+    addr_second_len = constant_second_len.address
+    # generar el cuadruplo de 'verify'
+
+    q = Quadruple('verify', None, addr_second_len, expr)
+    quadruples.append(q)
+
+
+def p_x_end_matrix_bracket(p):
+    'x_end_matrix_bracket :'
+    # en este punto tenemos en el stack de operandos (Direcciones) lo siguiente:
+    # [direccion_base,  fila, columna]
+    # tenemos que hacer la formula fila * col_len + columna  + direccion base
+    # o sea tenemos que hacer TRES cuadruplos + uno para verificar
+
+    col_addr = operands_stack.pop()
+    row_addr = operands_stack.pop()
+    base_dir_addr = operands_stack.pop()
+
+    # obtener el address de num columas, es decir var.second_len
+    col_len = current_var.second_len
+    const = constants_Table.get_constant(col_len)   
+    col_len_addr = const.address
+
+    # generar los cuadruplos
+    a1 = addr_manager.get_temp_int(1)
+    q1 = Quadruple('*', row_addr, col_len_addr, a1)
+
+    a2 = addr_manager.get_temp_int(1)
+    q2 = Quadruple('+', a1, col_addr, a2)
+
+    # ahora el cuadruplo del offset
+    res_addr = addr_manager.get_temp_int(1)
+    operands_stack.push(('pointer', res_addr))
+    types_stack.push('int')
+    q3 = Quadruple('address', base_dir_addr, a2, res_addr)
+    quadruples.append(q1)
+    quadruples.append(q2)
+    quadruples.append(q3)
+
+    operator_stack.pop()
+
+def p_x_end_array_bracket(p):
+    'x_end_array_bracket :'
+    # primero checar las dimensiones
+    # por ejemplo tenemos variable B[1,2] y una expresion B[1]
+
+    expr = operands_stack.top()
+    expr_type = types_stack.top()
+    operands_stack.pop()
+    types_stack.pop()
+
+    # aqui se crea el cuadruplo para verificar que este en el rango del array
+
+    # primero obtenemos el address de la constante del tamano del array
+
+
+    curr_var_addr = operands_stack.pop()
+
+    # el address se guarda en un tuple para que la vm sepa que es una direccion
+    # se le pone un temporal int al valor de esa direccion
+    new_addr = addr_manager.get_temp_int(1)
+    operands_stack.push(('pointer', new_addr))
+    types_stack.push('int')
+    q = Quadruple('address', curr_var_addr, expr, new_addr)
+
+    quadruples.append(q)
+    operator_stack.pop()
+    
+
+def p_x_push_vars_stack(p):
+    'x_push_vars_stack :'
+    vars_stack.push(current_var)
+    operator_stack.push('[')
+    
+def p_x_pop_vars_stack(p):
+    'x_pop_vars_stack :'
+    vars_stack.pop()
+    global current_var
+    current_var = vars_stack.top()
+
+
+def p_x_check_first_dimension(p):
+    'x_check_first_dimension :'
+    if not current_var.is_array >= 1:
+        # TODO mensaje de error
+        Error("Variable \'" + current_var.name + "\' dimensiones no coinciden")
+
+
+def p_x_check_second_dimension(p):
+    'x_check_second_dimension :'
+    global current_var
+    current_var = vars_stack.top()
+    if current_var.is_array != 2:
+        # TODO mensaje de error
+        Error("Variable \'" + current_var.name + "\' dimensiones no coinciden")
+
+    # aqui tambien se checa que este en el rango 
+
+
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
@@ -938,7 +1126,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-f = open("./tests/test.txt")
+f = open("./tests/test6.txt")
 
 
 # correr un ejemplo 
