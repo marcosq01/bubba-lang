@@ -44,3 +44,10 @@ Para el próximo avance se agregará lo necesario para el return statement de la
 ### Avance 6
 
 En este avance se añadió la generación de cuádruplos para output y la revisión de las funciones no void para que tuvieran un return. Se agregaron reglas para añadir los arreglos a la tabla de variables con los respectivos tamaños de sus dimensiones. En el uso de arreglos como expresiones se verifica que el tamaño de las dimensiones a las que se quiere acceder se encuentren dentro del rango de tamaño del arreglo guardado y que la cantidad de dimensiones sea coherente con la se tiene guardada en la tabla. Además de generar los cuádruplos para la verificación, uno de multiplicación y suma para el caso de la matriz y uno de address que es para generar el pointer. 
+
+### Avance 7
+
+Para este avance se creó el 'esqueleto'  de la maquina virtual y también el mapa de memoria el cual nos sirve para asignar las variables por cada llamada
+a funciones. También se corrigieron algunos detalles o errores.
+
+
