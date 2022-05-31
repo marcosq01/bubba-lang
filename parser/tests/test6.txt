@@ -1,8 +1,11 @@
 prog arrays:
 
+vars {
+    int : A[1, 2], B[2, 3], x, i, ar[10];
+    string : s[10, 3], t;
+}
+
 main() {
-    vars {
-        int : A[1, 2], B[2, 3], x, i;
-    }
-    x = A[B[3, A[i, 2]], A[3,4] * 100];
+
+    x = A[3,4] + 6;
 }

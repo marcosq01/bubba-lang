@@ -88,6 +88,10 @@ def p_program(p):
         print(i, quadruples[i].__dict__)
     for i in constants_Table.table:
         print(constants_Table.table[i].__dict__)
+    
+    print(operator_stack.__dict__)
+    print(operands_stack.__dict__)
+    print(types_stack.__dict__)
 
 def p_paux(p):
     '''
@@ -1037,9 +1041,14 @@ def p_x_end_matrix_bracket(p):
     # tenemos que hacer la formula fila * col_len + columna  + direccion base
     # o sea tenemos que hacer TRES cuadruplos + uno para verificar
 
+    # pop dos veces al types stack, ya no necesitamos esos valores
+    types_stack.pop()
+    types_stack.pop()
+
     col_addr = operands_stack.pop()
     row_addr = operands_stack.pop()
     base_dir_addr = operands_stack.pop()
+    curr_var_type = types_stack.pop()
 
     # obtener el address de num columas, es decir var.second_len
     col_len = current_var.second_len
@@ -1056,7 +1065,7 @@ def p_x_end_matrix_bracket(p):
     # ahora el cuadruplo del offset
     res_addr = addr_manager.get_temp_int(1)
     operands_stack.push(('pointer', res_addr))
-    types_stack.push('int')
+    types_stack.push(curr_var_type)
     q3 = Quadruple('address', base_dir_addr, a2, res_addr)
     quadruples.append(q1)
     quadruples.append(q2)
@@ -1080,17 +1089,20 @@ def p_x_end_array_bracket(p):
 
 
     curr_var_addr = operands_stack.pop()
-
+    curr_var_type = types_stack.pop()
     # el address se guarda en un tuple para que la vm sepa que es una direccion
     # se le pone un temporal int al valor de esa direccion
     new_addr = addr_manager.get_temp_int(1)
     operands_stack.push(('pointer', new_addr))
-    types_stack.push('int')
+    types_stack.push(curr_var_type)
     q = Quadruple('address', curr_var_addr, expr, new_addr)
 
     quadruples.append(q)
     operator_stack.pop()
     
+    print(operator_stack.__dict__)
+    print(operands_stack.__dict__)
+    print(types_stack.__dict__)
 
 def p_x_push_vars_stack(p):
     'x_push_vars_stack :'
@@ -1143,7 +1155,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-f = open("./tests/test.txt")
+f = open("./tests/test6.txt")
 
 
 # correr un ejemplo 
