@@ -909,7 +909,11 @@ def p_x_print_expr(p):
 def p_x_funcr_return(p):
     'x_funcr_return :'
     global current_function_return
-    current_function_return = 1  
+    current_function_return = 1
+    quadruples.append(Quadruple('return', None, None, operands_stack.top())) 
+    operands_stack.pop()
+    types_stack.pop()
+
 
 
 def p_x_set_is_array_1d(p):
@@ -1139,7 +1143,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-f = open("./tests/test6.txt")
+f = open("./tests/test.txt")
 
 
 # correr un ejemplo 
