@@ -9,14 +9,15 @@ vars {
 func void f(string : soyunparametro, int : numero, int: j, int: hg, float:pop) {
     vars {
         int : n, l;
-        float : f, g;
+        float : ip, g;
     }
 }
 
-func void dsf(string : asdf, int : fsd) {
+func void dsf(string : asdf, int : srf) {
     vars {
         int : n, l;
         float : f, g;
+        int: sf;
     }
 }
 
@@ -25,8 +26,9 @@ func int segundo(int : osos) {
         int :osito;
         float : osote;
     }
-    return osito;
+    return 4+5.9;
 }
+
 main () {
     vars {
         int : AUX, A, B, C,D, E,F,G,H,J,K,L, mat[1,2];

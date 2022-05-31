@@ -414,7 +414,7 @@ def p_if(p):
 
 def p_returnr(p):
     '''
-        returnr : RETURN expression SEMICOLON x_funcr_return
+        returnr : RETURN expression x_check_type_func SEMICOLON x_funcr_return
                 | RETURN SEMICOLON
     '''
     pass
@@ -425,7 +425,6 @@ def p_stmts(p):
               | stmts statement
     '''
     pass
-
 
 
 # Puntos neuralgicos ----------------------------------------------
@@ -469,6 +468,8 @@ def p_x_declare_variable(p):
     # Si ya existe, marcamos error
     if current_vars_table.has_var(var_name):
         Error("Variable doblemente declarada.")
+    elif current_function.name == var_name:
+        Error("Variable "+var_name+ " no se puede llamar igual que la función.")
     else:
         # Ponemos la variable en la tabla de variables
         addr = None
@@ -516,7 +517,9 @@ def p_x_set_current_vars_table(p):
 def p_x_set_current_function_type(p):
     'x_set_current_function_type :'
     global current_function_type
+    global current_function_return
     current_function_type = p[-1]
+    current_function_return = 0
 
 
 def p_x_insert_new_function(p):
@@ -898,6 +901,8 @@ def p_x_add_param(p):
 def p_x_print_expr(p):
     'x_print_expr :'
     quadruples.append(Quadruple('print', None, None,operands_stack.top()))
+    operands_stack.pop()
+    types_stack.pop()
 
 def p_x_funcr_return(p):
     'x_funcr_return :'
@@ -1111,6 +1116,12 @@ def p_x_check_second_dimension(p):
     # aqui tambien se checa que este en el rango 
 
 
+def p_x_check_type_func(p):
+    'x_check_type_func :'
+    if current_function.type != types_stack.top():
+        Error("El valor regresado no coincide con el indicado en la función.")
+
+
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
@@ -1126,7 +1137,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-f = open("./tests/test6.txt")
+f = open("./tests/test.txt")
 
 
 # correr un ejemplo 
