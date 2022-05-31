@@ -119,7 +119,9 @@ def p_funcs(p):
 
 
 def p_mainr(p):
-    'mainr : MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr LBRACE body RBRACE'
+    '''mainr : MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr LBRACE stmts RBRACE
+             | MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr LBRACE RBRACE 
+    '''
     pass
 
 def p_whiler(p):
@@ -1137,7 +1139,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-f = open("./tests/test.txt")
+f = open("./tests/test6.txt")
 
 
 # correr un ejemplo 
