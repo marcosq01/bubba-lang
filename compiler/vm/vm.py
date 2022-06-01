@@ -1,5 +1,6 @@
 from parser.tools.utils.stack import Stack
 from parser.tools.semantics.quadruple import Quadruple
+from parser.tools.utils.constants import * 
 
 from .memory_segment import MemorySegment
 from parser.tools.semantics.function_directory import FunctionDirectory
@@ -7,6 +8,7 @@ from parser.tools.semantics.function_directory import FunctionDirectory
 class VirtualMachine:
     def __init__(self, func_dir, const_tab) -> None:
         # instruction pointer
+        print(GLOBAL_INT_START)
         self.ip = 0
         self.function_directory = func_dir
         self.constants_table = const_tab
