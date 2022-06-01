@@ -16,11 +16,17 @@ class VirtualMachine:
         global_int_count = global_func.local_int_counter
         global_float_count = global_func.local_float_counter
         global_string_count = global_func.local_string_counter
+        global_temp_int_count = global_func.temp_int_counter 
+        global_temp_float_count = global_func.temp_float_counter 
+        global_temp_string_count = global_func.temp_string_counter 
+
         print(global_int_count)
         self.global_mem = MemorySegment(global_int_count,
                                         global_float_count, 
+                                        global_string_count,
+                                        global_temp_int_count,
+                                        global_temp_float_count,
                                         global_string_count)
-
         print(self.global_mem.__dict__)
         self.stack_segment = Stack()
 

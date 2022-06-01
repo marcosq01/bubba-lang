@@ -15,5 +15,5 @@ func int f(int : x) {
 
 main() {
 
-    x = 3 + 4;
+    x = 3 + 4 + 5;
 }
