@@ -1,4 +1,4 @@
-from tools.semantics.vars_table import VariableContext, VarsTable
+from parser.tools.semantics.vars_table import VariableContext, VarsTable
 
 def print_funcs_from_directory(directory):
     for x in directory.directory:
@@ -35,6 +35,7 @@ class FunctionDirectory:
 
     def __init__(self) -> None:
         self.directory = {}
+        self.program_name = ""
     
     def insert_function(self, func : FunctionContext):
         # no hace falta validar si existe la funcion

@@ -1,0 +1,7 @@
+prog tilin:
+vars {
+    int : x;
+}
+main() {
+    x = 10;
+}

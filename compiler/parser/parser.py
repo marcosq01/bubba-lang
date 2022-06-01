@@ -1,20 +1,20 @@
+from parser.tools.semantics.constants_table import Constant, ConstantsTable
 
+from parser.ply import yacc
 
-from distutils.log import error
-from doctest import ELLIPSIS_MARKER
-from re import I
-from tools.semantics.constants_table import Constant, ConstantsTable
-from ply import yacc
-from lexer import tokens
-#
-from tools.utils.stack import Stack
-from tools.semantics.semantic_cube import SemanticCube
-from tools.semantics.quadruple import Quadruple
-from tools.semantics.vars_table import VarsTable, VariableContext
-from tools.semantics.function_directory import FunctionDirectory, FunctionContext
-from tools.error import Error
-from tools.address_manager import AddressManager
-#
+from parser.lexer import tokens
+
+from parser.tools.utils.stack import Stack
+
+from parser.tools.semantics.semantic_cube import SemanticCube
+from parser.tools.semantics.quadruple import Quadruple
+from parser.tools.semantics.vars_table import VarsTable, VariableContext
+from parser.tools.semantics.function_directory import FunctionDirectory, FunctionContext
+
+from parser.tools.error import Error
+
+from parser.tools.address_manager import AddressManager
+
 
 
 # TODO agregar precedence en caso de ser necesario
@@ -29,6 +29,7 @@ from tools.address_manager import AddressManager
 
 # Algunas variables de utilidad (stacks, listas, tablas, etc):
 # por el momento son muy simples pero despues se anadiran mas propiedades
+
 
 # Cubo semantico
 cube = SemanticCube()
@@ -51,13 +52,12 @@ jumps_stack = Stack()
 quadruples = []
 
 #Tabla de constantes
-constants_Table = ConstantsTable()
+constants_table = ConstantsTable()
 
 # el administrador de direcciones
 addr_manager = AddressManager()
 
 
-program_name = None
 current_type_var_declaration = None
 
 current_function = None
@@ -76,9 +76,11 @@ current_function_call_name = None
 current_function_return=0 
 
 
+prog_name = None
 
 
-# -----------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------
 # Gramatica
 
 def p_program(p):
@@ -86,12 +88,10 @@ def p_program(p):
     function_directory.print()
     for i in range(len(quadruples)):
         print(i, quadruples[i].__dict__)
-    for i in constants_Table.table:
-        print(constants_Table.table[i].__dict__)
+    for i in constants_table.table:
+        print(constants_table.table[i].__dict__)
     
-    print(operator_stack.__dict__)
-    print(operands_stack.__dict__)
-    print(types_stack.__dict__)
+
 
 def p_paux(p):
     '''
@@ -99,6 +99,7 @@ def p_paux(p):
              | empty
     '''
     pass
+
 
 def p_program_vars(p):
     '''
@@ -421,7 +422,7 @@ def p_if(p):
 def p_returnr(p):
     '''
         returnr : RETURN expression x_check_type_func SEMICOLON x_funcr_return
-                | RETURN SEMICOLON
+                | RETURN x_check_void_func SEMICOLON
     '''
     pass
 
@@ -440,20 +441,22 @@ def p_stmts(p):
 
 def p_x_add_prog_to_funcdir(p):
     'x_add_prog_to_funcdir :'
-    # Obtener el nombre del programa
-    global program_name
-    program_name = p[-1]
 
+    # Obtener el nombre del programa
+    global current_function
+    global prog_name
+    prog_name = p[-1]
+
+    function_directory.program_name = p[-1]
     # 'Funcion' actual es program_name
     # esto es para guardar las variables globales
-    global current_function 
 
     # Insertar el programa como si fuera una funcion, este tiene
     # la tabla de variables globales
-    function_directory.insert_function(FunctionContext(program_name, 'program', VarsTable()))
+    function_directory.insert_function(FunctionContext(prog_name, 'program', VarsTable()))
 
     # La funcion actual es 'programa'
-    current_function = function_directory.search_function(program_name)
+    current_function = function_directory.search_function(prog_name)
 
 
 
@@ -569,7 +572,7 @@ def p_x_add_Var_to_stack(p):
         varData = current_vars_table.search_var(varname)
     else:
         #Obtener la tabla de variables globales
-        globalfunc = function_directory.search_function(program_name)
+        globalfunc = function_directory.search_function(prog_name)
         globalvars = globalfunc.get_vars_table()
         #Revisar que la variable se encuentra en las vars globales
         if globalvars.has_var(varname):
@@ -577,7 +580,6 @@ def p_x_add_Var_to_stack(p):
             varData = globalvars.search_var(varname)
         #Si no existe se marca error
         else:
-            print(varname)
             Error ("Variable no ha sido declarada")
 
     global current_var_name, current_var
@@ -814,19 +816,19 @@ def p_x_end_while(p):
 def p_x_add_constant_arr_size(p):
     'x_add_constant_arr_size :'
     c = p[-1]
-    if not constants_Table.has_constant(c):
+    if not constants_table.has_constant(c):
         a = addr_manager.get_const_int(1)
-        constants_Table.add_constant(c, a)
+        constants_table.add_constant(c, a)
 
 
 def p_x_add_constants_table_i(p):
     'x_add_constants_table_i :'
     c = p[-1]
-    if not constants_Table.has_constant(c):
+    if not constants_table.has_constant(c):
         a = addr_manager.get_const_int(1)
-        constants_Table.add_constant(c, a)
+        constants_table.add_constant(c, a)
     else:
-        aux= constants_Table.get_constant(c)
+        aux= constants_table.get_constant(c)
         a= aux.address
     operands_stack.push(a)
     types_stack.push('int')
@@ -835,11 +837,11 @@ def p_x_add_constants_table_i(p):
 def p_x_add_constants_table_f(p):
     'x_add_constants_table_f :'
     c = p[-1]
-    if not constants_Table.has_constant(c):
+    if not constants_table.has_constant(c):
         a = addr_manager.get_const_float(1)
-        constants_Table.add_constant(c, a)
+        constants_table.add_constant(c, a)
     else:
-        aux= constants_Table.get_constant(c)
+        aux= constants_table.get_constant(c)
         a= aux.address
     operands_stack.push(a)
     types_stack.push('float')
@@ -847,11 +849,11 @@ def p_x_add_constants_table_f(p):
 def p_x_add_constants_table_s(p):
     'x_add_constants_table_s :'
     c = p[-1]
-    if not constants_Table.has_constant(c):
+    if not constants_table.has_constant(c):
         a = addr_manager.get_const_string(1)
-        constants_Table.add_constant(c, a)
+        constants_table.add_constant(c, a)
     else:
-        aux= constants_Table.get_constant(c)
+        aux= constants_table.get_constant(c)
         a= aux.address
     operands_stack.push(a)
     types_stack.push('string')
@@ -1001,7 +1003,7 @@ def p_x_check_first_bounds(p):
 
     # necesito la constante del tamano del array (primera dimension y segunda dimension)
     first_len = current_var.first_len
-    constant_first_len = constants_Table.get_constant(first_len)
+    constant_first_len = constants_table.get_constant(first_len)
     addr_first_len = constant_first_len.address
     
     # generar el cuadruplo de 'verify'
@@ -1025,7 +1027,7 @@ def p_x_check_second_bounds(p):
     # necesito la constante del tamano del array (primera dimension y segunda dimension)
 
     second_len = current_var.second_len
-    constant_second_len = constants_Table.get_constant(second_len)
+    constant_second_len = constants_table.get_constant(second_len)
 
     addr_second_len = constant_second_len.address
     # generar el cuadruplo de 'verify'
@@ -1052,7 +1054,7 @@ def p_x_end_matrix_bracket(p):
 
     # obtener el address de num columas, es decir var.second_len
     col_len = current_var.second_len
-    const = constants_Table.get_constant(col_len)   
+    const = constants_table.get_constant(col_len)   
     col_len_addr = const.address
 
     # generar los cuadruplos
@@ -1100,9 +1102,6 @@ def p_x_end_array_bracket(p):
     quadruples.append(q)
     operator_stack.pop()
     
-    print(operator_stack.__dict__)
-    print(operands_stack.__dict__)
-    print(types_stack.__dict__)
 
 def p_x_push_vars_stack(p):
     'x_push_vars_stack :'
@@ -1136,10 +1135,17 @@ def p_x_check_second_dimension(p):
 
 def p_x_check_type_func(p):
     'x_check_type_func :'
+
+    if current_function.type == 'void':
+        Error("Funcion " + current_function.name + " es void y no puede regresar valores.")
+
     if current_function.type != types_stack.top():
         Error("El valor regresado no coincide con el indicado en la función.")
 
-
+def p_x_check_void_func(p):
+    'x_check_void_func :'
+    if current_function.type != 'void':
+        Error("Return en funcion tipo \'" + current_function.type + "\' debe retornar un valor.")
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
@@ -1155,10 +1161,12 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-f = open("./tests/test6.txt")
+
+# f = open("././tests/test6.txt")
 
 
-# correr un ejemplo 
-s = f.read()
+# # correr un ejemplo 
+# s = f.read()
 
-result = parser.parse(s)
+# result = parser.parse(s)
+# print(result)

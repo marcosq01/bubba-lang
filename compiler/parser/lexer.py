@@ -1,5 +1,5 @@
 
-from ply import lex
+from parser.ply import lex
 
 # TODO falta el regex de VSTRING
 # TODO line numbers??
