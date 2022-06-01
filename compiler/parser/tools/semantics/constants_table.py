@@ -15,4 +15,3 @@ class ConstantsTable:
     
     def get_constant(self, c):
         return self.table[c]
-

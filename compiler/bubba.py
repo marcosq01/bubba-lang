@@ -9,7 +9,7 @@ class Bubba:
     def run(self, source_code):
         parser.parse(source_code)
         vm = VirtualMachine(function_directory, constants_table)
-
+        vm.exec(quadruples)
 
 if __name__ == '__main__':
 
