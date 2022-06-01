@@ -124,8 +124,8 @@ def p_funcs(p):
 
 
 def p_mainr(p):
-    '''mainr : MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr LBRACE stmts RBRACE
-             | MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr LBRACE RBRACE 
+    '''mainr : MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr x_goto_main LBRACE stmts RBRACE
+             | MAIN x_add_main_to_func_dir LPAR RPAR x_func_init_addr x_goto_main LBRACE RBRACE 
     '''
     pass
 
@@ -442,6 +442,11 @@ def p_stmts(p):
 def p_x_add_prog_to_funcdir(p):
     'x_add_prog_to_funcdir :'
 
+
+    # goto a main
+    quadruples.append(Quadruple("goto", None, None, None))
+    jumps_stack.push(0)
+    
     # Obtener el nombre del programa
     global current_function
     global prog_name
@@ -1162,6 +1167,15 @@ def p_x_check_void_func(p):
     'x_check_void_func :'
     if current_function.type != 'void':
         Error("Return en funcion tipo \'" + current_function.type + "\' debe retornar un valor.")
+
+def p_x_goto_main(p):
+    'x_goto_main :'
+
+    # se pone la direccion del primer cuadruplo de main
+    goto_main = jumps_stack.pop()
+    q = quadruples[goto_main]
+    q.set_result(len(quadruples))
+
 
 # esta regla es para mas claridad en el codigo (gramatica)
 # no hace nada
