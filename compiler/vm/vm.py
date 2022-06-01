@@ -5,7 +5,7 @@ from .memory_segment import MemorySegment
 from parser.tools.semantics.function_directory import FunctionDirectory
 
 class VirtualMachine:
-    def __init__(self, func_dir, const_tab, program_name) -> None:
+    def __init__(self, func_dir, const_tab) -> None:
         # instruction pointer
         self.ip = 0
         self.function_directory = func_dir

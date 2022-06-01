@@ -1,7 +1,18 @@
 prog tilin:
+
 vars {
-    int : x;
+    int : M[10, 5], y[2,3], x;
 }
+
+func int f(int : x) {
+    vars {
+        int : A[100], y;
+    }
+
+    return 0;
+}
+
 main() {
-    x = 10;
+
+    x = M[1,3];
 }

@@ -490,9 +490,12 @@ def p_x_declare_variable(p):
         if t_func == 'program':
             if t_var == 'int':
                 addr = addr_manager.get_global_int(1)
+                current_function.local_int_counter += 1
             elif t_var == 'float':
                 addr = addr_manager.get_global_float(1)
+                current_function.local_float_counter += 1
             elif t_var == 'string':
+                current_function.local_string_counter += 1
                 addr = addr_manager.get_global_string(1)
 
         # estas son las locales
@@ -555,10 +558,11 @@ def p_x_add_main_to_func_dir(p):
     if function_directory.has_function('main'):
         Error("Funcion ya ha sido declarada")
     
-    global current_vars_table, current_function
-    current_vars_table = VarsTable()
-    current_function = FunctionContext('main', 'main', current_vars_table)
-    function_directory.insert_function(current_function)
+    global current_vars_table, current_function 
+    current_function = function_directory.search_function(prog_name)
+    current_vars_table = current_function.get_vars_table()
+    # current_function = FunctionContext('main', 'main', current_vars_table)
+    # function_directory.insert_function(current_function)
     addr_manager.reset()
     
 # Agregar la variable a nuestra pila
@@ -940,10 +944,14 @@ def p_x_array_get_addrs(p):
     # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
     if t == 'int':
         addr_manager.get_local_int(n - 1)
+        current_function.local_int_counter += n - 1
     elif t == 'float':
         addr_manager.get_local_float(n - 1)
+        current_function.local_float_counter += n - 1
     elif t == 'string':
         addr_manager.get_local_string(n - 1)
+        current_function.local_string_counter += n - 1
+
 
 
 def p_x_matrix_get_addrs(p):
@@ -956,10 +964,14 @@ def p_x_matrix_get_addrs(p):
     # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
     if t == 'int':
         addr_manager.get_local_int(n * m - 1)
+        current_function.local_int_counter += n * m - 1
     elif t == 'float':
         addr_manager.get_local_float(n * m - 1)
+        current_function.local_float_counter += n * m - 1
     elif t == 'string':
         addr_manager.get_local_string(n * m - 1)
+        current_function.local_string_counter += n * m - 1
+
 
 def p_x_set_first_len(p):
     'x_set_first_len :'
@@ -1059,13 +1071,16 @@ def p_x_end_matrix_bracket(p):
 
     # generar los cuadruplos
     a1 = addr_manager.get_temp_int(1)
+    current_function.temp_int_counter += 1
     q1 = Quadruple('*', row_addr, col_len_addr, a1)
 
     a2 = addr_manager.get_temp_int(1)
+    current_function.temp_int_counter += 1
     q2 = Quadruple('+', a1, col_addr, a2)
 
     # ahora el cuadruplo del offset
     res_addr = addr_manager.get_temp_int(1)
+    current_function.temp_int_counter += 1
     operands_stack.push(('pointer', res_addr))
     types_stack.push(curr_var_type)
     q3 = Quadruple('address', base_dir_addr, a2, res_addr)
@@ -1095,6 +1110,7 @@ def p_x_end_array_bracket(p):
     # el address se guarda en un tuple para que la vm sepa que es una direccion
     # se le pone un temporal int al valor de esa direccion
     new_addr = addr_manager.get_temp_int(1)
+    current_function.temp_int_counter += 1
     operands_stack.push(('pointer', new_addr))
     types_stack.push(curr_var_type)
     q = Quadruple('address', curr_var_addr, expr, new_addr)

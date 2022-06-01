@@ -1,5 +1,5 @@
 from numpy import source
-from parser.parser import parser, function_directory, constants_table, prog_name, quadruples, current_function
+from parser.parser import parser, function_directory, constants_table, quadruples 
 from vm.vm import VirtualMachine
 
 class Bubba:
@@ -8,7 +8,7 @@ class Bubba:
 
     def run(self, source_code):
         parser.parse(source_code)
-        vm = VirtualMachine(function_directory, constants_table, prog_name)
+        vm = VirtualMachine(function_directory, constants_table)
 
 
 if __name__ == '__main__':
