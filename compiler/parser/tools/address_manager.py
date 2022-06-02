@@ -63,6 +63,7 @@ class AddressManager:
         if self.local_int_free >= n:
             temp = self.local_int_count
             self.local_int_count += n
+            print("AAAa", n)
             self.local_int_free -= n
             return temp
         else:

@@ -944,19 +944,33 @@ def p_x_array_get_addrs(p):
     'x_array_get_addrs :'
     # cuantos tiene el array
     n = current_var.first_len
+    print("ENE", n)
     # type de la variable
     t = current_var.type
-    # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
-    if t == 'int':
-        addr_manager.get_local_int(n - 1)
-        current_function.local_int_counter += n - 1
-    elif t == 'float':
-        addr_manager.get_local_float(n - 1)
-        current_function.local_float_counter += n - 1
-    elif t == 'string':
-        addr_manager.get_local_string(n - 1)
-        current_function.local_string_counter += n - 1
-
+    print("TYPE", t)
+    t_func = current_function.type
+    if t_func == 'program':
+            # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
+        if t == 'int':
+            addr_manager.get_global_int(n - 1)
+            current_function.local_int_counter += n - 1
+        elif t == 'float':
+            addr_manager.get_global_float(n - 1)
+            current_function.local_float_counter += n - 1
+        elif t == 'string':
+            addr_manager.get_global_string(n - 1)
+            current_function.local_string_counter += n - 1
+    else:
+        # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
+        if t == 'int':
+            addr_manager.get_local_int(n - 1)
+            current_function.local_int_counter += n - 1
+        elif t == 'float':
+            addr_manager.get_local_float(n - 1)
+            current_function.local_float_counter += n - 1
+        elif t == 'string':
+            addr_manager.get_local_string(n - 1)
+            current_function.local_string_counter += n - 1
 
 
 def p_x_matrix_get_addrs(p):
@@ -966,16 +980,31 @@ def p_x_matrix_get_addrs(p):
     m = current_var.second_len
     # type de la variable
     t = current_var.type
+    t_func = current_function.type
+
+    if t_func == 'program':
     # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
-    if t == 'int':
-        addr_manager.get_local_int(n * m - 1)
-        current_function.local_int_counter += n * m - 1
-    elif t == 'float':
-        addr_manager.get_local_float(n * m - 1)
-        current_function.local_float_counter += n * m - 1
-    elif t == 'string':
-        addr_manager.get_local_string(n * m - 1)
-        current_function.local_string_counter += n * m - 1
+        if t == 'int':
+            addr_manager.get_global_int(n * m - 1)
+            current_function.local_int_counter += n * m - 1
+        elif t == 'float':
+            addr_manager.get_global_float(n * m - 1)
+            current_function.local_float_counter += n * m - 1
+        elif t == 'string':
+            addr_manager.get_global_string(n * m - 1)
+            current_function.local_string_counter += n * m - 1
+    else:
+            # consumimos n - 1 locales porque ya se consumió 1 en la declaracion
+        if t == 'int':
+            addr_manager.get_local_int(n - 1)
+            current_function.local_int_counter += n * m- 1
+        elif t == 'float':
+            addr_manager.get_local_float(n - 1)
+            current_function.local_float_counter += n * m - 1
+        elif t == 'string':
+            addr_manager.get_local_string(n - 1)
+            current_function.local_string_counter += n * m - 1
+
 
 
 def p_x_set_first_len(p):

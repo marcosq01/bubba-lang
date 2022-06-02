@@ -1,6 +1,6 @@
 
 
-from operator import eq, add, sub, truediv, mul
+from operator import eq, add, sub, truediv, mul, ge, gt, le, lt, eq, ne, and_, or_, not_
 from parser.tools.utils.stack import Stack
 from parser.tools.semantics.quadruple import Quadruple
 from parser.tools.utils.constants import * 
@@ -14,6 +14,8 @@ class VirtualMachine:
         # instruction pointer
         self.ip = 0
         self.function_directory = func_dir
+
+        # la tabla de constantes es un diccionario
         self.constants_table = {}
 
         # se voltea la tabla de constantes
@@ -40,6 +42,8 @@ class VirtualMachine:
         self.current_memory = None
 
     def get_value_from_address(self, addr):
+        if isinstance(addr, tuple):
+            addr = self.get_value_from_address(addr[1])
 
         # globales 
         if addr >= GLOBAL_INT_START and addr < GLOBAL_INT_START + GLOBAL_INT_FREE:
@@ -68,6 +72,9 @@ class VirtualMachine:
     
 
     def set_value_in_address(self, val, addr):
+        if isinstance(addr, tuple):
+            addr = self.get_value_from_address(addr[1])
+
         # globales 
         if addr >= GLOBAL_INT_START and addr < GLOBAL_INT_START + GLOBAL_INT_FREE:
             self.global_mem.local_int[addr - GLOBAL_INT_START] = int(val)
@@ -100,7 +107,15 @@ class VirtualMachine:
             if right == 0:
                 Error("Division de cero.") 
 
-        return op(left, right)
+        res = op(left, right)
+
+        if op in ['>', '>=', '<', '<=', '!=']:
+            if res:
+                res = 1
+            else:
+                res = 0 
+
+        return res
 
 
     def exec(self, quadruples):
@@ -135,25 +150,79 @@ class VirtualMachine:
                 self.ip += 1
 
             elif quad.op == '>':
-                pass
+                result = self.binary_operation(quad.left, quad.right, gt)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == '>=':
-                pass
+                result = self.binary_operation(quad.left, quad.right, ge)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == '<':
-                pass
+                result = self.binary_operation(quad.left, quad.right, lt)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == '<=':
-                pass
+                result = self.binary_operation(quad.left, quad.right, le)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == '!=':
-                pass
+                result = self.binary_operation(quad.left, quad.right, ne)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+            elif quad.op == '==':
+                result = self.binary_operation(quad.left, quad.right, eq)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == '&&':
-                pass
+                result = self.binary_operation(quad.left, quad.right, and_)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == '||':
-                pass
+                result = self.binary_operation(quad.left, quad.right, or_)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
+            elif quad.op == '!':
+                result = self.binary_operation(quad.left, quad.right, not_)
+                self.set_value_in_address(result, quad.result)
+                self.ip += 1
+
             elif quad.op == 'print':
                 val = self.get_value_from_address(quad.result)
                 print(val)
                 self.ip += 1
+
             elif quad.op == 'goto':
                 self.ip = quad.result
+
+            elif quad.op == 'gotof':
+                condition = self.get_value_from_address(quad.left)
+                if not condition:
+                    self.ip = quad.result
+                else:
+                    self.ip += 1
+    
+            elif quad.op == 'verify':
+                expr_val = self.get_value_from_address(quad.result)
+                if quad.left != None:
+                    len_val = self.get_value_from_address(quad.left)
+                else:
+                    len_val = self.get_value_from_address(quad.right)
+
+                if expr_val < 0 or expr_val >= len_val:
+                    Error("Acceso incorrecto a valor de arreglo")
+                
+                self.ip += 1
+            elif quad.op == 'address':
+                val = self.get_value_from_address(quad.right)
+                self.set_value_in_address(quad.left + val, quad.result)
+                self.ip += 1
         
         print(self.global_mem.__dict__)
 
