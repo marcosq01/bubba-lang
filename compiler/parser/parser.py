@@ -415,12 +415,15 @@ def p_x_pop_par(p):
 
 def p_x_push_call_value(p):
     'x_push_call_value :'
-
     global_func = function_directory.search_function(prog_name)
     global_vars_table = global_func.get_vars_table()
 
     global_var = global_vars_table.search_var(current_function_call_name)
+    if global_var == None:
+        return
     print("LLAMADA", current_function_call_name)
+
+    print(global_var)
     # assign
     if global_var.type == 'int':
         new_addr = addr_manager.get_temp_int(1)
