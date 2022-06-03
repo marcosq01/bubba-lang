@@ -133,6 +133,11 @@ def t_VINTEGER(t):
         print("error")
     return t
 
+def t_VSTRING(t):
+    r'"(\.|[^"])*"'
+    t.value = t.value[1:-1]
+    return t;
+
 
 # Define a rule so we can track line numbers
 def t_newline(t):

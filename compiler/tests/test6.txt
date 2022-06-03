@@ -2,6 +2,7 @@ prog tilin:
 
 vars {
     int : A[7], i;
+    string : s;
 }
 
 func int partition(int : low, int : high) {
@@ -49,7 +50,8 @@ func int f() {
 }
 
 main() {
-
+    s = "jajajaja" + " troll";
+    print(s);
     A[0] = 5;
     A[1] = 4;
     A[2] = 7;
@@ -58,6 +60,7 @@ main() {
     A[5] = 3;
     A[6] = 0;
 
+    print("aaa");
     qs(0, 6);
 
     i = 0;
@@ -67,7 +70,6 @@ main() {
         i = i + 1;
     }
 
-    f();
 }
 
 

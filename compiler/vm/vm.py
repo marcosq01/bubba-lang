@@ -18,7 +18,6 @@ class VirtualMachine:
 
         # la tabla de constantes es un diccionario
         self.constants_table = {}
-
         # se voltea la tabla de constantes
         for k in const_tab.table:
             self.constants_table[const_tab.table[k].address] = k
@@ -134,8 +133,11 @@ class VirtualMachine:
 
         # mientras haya cuadruplos por ejecutar
         while self.ip < n:
+
+            # si hay mas de 5000 llamadas en el stack, error
             if self.execution_stack.size() >= 5000:
                 Error("Execution Stack overflow")
+
             quad = quadruples[self.ip]
             if quad.op == '+':
                 result = self.binary_operation(quad.left, quad.right, add)
@@ -266,8 +268,12 @@ class VirtualMachine:
 
                 val = self.get_value_from_address(quad.left)
 
-                # asignar el val a la nueva memoria
+                # en este punto tenemos '3' memorias 'activas'
 
+                # global, actual, y la nueva (está en top de stack)
+
+                # asignar el val a la nueva memoria
+                # Unicamente revisar las locales, ya que los parametros siempre son variables locales
                 addr = quad.result
 
                 if addr >= LOCAL_INT_START and addr < LOCAL_INT_START + LOCAL_INT_FREE:
@@ -280,14 +286,27 @@ class VirtualMachine:
                 self.ip += 1
 
             elif quad.op == 'gosub':
+
+                # se crea el contexto de la memoria actual, junto con el ip + 1
                 old_exec_ctx = ExecutionContext(self.current_memory, self.ip + 1)
+
+                # la actual ahora es la 'nueva' que se encontraba en el top del stack, se hace pop
                 self.current_memory = self.execution_stack.pop()
+
+                # se guarda en el stack la vieja
                 self.execution_stack.push(old_exec_ctx)
+
+                # mover el ip al primer cuadruplo de la nueva funcion llamada
                 self.ip = quad.result
             
 
             elif quad.op == 'endfunc':
+
+                # se 'mata' la memoria actual
+                # y guardamos el top del stack
                 exec_ctx = self.execution_stack.pop()
+
+                # se actualiza el ip y la actual
                 self.ip = exec_ctx.address
                 self.current_memory = exec_ctx.memory
 

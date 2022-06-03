@@ -125,7 +125,7 @@ class SemanticCube():
                     '||' : 'error'
                 },
                 'string' : {
-                    '+' : 'error',
+                    '+' : 'string',
                     '-' : 'error',
                     '*' : 'error',
                     '/' : 'error',
