@@ -1,3 +1,4 @@
+from unittest import addModuleCleanup
 from parser.tools.semantics.constants_table import Constant, ConstantsTable
 
 from parser.ply import yacc
@@ -216,11 +217,45 @@ def p_assign(p):
 
 def p_factor(p):
     '''
-        factor : MINUS factor_val
+        factor : MINUS factor_val x_generate_neg_quad
                | PLUS factor_val
                | factor_val 
     '''
     pass
+
+def p_x_generate_neg_quad(p):
+    'x_generate_neg_quad :'
+
+    # En este punto tenemos el operador y su tipo en el top de los stacks
+    # Se generará uncuadruplo que sea (-, 0, addr, temp)
+    # primero se busca la constante 0 en la tabla de const
+    # se agrega si es necesario
+
+    if not constants_table.has_constant(0):
+        addr_0 = addr_manager.get_const_int(1)
+        constants_table.add_constant(0, addr_0)
+    constant_0 = constants_table.get_constant(0)
+    addr_0 = constant_0.address
+
+    # obtener operando y tipo
+    op = operands_stack.pop()
+    t = types_stack.pop()
+
+    if t == 'string':
+        Error("No hay strings negativos")
+    elif t == 'int':
+        current_function.temp_int_counter += 1
+        addr = addr_manager.get_temp_int(1)
+    elif t == 'float':
+        current_function.temp_float_counter += 1
+        addr = addr_manager.get_temp_float(1)
+
+    q = Quadruple('-', addr_0, op, addr)
+    quadruples.append(q)
+
+    operands_stack.push(addr)
+    types_stack.push(t)
+
 
 def p_factor_val(p):
     '''
@@ -337,15 +372,10 @@ def p_output_a(p):
     pass
 
 def p_inputr(p):
-    'inputr : INPUT LPAR var input_a RPAR SEMICOLON'
+    'inputr : INPUT LPAR var RPAR SEMICOLON'
     pass
 
-def p_input_a(p):
-    '''
-        input_a : COMMA var input_a
-                | empty
-    '''
-    pass
+
 
 def p_body(p):
     '''
@@ -423,9 +453,7 @@ def p_x_push_call_value(p):
     # nada que hacere en el stack de operandos
     if global_var == None:
         return
-    print("LLAMADA", current_function_call_name)
 
-    print(global_var)
     # assign
     if global_var.type == 'int':
         new_addr = addr_manager.get_temp_int(1)
@@ -579,11 +607,9 @@ def p_x_declare_variable(p):
             elif t_var == 'string':
                 addr = addr_manager.get_local_string(1)
                 current_function.local_string_counter += 1
-            print(in_params)
             if in_params:
                 params_addresses = current_function.params_addresses
                 params_addresses.append(addr)
-                print("LISTA",params_addresses)
 
         # TODO clases y arreglos
 
@@ -976,12 +1002,9 @@ def p_x_verify_func(p):
         global function_args_pointer
         function_args_pointer = 0
         current_function_call_name = p[-1]
-        print("JAJAJAJ",current_function_call_name)
 
         # se agrega el nombre al stack de llamadas
         call_stack.push(p[-1])
-        print("siiii")
-        call_stack.print()
         quadruples.append(Quadruple('era', None, None, p[-1]))
     else:
         Error("Función no existe")
@@ -1065,10 +1088,8 @@ def p_x_array_get_addrs(p):
     'x_array_get_addrs :'
     # cuantos tiene el array
     n = current_var.first_len
-    print("ENE", n)
     # type de la variable
     t = current_var.type
-    print("TYPE", t)
     t_func = current_function.type
     if t_func == 'program':
             # consumimos n - 1 locales porque ya se consumió 1 en la declaracion

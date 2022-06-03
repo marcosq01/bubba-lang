@@ -1,7 +1,7 @@
 prog tilin:
 
 vars {
-    int : A[7], i;
+    int : A[7], i, yy;
     string : s;
 }
 
@@ -50,6 +50,11 @@ func int f() {
 }
 
 main() {
+    yy = -(-(5));
+
+    print(-3-3-yy);
+    print(yy);
+    print("b" == "b");
     s = "jajajaja" + " troll";
     print(s);
     A[0] = 5;
