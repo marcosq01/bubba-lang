@@ -1,7 +1,7 @@
 prog tilin:
 
 vars {
-    int : A[6], i;
+    int : A[7], i;
 }
 
 func int partition(int : low, int : high) {
@@ -52,12 +52,13 @@ main() {
     A[3] = 10;
     A[4] = 1;
     A[5] = 3;
+    A[6] = 0;
 
-    qs(0, 5);
+    qs(0, 6);
 
     i = 0;
     
-    while (i < 6) {
+    while (i < 7) {
         print(A[i]);
         i = i + 1;
     }

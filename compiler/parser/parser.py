@@ -411,7 +411,6 @@ def p_x_pop_par(p):
     call_stack.pop()
     global current_function_call_name
     current_function_call_name = call_stack.top()
-    print("????",current_function_call_name)
 
 def p_x_push_call_value(p):
     'x_push_call_value :'
@@ -419,6 +418,9 @@ def p_x_push_call_value(p):
     global_vars_table = global_func.get_vars_table()
 
     global_var = global_vars_table.search_var(current_function_call_name)
+
+    # si se llamó a una funcion void, simplemente salirnos porque no hay
+    # nada que hacere en el stack de operandos
     if global_var == None:
         return
     print("LLAMADA", current_function_call_name)
@@ -1045,7 +1047,10 @@ def p_x_funcr_return(p):
 
 def p_x_funcr_return_void(p):
     'x_funcr_return_void :'
-    pass
+    # generar cuadruplo de endfunc para salirnos de la funcion inmediatamente
+    q = Quadruple('endfunc', None, None, None)
+    quadruples.append(q)
+
 
 def p_x_set_is_array_1d(p):
     'x_set_is_array_1d :'
