@@ -71,6 +71,10 @@ current_var = None
 vars_stack = Stack()
 
 
+# este stack es para llamadas a funciones dentro de llamadas
+# ejemplo:  f(g(a()) + h())
+call_stack = Stack()
+
 function_args_pointer = 0
 current_function_call_name = None
 current_function_return=0 
@@ -388,10 +392,52 @@ def p_type_simple(p):
 
 def p_call(p):
     '''
-        call : call_id x_verify_func LPAR x_points_null RPAR
-             | call_id x_verify_func LPAR args x_points_null RPAR
+        call : call_id x_verify_func x_push_par LPAR x_points_null RPAR x_push_call_value x_pop_par
+             | call_id x_verify_func x_push_par LPAR args x_points_null RPAR x_push_call_value x_pop_par
     '''
     pass
+
+    
+
+def p_x_push_par(p):
+    'x_push_par :'
+    operator_stack.push('(')
+
+def p_x_pop_par(p):
+    'x_pop_par :'
+    operator_stack.pop()
+
+    # se actualiza current call name
+    call_stack.pop()
+    global current_function_call_name
+    current_function_call_name = call_stack.top()
+    print("????",current_function_call_name)
+
+def p_x_push_call_value(p):
+    'x_push_call_value :'
+
+    global_func = function_directory.search_function(prog_name)
+    global_vars_table = global_func.get_vars_table()
+
+    global_var = global_vars_table.search_var(current_function_call_name)
+    print("LLAMADA", current_function_call_name)
+    # assign
+    if global_var.type == 'int':
+        new_addr = addr_manager.get_temp_int(1)
+        current_function.temp_int_counter += 1
+    elif global_var.type == 'float':    
+        new_addr = addr_manager.get_temp_float(1)
+        current_function.temp_float_counter += 1
+    elif global_var.type == 'string':
+        new_addr = addr_manager.get_temp_string(1)
+        current_function.temp_string_counter += 1
+
+    q = Quadruple('=', global_var.address, None, new_addr)
+    quadruples.append(q)
+
+    operands_stack.push(new_addr)
+    types_stack.push(global_var.type)
+
 
 def p_call_id(p):
     '''
@@ -586,7 +632,6 @@ def p_x_insert_new_function(p):
         if current_function_type == 'int':
             addr = addr_manager.get_global_int(1)
             global_func.local_int_counter += 1
-            print("XDDDD", global_func.name)
         elif current_function_type == 'float':
             addr = addr_manager.get_global_float(1)
             global_func.local_float_counter += 1
@@ -926,6 +971,12 @@ def p_x_verify_func(p):
         global function_args_pointer
         function_args_pointer = 0
         current_function_call_name = p[-1]
+        print("JAJAJAJ",current_function_call_name)
+
+        # se agrega el nombre al stack de llamadas
+        call_stack.push(p[-1])
+        print("siiii")
+        call_stack.print()
         quadruples.append(Quadruple('era', None, None, p[-1]))
     else:
         Error("Función no existe")

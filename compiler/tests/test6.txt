@@ -1,22 +1,19 @@
 prog tilin:
 
-vars {
-    int :  x, i, sum;
-    string : yy;
+func int g() {
+    return 3;
 }
 
-func int f(int : a) {
-    vars {
-        int : y[3];
-    }
-    print(a + 1);
+func int f(int : x) {
+    return 5 + x;
+}
+
+func int h() {
     return 1;
 }
 
 main() {
-    i = 0;
-    while (i < 5) {
-        f(i);
-        i = i + 1;
-    }
+    print( f(g() + h() + g() + h())   );
 }
+
+
