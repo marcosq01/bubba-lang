@@ -33,3 +33,6 @@ class Stack():
     def print(self):
         print(self.items)
 
+    def size(self):
+        return len(self.items)
+

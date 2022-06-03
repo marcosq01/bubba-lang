@@ -134,6 +134,8 @@ class VirtualMachine:
 
         # mientras haya cuadruplos por ejecutar
         while self.ip < n:
+            if self.execution_stack.size() >= 5000:
+                Error("Execution Stack overflow")
             quad = quadruples[self.ip]
             if quad.op == '+':
                 result = self.binary_operation(quad.left, quad.right, add)

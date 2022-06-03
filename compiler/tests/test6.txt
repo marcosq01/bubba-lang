@@ -44,6 +44,10 @@ func void qs(int : low, int : high) {
     };
 }
 
+func int f() {
+    return f();
+}
+
 main() {
 
     A[0] = 5;
@@ -62,6 +66,8 @@ main() {
         print(A[i]);
         i = i + 1;
     }
+
+    f();
 }
 
 
