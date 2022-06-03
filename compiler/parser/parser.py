@@ -1,4 +1,5 @@
 from unittest import addModuleCleanup
+from xml.etree.ElementTree import QName
 from parser.tools.semantics.constants_table import Constant, ConstantsTable
 
 from parser.ply import yacc
@@ -373,8 +374,14 @@ def p_output_a(p):
 
 def p_inputr(p):
     'inputr : INPUT LPAR var RPAR SEMICOLON'
-    pass
 
+    # se sacan estos dos de los stacks
+    addr = operands_stack.pop()
+    t = types_stack.pop()
+
+    # se genera un cuadruplo solo con el address y tipo de la variable
+    q = Quadruple('input', t, None, addr)
+    quadruples.append(q)
 
 
 def p_body(p):
@@ -1067,6 +1074,7 @@ def p_x_funcr_return(p):
 
     operands_stack.pop()
     types_stack.pop()
+
 
 def p_x_funcr_return_void(p):
     'x_funcr_return_void :'

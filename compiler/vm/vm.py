@@ -212,6 +212,19 @@ class VirtualMachine:
                 val = self.get_value_from_address(quad.result)
                 print(val)
                 self.ip += 1
+            
+            elif quad.op == 'input':
+                if quad.left == 'string':
+                    quad.left = 'str'
+
+                val = input()
+                try:
+                    val = eval(quad.left)(val)
+                except ValueError:
+                    Error("Type de input incompatible con la variable")
+                
+                self.set_value_in_address(eval(quad.left)(val), quad.result)
+                self.ip += 1
 
             elif quad.op == 'goto':
                 self.ip = quad.result
