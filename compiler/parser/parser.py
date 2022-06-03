@@ -74,9 +74,10 @@ vars_stack = Stack()
 function_args_pointer = 0
 current_function_call_name = None
 current_function_return=0 
-
+in_params = False
 
 prog_name = None
+
 
 
 
@@ -278,9 +279,21 @@ def p_expression(p):
 def p_funcr(p):
     '''
         funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc 
-              | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR params RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
+              | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR x_set_true_params params x_set_false_params RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
     '''
     pass
+
+def p_x_set_true_params(p):
+    'x_set_true_params :'
+    global in_params
+    in_params = True
+
+
+def p_x_set_false_params(p):
+    'x_set_false_params :'
+    global in_params
+    in_params = False
+    
 
 def p_params(p):
     '''
@@ -422,7 +435,7 @@ def p_if(p):
 def p_returnr(p):
     '''
         returnr : RETURN expression x_check_type_func SEMICOLON x_funcr_return
-                | RETURN x_check_void_func SEMICOLON
+                | RETURN x_check_void_func SEMICOLON x_funcr_return_void
     '''
     pass
 
@@ -490,7 +503,6 @@ def p_x_declare_variable(p):
         # del directorio sacar el tipo
         t_func = current_function.type
         t_var = current_type_var_declaration
-        scope = None
         # estas son las globales
         if t_func == 'program':
             if t_var == 'int':
@@ -505,15 +517,22 @@ def p_x_declare_variable(p):
 
         # estas son las locales
         else:
+
             if t_var == 'int':
                 addr = addr_manager.get_local_int(1)
                 current_function.local_int_counter += 1
+ 
             elif t_var == 'float':
                 addr = addr_manager.get_local_float(1)
                 current_function.local_float_counter += 1
             elif t_var == 'string':
                 addr = addr_manager.get_local_string(1)
                 current_function.local_string_counter += 1
+            print(in_params)
+            if in_params:
+                params_addresses = current_function.params_addresses
+                params_addresses.append(addr)
+                print("LISTA",params_addresses)
 
         # TODO clases y arreglos
 
@@ -555,6 +574,29 @@ def p_x_insert_new_function(p):
     current_function = FunctionContext(func_name, current_function_type, current_vars_table)
     function_directory.insert_function(current_function)
 
+    # declarar la variable global si no es void
+    if current_function_type != 'void':
+
+        global_func = function_directory.search_function(prog_name)
+        global_vars_table = global_func.get_vars_table()
+
+        if global_vars_table.has_var(func_name):
+            Error("Funcion con mismo nombre de variable global`")
+
+        if current_function_type == 'int':
+            addr = addr_manager.get_global_int(1)
+            global_func.local_int_counter += 1
+            print("XDDDD", global_func.name)
+        elif current_function_type == 'float':
+            addr = addr_manager.get_global_float(1)
+            global_func.local_float_counter += 1
+        elif current_function_type == 'string':
+            global_func.local_string_counter += 1
+            addr = addr_manager.get_global_string(1)
+        
+        var = VariableContext(func_name, current_function_type, addr)
+        global_vars_table.insert_var(var)
+        
     # actualizar las direcciones locales y temporales 
     addr_manager.reset()
  
@@ -897,7 +939,10 @@ def p_x_check_parameters(p):
     if function_args_pointer >= len(f.signature):
         Error("Demasiados argumentos para llamada a funcion \"" + f.name + "\"")
     if f.signature[function_args_pointer] ==argumentType:
-        quadruples.append(Quadruple('parameter', argument, None,function_args_pointer))
+        p_a = f.params_addresses
+        # address del parametro:
+        addr = p_a[function_args_pointer]
+        quadruples.append(Quadruple('parameter', argument, None, addr))
         function_args_pointer +=1
     else:
         Error("Tipos incompatibles en llamada a funcion \"" + f.name + "\"")
@@ -925,11 +970,28 @@ def p_x_funcr_return(p):
     'x_funcr_return :'
     global current_function_return
     current_function_return = 1
-    quadruples.append(Quadruple('return', None, None, operands_stack.top())) 
+
+    # asignar a la variable global de la funcion el ultimo operando
+    global_func = function_directory.search_function(prog_name)
+    global_vars_table = global_func.get_vars_table()
+
+    global_var = global_vars_table.search_var(current_function.name)
+    var_addr = global_var.address
+    expr = operands_stack.top()
+    q = Quadruple('=', expr, None, var_addr)
+    quadruples.append(q)
+
+    q2 = Quadruple('endfunc', None, None, None)
+    quadruples.append(q2)
+
+    #
+
     operands_stack.pop()
     types_stack.pop()
 
-
+def p_x_funcr_return_void(p):
+    'x_funcr_return_void :'
+    pass
 
 def p_x_set_is_array_1d(p):
     'x_set_is_array_1d :'

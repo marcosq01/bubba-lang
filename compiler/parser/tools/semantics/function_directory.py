@@ -12,6 +12,7 @@ class FunctionContext:
         self.type = type
         self.vars_table = vars_table
         self.signature = []
+        self.params_addresses = []
         self.initial_address = None
         self.temp_int_counter = 0
         self.temp_float_counter = 0
