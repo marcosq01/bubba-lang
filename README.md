@@ -49,5 +49,8 @@ En este avance se añadió la generación de cuádruplos para output y la revisi
 
 Para este avance se creó el 'esqueleto'  de la maquina virtual y también el mapa de memoria el cual nos sirve para asignar las variables por cada llamada
 a funciones. También se corrigieron algunos detalles o errores.
+### Avance 8
+
+Para este último avance la máquina virtual ya es capaz de generar código para las expresiones aritméticas, estatutos secuenciales, condicionales y funciones. Además se arreglaron detalles del parser como el manejo de las constantes negativas y el return en void. 
 
 
