@@ -56,6 +56,11 @@ class ClassDirectory:
     def has_class(self, name):
         return name in self.table
 
+
+    def get_class(self, name):
+        return self.table[name]
+
+
     def print(self):
         for c in self.table:
             print(self.table[c].__dict__)

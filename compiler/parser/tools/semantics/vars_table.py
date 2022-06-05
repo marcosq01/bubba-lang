@@ -14,8 +14,10 @@ class VariableContext:
         self.type = type
         self.address = address
         self.is_array = 0
+        self.is_object = False
         self.first_len = 0
         self.second_len = None
+        self.obj_attributes = {}
 
 
 
@@ -43,7 +45,9 @@ class VarsTable:
     def print(self):
         for var in self.table:
             v = self.table[var]
-            print("nombre_variable:", v.name, "type_variable:", v.type, "address_var:", v.address, "is_array:", v.is_array, "first_len:", v.first_len, "second_len:", v.second_len)
+            print("nombre_variable:", v.name, "type_variable:", v.type, "address_var:", v.address, "is_array:", 
+                   v.is_array, "is_object: ", v.is_object, 
+                   "first_len:", v.first_len, "second_len:", v.second_len, "attributes:" , v.obj_attributes)
             
 
 
