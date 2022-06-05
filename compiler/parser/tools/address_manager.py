@@ -1,3 +1,4 @@
+import tempfile
 from .utils.constants import *
 
 class AddressManager:
@@ -11,26 +12,31 @@ class AddressManager:
         self.global_string_count = GLOBAL_STRING_START
         self.global_string_free = GLOBAL_STRING_FREE
         # locales
-        self.local_int_count = 10000
-        self.local_int_free = 5000
-        self.local_float_count = 15000
-        self.local_float_free = 4000
-        self.local_string_count = 19000
-        self.local_string_free = 1000
+        self.local_int_count = LOCAL_INT_START
+        self.local_int_free = LOCAL_INT_FREE
+        self.local_float_count = LOCAL_FLOAT_START
+        self.local_float_free = LOCAL_FLOAT_FREE
+        self.local_string_count = LOCAL_STRING_START
+        self.local_string_free = LOCAL_STRING_FREE
+
+        # objetos locales
+        self.local_object_attr_count = LOCAL_OBJECT_FREE
+        self.local_object_attr_free = LOCAL_OBJECT_FREE
+
         # temporales
-        self.temp_int_count = 20000
-        self.temp_int_free = 2000
-        self.temp_float_count = 22000
-        self.temp_float_free = 2000
-        self.temp_string_count = 24000
-        self.temp_string_free = 1000
+        self.temp_int_count = TEMP_INT_START
+        self.temp_int_free = TEMP_INT_FREE
+        self.temp_float_count = TEMP_FLOAT_START
+        self.temp_float_free = TEMP_FLOAT_FREE
+        self.temp_string_count = TEMP_STRING_START
+        self.temp_string_free = TEMP_STRING_FREE
         # constantes
-        self.const_int_count = 25000
-        self.const_int_free = 2000
-        self.const_float_count = 27000
-        self.const_float_free = 1000
-        self.const_string_count = 28000
-        self.const_string_free = 1000
+        self.const_int_count = CONST_INT_START
+        self.const_int_free = CONST_INT_FREE
+        self.const_float_count = CONST_FLOAT_START
+        self.const_float_free = CONST_FLOAT_FREE
+        self.const_string_count = CONST_STRING_START
+        self.const_string_free = CONST_STRING_FREE
 
     def get_global_int(self, n):
         if self.global_int_free >= n:
@@ -82,6 +88,15 @@ class AddressManager:
             temp = self.local_string_count
             self.local_string_count += n
             self.local_string_free -= n
+            return temp
+        else:
+            return -1
+
+    def get_local_object_attr(self, n):
+        if self.local_object_attr_free >= n:
+            temp = self.local_object_attr_count
+            self.local_object_attr_count += n
+            self.local_object_attr_free -= n
             return temp
         else:
             return -1
@@ -144,17 +159,21 @@ class AddressManager:
 
     def reset(self):
         # locales
-        self.local_int_count = 10000
-        self.local_int_free = 5000
-        self.local_float_count = 15000
-        self.local_float_free = 4000
-        self.local_string_count = 19000
-        self.local_string_free = 1000
+        self.local_int_count = LOCAL_INT_START
+        self.local_int_free = LOCAL_INT_FREE
+        self.local_float_count = LOCAL_FLOAT_START
+        self.local_float_free = LOCAL_FLOAT_FREE
+        self.local_string_count = LOCAL_STRING_START
+        self.local_string_free = LOCAL_STRING_FREE
+
+        # objetos locales
+        self.local_object_attr_count = LOCAL_OBJECT_START
+        self.local_float_free = LOCAL_OBJECT_FREE
 
         # temporales
-        self.temp_int_count = 20000
-        self.temp_int_free = 2000
-        self.temp_float_count = 22000
-        self.temp_float_free = 2000
-        self.temp_string_count = 24000
-        self.temp_string_free = 1000
+        self.temp_int_count = TEMP_INT_START
+        self.temp_int_free = TEMP_INT_FREE
+        self.temp_float_count = TEMP_FLOAT_START
+        self.temp_float_free = TEMP_FLOAT_FREE
+        self.temp_string_count = TEMP_STRING_START
+        self.temp_string_free = TEMP_STRING_FREE

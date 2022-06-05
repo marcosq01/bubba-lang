@@ -101,8 +101,7 @@ def p_program(p):
         print(i, quadruples[i].__dict__)
     for i in constants_table.table:
         print(constants_table.table[i].__dict__)
-    operands_stack.print()
-
+    class_directory.print()
 
 def p_paux(p):
     '''
@@ -317,8 +316,8 @@ def p_func_type(p):
 
 def p_classr(p):
     '''
-    classr : CLASS ID x_insert_new_class LBRACE attributes methods RBRACE SEMICOLON
-           | CLASS ID x_insert_new_class EXTENDS ID x_inherit_attrs LBRACE attributes methods RBRACE SEMICOLON
+    classr : CLASS ID x_insert_new_class LBRACE attributes RBRACE SEMICOLON
+           | CLASS ID x_insert_new_class EXTENDS ID x_inherit_attrs LBRACE attributes RBRACE SEMICOLON
     '''
     pass
 
@@ -337,7 +336,6 @@ def p_x_insert_new_class(p):
 
     # anadir la clase al directorio de clases
     class_directory.add_class(current_class)
-    class_directory.print()
 
 
 
@@ -398,13 +396,9 @@ def p_x_declare_attr(p):
     attr = Attribute(attr_name, current_type_var_declaration)
     # agregarlo a los atributos de la clase
     current_class.add_attribute(attr)
-    class_directory.print()
-    for a in current_class.attributes:
-        print(current_class.attributes[a].__dict__)
 
     # incrementar los contadores de atributos
     current_class.increment_type_count(current_type_var_declaration, 1)
-
 
 def p_attribute_type(p):
     '''
@@ -595,38 +589,60 @@ def p_x_declare_variable(p):
         t_func = current_function.type
         t_var = current_type_var_declaration
         # estas son las globales
-        if t_func == 'program':
-            if t_var == 'int':
-                addr = addr_manager.get_global_int(1)
-                current_function.local_int_counter += 1
-            elif t_var == 'float':
-                addr = addr_manager.get_global_float(1)
-                current_function.local_float_counter += 1
-            elif t_var == 'string':
-                current_function.local_string_counter += 1
-                addr = addr_manager.get_global_string(1)
+        if t_var in ['int', 'float', 'string']:
+            if t_func == 'program':
+                if t_var == 'int':
+                    addr = addr_manager.get_global_int(1)
+                    current_function.local_int_counter += 1
+                elif t_var == 'float':
+                    addr = addr_manager.get_global_float(1)
+                    current_function.local_float_counter += 1
+                elif t_var == 'string':
+                    current_function.local_string_counter += 1
+                    addr = addr_manager.get_global_string(1)
 
-        # estas son las locales
+            # estas son las locales
+            else:
+
+                if t_var == 'int':
+                    addr = addr_manager.get_local_int(1)
+                    current_function.local_int_counter += 1
+
+                elif t_var == 'float':
+                    addr = addr_manager.get_local_float(1)
+                    current_function.local_float_counter += 1
+                elif t_var == 'string':
+                    addr = addr_manager.get_local_string(1)
+                    current_function.local_string_counter += 1
+                if in_params:
+                    params_addresses = current_function.params_addresses
+                    params_addresses.append(addr)
+            var = VariableContext(p[-1], current_type_var_declaration, addr) 
+
+
         else:
+            # si es una declaracion de objeto....
 
-            if t_var == 'int':
-                addr = addr_manager.get_local_int(1)
-                current_function.local_int_counter += 1
- 
-            elif t_var == 'float':
-                addr = addr_manager.get_local_float(1)
-                current_function.local_float_counter += 1
-            elif t_var == 'string':
-                addr = addr_manager.get_local_string(1)
-                current_function.local_string_counter += 1
-            if in_params:
-                params_addresses = current_function.params_addresses
-                params_addresses.append(addr)
+            # obtenemos primero la clase y el dict de attributes
+            cl = class_directory.get_class(t_var)
+            cl_attrs = cl.attributes
 
-        # TODO clases y arreglos
+            # tendremos que asignar direcciones a cada uno de los atributos
+            # y poner esos atributos en el var_context del objeto
+            obj_ctx = VariableContext(var_name, t_var, None)
+            obj_ctx.is_object = True
 
+            obj_attrs = obj_ctx.obj_attributes
 
-        var = VariableContext(p[-1], current_type_var_declaration, addr) 
+            for a in cl_attrs:
+                x_attr = cl_attrs[a]
+                x_attr_address = addr_manager.get_local_object_attr(1)
+                at = Attribute(x_attr.name, x_attr.type, x_attr_address)
+                obj_attrs[a] = at
+
+            var = obj_ctx
+            print("VAARRRRRR", var.__dict__)
+
         current_vars_table.insert_var(var)
     
     global current_var
@@ -858,6 +874,7 @@ def p_x_AND_op(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
+                print("result", result)
                 current_function.temp_int_counter += 1
 
             elif (ft=='float'):
