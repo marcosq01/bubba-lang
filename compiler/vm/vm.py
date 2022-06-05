@@ -119,11 +119,10 @@ class VirtualMachine:
 
         res = op(left, right)
 
-        if op in ['>', '>=', '<', '<=', '!=']:
-            if res:
-                res = 1
-            else:
-                res = 0 
+        if op == and_:
+            res = left and right
+        if op == or_:
+            res = left or right
 
         return res
 

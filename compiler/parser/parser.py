@@ -97,7 +97,7 @@ def p_program(p):
         print(i, quadruples[i].__dict__)
     for i in constants_table.table:
         print(constants_table.table[i].__dict__)
-    
+    operands_stack.print()
 
 
 def p_paux(p):
