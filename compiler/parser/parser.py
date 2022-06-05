@@ -362,15 +362,9 @@ def p_class_extends(p):
     '''
 
 def p_output(p):
-    'output : PRINT LPAR expression x_print_expr output_a RPAR SEMICOLON'
+    'output : PRINT LPAR expression x_print_expr RPAR SEMICOLON'
     pass
 
-def p_output_a(p):
-    '''
-        output_a : COMMA expression x_print_expr output_a
-                 | empty
-    '''
-    pass
 
 def p_inputr(p):
     'inputr : INPUT LPAR var RPAR SEMICOLON'
