@@ -1,15 +1,15 @@
-
+from .utils.constants import *
 
 class AddressManager:
 
     def __init__(self) -> None:
         # globales
-        self.global_int_count = 1000
-        self.global_int_free = 4000
-        self.global_float_count = 5000
-        self.global_float_free = 4000
-        self.global_string_count = 9000
-        self.global_string_free = 1000
+        self.global_int_count = GLOBAL_INT_START
+        self.global_int_free = GLOBAL_INT_FREE
+        self.global_float_count = GLOBAL_FLOAT_START
+        self.global_float_free = GLOBAL_FLOAT_FREE
+        self.global_string_count = GLOBAL_STRING_START
+        self.global_string_free = GLOBAL_STRING_FREE
         # locales
         self.local_int_count = 10000
         self.local_int_free = 5000

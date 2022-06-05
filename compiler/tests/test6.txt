@@ -1,6 +1,14 @@
 
 prog tilin:
 
+
+class A { 
+    attributes {
+        int : x;
+        float : f;
+    }
+}
+
 vars {
     int : A[10], i;
 }

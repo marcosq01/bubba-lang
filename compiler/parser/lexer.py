@@ -23,6 +23,8 @@ reserved = {
     'return' : 'RETURN',
     'class' : 'CLASS',
     'extends' : 'EXTENDS',
+    'attributes' : 'ATTRIBUTES',
+    'methods' : 'METHODS',
     'func' : 'FUNC',
     'void' : 'VOID',
     'input' : 'INPUT',

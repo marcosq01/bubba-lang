@@ -1,5 +1,3 @@
-from unittest import addModuleCleanup
-from xml.etree.ElementTree import QName
 from parser.tools.semantics.constants_table import Constant, ConstantsTable
 
 from parser.ply import yacc
@@ -12,7 +10,7 @@ from parser.tools.semantics.semantic_cube import SemanticCube
 from parser.tools.semantics.quadruple import Quadruple
 from parser.tools.semantics.vars_table import VarsTable, VariableContext
 from parser.tools.semantics.function_directory import FunctionDirectory, FunctionContext
-
+from parser.tools.semantics.class_directory import ClassDirectory, ClassEntry, Attribute
 from parser.tools.error import Error
 
 from parser.tools.address_manager import AddressManager
@@ -36,7 +34,11 @@ from parser.tools.address_manager import AddressManager
 # Cubo semantico
 cube = SemanticCube()
 
+# directorio de funciones
 function_directory = FunctionDirectory()
+
+# directorio de clases
+class_directory = ClassDirectory()
 
 # este puede contener (+, -, /, *)
 operator_stack = Stack()
@@ -61,6 +63,8 @@ addr_manager = AddressManager()
 
 
 current_type_var_declaration = None
+
+current_class = None
 
 current_function = None
 current_vars_table = None
@@ -175,7 +179,7 @@ def p_statement(p):
 def p_lid(p):
     '''
         lid : var_dec
-            | var_dec COMMA lid 
+            | lid COMMA var_dec
     '''
     pass
 
@@ -186,6 +190,8 @@ def p_var_dec(p):
                 | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len x_add_constant_arr_size COMMA VINTEGER x_set_second_len x_add_constant_arr_size RBRACKET x_matrix_get_addrs
     '''
     p[0] = p[1]
+    print(p[1])
+
 
 
 def p_var(p):
@@ -223,39 +229,6 @@ def p_factor(p):
                | factor_val 
     '''
     pass
-
-def p_x_generate_neg_quad(p):
-    'x_generate_neg_quad :'
-
-    # En este punto tenemos el operador y su tipo en el top de los stacks
-    # Se generará uncuadruplo que sea (-, 0, addr, temp)
-    # primero se busca la constante 0 en la tabla de const
-    # se agrega si es necesario
-
-    if not constants_table.has_constant(0):
-        addr_0 = addr_manager.get_const_int(1)
-        constants_table.add_constant(0, addr_0)
-    constant_0 = constants_table.get_constant(0)
-    addr_0 = constant_0.address
-
-    # obtener operando y tipo
-    op = operands_stack.pop()
-    t = types_stack.pop()
-
-    if t == 'string':
-        Error("No hay strings negativos")
-    elif t == 'int':
-        current_function.temp_int_counter += 1
-        addr = addr_manager.get_temp_int(1)
-    elif t == 'float':
-        current_function.temp_float_counter += 1
-        addr = addr_manager.get_temp_float(1)
-
-    q = Quadruple('-', addr_0, op, addr)
-    quadruples.append(q)
-
-    operands_stack.push(addr)
-    types_stack.push(t)
 
 
 def p_factor_val(p):
@@ -323,16 +296,7 @@ def p_funcr(p):
     '''
     pass
 
-def p_x_set_true_params(p):
-    'x_set_true_params :'
-    global in_params
-    in_params = True
 
-
-def p_x_set_false_params(p):
-    'x_set_false_params :'
-    global in_params
-    in_params = False
     
 
 def p_params(p):
@@ -352,19 +316,110 @@ def p_func_type(p):
     p[0] = p[1]
 
 def p_classr(p):
-    'classr : CLASS ID class_extends LBRACE varsr methods RBRACE SEMICOLON'
+    '''
+    classr : CLASS ID x_insert_new_class LBRACE attributes methods RBRACE SEMICOLON
+           | CLASS ID x_insert_new_class EXTENDS ID x_inherit_attrs LBRACE attributes methods RBRACE SEMICOLON
+    '''
     pass
 
-def p_class_extends(p):
+
+def p_x_insert_new_class(p):
+    'x_insert_new_class :'
+    class_name = p[-1]
+
+    # revisar si existe la clase
+    if class_directory.has_class(class_name):
+        Error("Clase \"" + class_name + "\" ya existe.")
+
+    global current_class
+
+    current_class = ClassEntry(class_name)
+
+    # anadir la clase al directorio de clases
+    class_directory.add_class(current_class)
+    class_directory.print()
+
+
+
+
+def p_x_inherit_attrs(p):
+    'x_inherit_attrs :'
+    pass
+
+
+
+
+
+def p_attributes(p):
     '''
-        class_extends : EXTENDS ID
-                      | empty
+    attributes : ATTRIBUTES LBRACE attributes_a RBRACE
     '''
+    pass
+
+
+def p_attributes_a(p):
+    '''attributes_a : attribute_type x_set_curr_attr_type COLON lid_attr SEMICOLON
+                  | attributes_a attribute_type x_set_curr_attr_type COLON lid_attr SEMICOLON
+    '''
+    pass
+
+def p_x_set_curr_attr_type(p):
+    'x_set_curr_attr_type :'
+    global current_type_var_declaration
+    # se guarda el current type de los siguientes atributos
+    current_type_var_declaration = p[-1]
+
+
+def p_lid_attr(p):
+    '''
+        lid_attr : attr_dec
+                 | lid_attr COMMA attr_dec
+    '''
+    pass
+
+
+# TODO se le pueden agregar las reglas para generar arreglos y matrices
+def p_attr_dec(p):
+    '''
+        attr_dec : ID x_declare_attr
+    '''
+    p[0] = p[1]
+
+
+def p_x_declare_attr(p):
+    'x_declare_attr :'
+    attr_name = p[-1]
+
+
+    # revisar que si existe el atributo 
+    if current_class.has_attribute(attr_name):
+        Error("Doble declaracion de atributo en clase + \"" + current_class.name + "\".")
+
+    attr = Attribute(attr_name, current_type_var_declaration)
+    # agregarlo a los atributos de la clase
+    current_class.add_attribute(attr)
+    class_directory.print()
+    for a in current_class.attributes:
+        print(current_class.attributes[a].__dict__)
+
+    # incrementar los contadores de atributos
+    current_class.increment_type_count(current_type_var_declaration, 1)
+
+
+def p_attribute_type(p):
+    '''
+        attribute_type : INT
+                       | FLOAT
+                       | STRING
+    '''
+    p[0] = p[1]
 
 def p_output(p):
     'output : PRINT LPAR expression x_print_expr RPAR SEMICOLON'
     pass
 
+
+# TODO hacer un punto neuralgico para esta cosa
 
 def p_inputr(p):
     'inputr : INPUT LPAR var RPAR SEMICOLON'
@@ -427,50 +482,6 @@ def p_call(p):
              | call_id x_verify_func x_push_par LPAR args x_points_null RPAR x_push_call_value x_pop_par
     '''
     pass
-
-    
-
-def p_x_push_par(p):
-    'x_push_par :'
-    operator_stack.push('(')
-
-def p_x_pop_par(p):
-    'x_pop_par :'
-    operator_stack.pop()
-
-    # se actualiza current call name
-    call_stack.pop()
-    global current_function_call_name
-    current_function_call_name = call_stack.top()
-
-def p_x_push_call_value(p):
-    'x_push_call_value :'
-    global_func = function_directory.search_function(prog_name)
-    global_vars_table = global_func.get_vars_table()
-
-    global_var = global_vars_table.search_var(current_function_call_name)
-
-    # si se llamó a una funcion void, simplemente salirnos porque no hay
-    # nada que hacere en el stack de operandos
-    if global_var == None:
-        return
-
-    # assign
-    if global_var.type == 'int':
-        new_addr = addr_manager.get_temp_int(1)
-        current_function.temp_int_counter += 1
-    elif global_var.type == 'float':    
-        new_addr = addr_manager.get_temp_float(1)
-        current_function.temp_float_counter += 1
-    elif global_var.type == 'string':
-        new_addr = addr_manager.get_temp_string(1)
-        current_function.temp_string_counter += 1
-
-    q = Quadruple('=', global_var.address, None, new_addr)
-    quadruples.append(q)
-
-    operands_stack.push(new_addr)
-    types_stack.push(global_var.type)
 
 
 def p_call_id(p):
@@ -1348,6 +1359,104 @@ def p_x_goto_main(p):
     goto_main = jumps_stack.pop()
     q = quadruples[goto_main]
     q.set_result(len(quadruples))
+
+
+def p_x_generate_neg_quad(p):
+    'x_generate_neg_quad :'
+
+    # En este punto tenemos el operador y su tipo en el top de los stacks
+    # Se generará uncuadruplo que sea (-, 0, addr, temp)
+    # primero se busca la constante 0 en la tabla de const
+    # se agrega si es necesario
+
+    if not constants_table.has_constant(0):
+        addr_0 = addr_manager.get_const_int(1)
+        constants_table.add_constant(0, addr_0)
+    constant_0 = constants_table.get_constant(0)
+    addr_0 = constant_0.address
+
+    # obtener operando y tipo
+    op = operands_stack.pop()
+    t = types_stack.pop()
+
+    if t == 'string':
+        Error("No hay strings negativos")
+    elif t == 'int':
+        current_function.temp_int_counter += 1
+        addr = addr_manager.get_temp_int(1)
+    elif t == 'float':
+        current_function.temp_float_counter += 1
+        addr = addr_manager.get_temp_float(1)
+
+    q = Quadruple('-', addr_0, op, addr)
+    quadruples.append(q)
+
+    operands_stack.push(addr)
+    types_stack.push(t)
+
+
+def p_x_set_true_params(p):
+    'x_set_true_params :'
+    global in_params
+    in_params = True
+
+
+def p_x_set_false_params(p):
+    'x_set_false_params :'
+    global in_params
+    in_params = False
+
+
+def p_x_push_par(p):
+    'x_push_par :'
+    operator_stack.push('(')
+
+def p_x_pop_par(p):
+    'x_pop_par :'
+    operator_stack.pop()
+
+    # se actualiza current call name
+    call_stack.pop()
+    global current_function_call_name
+    current_function_call_name = call_stack.top()
+
+def p_x_push_call_value(p):
+    'x_push_call_value :'
+    global_func = function_directory.search_function(prog_name)
+    global_vars_table = global_func.get_vars_table()
+
+    global_var = global_vars_table.search_var(current_function_call_name)
+
+    # si se llamó a una funcion void, simplemente salirnos porque no hay
+    # nada que hacere en el stack de operandos
+    if global_var == None:
+        return
+
+    # assign
+    if global_var.type == 'int':
+        new_addr = addr_manager.get_temp_int(1)
+        current_function.temp_int_counter += 1
+    elif global_var.type == 'float':    
+        new_addr = addr_manager.get_temp_float(1)
+        current_function.temp_float_counter += 1
+    elif global_var.type == 'string':
+        new_addr = addr_manager.get_temp_string(1)
+        current_function.temp_string_counter += 1
+
+    q = Quadruple('=', global_var.address, None, new_addr)
+    quadruples.append(q)
+
+    operands_stack.push(new_addr)
+    types_stack.push(global_var.type)
+
+
+
+
+
+
+# ------------------------------ fin puntos neuralgicos
+
+
 
 
 # esta regla es para mas claridad en el codigo (gramatica)
