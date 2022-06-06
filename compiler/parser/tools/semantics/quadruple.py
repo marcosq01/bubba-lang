@@ -12,3 +12,7 @@ class Quadruple:
         self.result = x
 
 
+    def print(self):
+
+        return str("  " + self.op + (" " * ( 12 - len(str(self.op)))) + str(self.left) + (" " * (22 - len(str(self.left)))) + str(self.right) + (" " * (15 - len(str(self.left)))) + str(self.result))
+

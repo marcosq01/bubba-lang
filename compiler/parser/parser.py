@@ -15,7 +15,7 @@ from parser.tools.error import Error
 
 from parser.tools.address_manager import AddressManager
 
-
+from copy import deepcopy
 
 # TODO agregar precedence en caso de ser necesario
 # TODO algunas reglas tienen mal el orden (se ejecutan las de la derecha primero)
@@ -96,16 +96,18 @@ prog_name = None
 
 def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
-    function_directory.print()
+    # function_directory.print()
+    print("    OPERATION   LEFT                  RIGHT          RESULT")    
+
     for i in range(len(quadruples)):
         print(i, quadruples[i].__dict__)
-    for i in constants_table.table:
-        print(constants_table.table[i].__dict__)
+    # for i in constants_table.table:
+    #     print(constants_table.table[i].__dict__)
     class_directory.print()
 
 def p_paux(p):
     '''
-        paux : classr paux
+        paux : paux classr
              | empty
     '''
     pass
@@ -189,7 +191,6 @@ def p_var_dec(p):
                 | ID x_declare_variable x_set_is_array_1d LBRACKET VINTEGER x_set_first_len x_add_constant_arr_size COMMA VINTEGER x_set_second_len x_add_constant_arr_size RBRACKET x_matrix_get_addrs
     '''
     p[0] = p[1]
-    print(p[1])
 
 
 
@@ -253,7 +254,6 @@ def p_x_process_obj_attribute(p):
     attr_data = var_data.obj_attributes[attr_name]
 
     # se anade el operando y el type a los stacks
-    print("HOLAAAAAA",attr_data.__dict__)
     operands_stack.push(attr_data.address)
     types_stack.push(attr_data.type)
 
@@ -280,7 +280,7 @@ def p_assign(p):
 
 def p_factor(p):
     '''
-        factor : MINUS factor_val x_generate_neg_quad
+        factor : MINUS factor x_generate_neg_quad
                | PLUS factor_val
                | factor_val 
     '''
@@ -400,7 +400,21 @@ def p_x_insert_new_class(p):
 
 def p_x_inherit_attrs(p):
     'x_inherit_attrs :'
-    pass
+    parent_class_name = p[-1]
+
+    # checar si existe la clase padre o base
+    if not class_directory.has_class(parent_class_name):
+        Error("Clase base \"" + parent_class_name + "\" no existe.")
+    
+
+    parent_class = class_directory.get_class(parent_class_name)
+    parent_class_attrs  = parent_class.attributes
+
+    current_class.attributes = deepcopy(parent_class_attrs)
+    current_class.int_count = parent_class.int_count
+    current_class.float_count = parent_class.float_count
+    current_class.string_count = parent_class.string_count
+
 
 
 
@@ -682,6 +696,9 @@ def p_x_declare_variable(p):
             # si es una declaracion de objeto....
 
             # obtenemos primero la clase y el dict de attributes
+            print("TVAR" , t_var)
+            print(class_directory.__dict__)
+            class_directory.print()
             cl = class_directory.get_class(t_var)
             cl_attrs = cl.attributes
 
@@ -699,7 +716,6 @@ def p_x_declare_variable(p):
                 else:
                     
                     x_attr_address = addr_manager.get_local_object_attr(1)
-                print("ADDRESSSSSS", x_attr_address)
                 at = Attribute(x_attr.name, x_attr.type, x_attr_address)
                 obj_attrs[a] = at
 
@@ -936,7 +952,6 @@ def p_x_AND_op(p):
         if(ft!='error'):
             if (ft=='int'):
                 result =  addr_manager.get_temp_int(1)
-                print("result", result)
                 current_function.temp_int_counter += 1
 
             elif (ft=='float'):
@@ -1083,7 +1098,7 @@ def p_x_func_init_addr(p):
 def p_x_add_endfunc(p):
     'x_add_endfunc :'
     if(current_function_type!= "void" and not current_function_return):
-     Error("La función no regresa ningún valor")
+        Error("La función no regresa ningún valor")
     quadruples.append(Quadruple('endfunc', None, None, None))
 
 def p_x_verify_func(p):
@@ -1428,7 +1443,10 @@ def p_x_check_type_func(p):
 
 def p_x_check_void_func(p):
     'x_check_void_func :'
-    if current_function.type != 'void':
+    if current_function.type == 'program':
+        q = Quadruple('endprogram', None, None, None)
+        quadruples.append(q)
+    if current_function.type in ['int', 'float', 'string']:
         Error("Return en funcion tipo \'" + current_function.type + "\' debe retornar un valor.")
 
 def p_x_goto_main(p):

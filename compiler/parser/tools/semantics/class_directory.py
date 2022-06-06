@@ -62,5 +62,7 @@ class ClassDirectory:
 
 
     def print(self):
+        print("jaja")
         for c in self.table:
+            print("c", c)
             print(self.table[c].__dict__)

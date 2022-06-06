@@ -1,55 +1,29 @@
 
-prog tilin:
+prog x:
 
-
-class A { 
+class A {
     attributes {
-        int : x, y, z, a, b, c;
-        float : f;
-    }
-};
-
-class B {
-    attributes {
-        int : bx, by;
-        float : bf;
+        int : a;
         string : s;
     }
 };
 
-vars {
-    int : A[10], i;
-    B : globalb;
-    string : s;
-}
 
-
-func void ff(int : x) {
-    vars {
-        B: bbbb;
+class B extends A {
+    attributes {
+        int : b;
     }
-    if (x > 0) {
-        print("TROLL");
-        return;
-    };
-    print("NOOOO");
-}
+};
 
-func int f() {
-    vars {
-        A : aa, aaaa;
-        int : xxx;
-        float : fffff;
-    }
-    return 5;
+vars { 
+    B : bb;
+    A : aa;
 }
 
 main() {
-    globalb.bx = 5 * 100;
-    print(globalb.bx);
-    globalb.s = "holi";
-
-    print(s.a + "troll");
-
-
+    bb.a = 10;
+    bb.s = "hola desde b";
+    aa.a = 50;
+    print(bb.a);
+    print(aa.a * 1000);
 }

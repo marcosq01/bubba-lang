@@ -343,9 +343,12 @@ class VirtualMachine:
                 self.ip = exec_ctx.address
                 self.current_memory = exec_ctx.memory
 
+            elif quad.op == 'endprogram':
+                exit()
+
 
         
-        print("global mem", self.global_mem.__dict__)
+        # print("global mem", self.global_mem.__dict__)
 
 
  
