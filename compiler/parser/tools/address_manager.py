@@ -11,6 +11,11 @@ class AddressManager:
         self.global_float_free = GLOBAL_FLOAT_FREE
         self.global_string_count = GLOBAL_STRING_START
         self.global_string_free = GLOBAL_STRING_FREE
+
+        # objetos globales
+        self.global_object_attr_count = GLOBAL_OBJECT_START
+        self.global_object_attr_free = GLOBAL_OBJECT_FREE
+
         # locales
         self.local_int_count = LOCAL_INT_START
         self.local_int_free = LOCAL_INT_FREE
@@ -61,6 +66,15 @@ class AddressManager:
             temp = self.global_string_count
             self.global_string_count += n
             self.global_string_free -= n
+            return temp
+        else:
+            return -1
+
+    def get_global_object_attr(self, n):
+        if self.global_object_attr_free >= n:
+            temp = self.global_object_attr_count
+            self.global_object_attr_count += n
+            self.global_object_attr_free -= n
             return temp
         else:
             return -1

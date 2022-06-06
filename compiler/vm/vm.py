@@ -27,6 +27,7 @@ class VirtualMachine:
         global_int_count = global_func.local_int_counter
         global_float_count = global_func.local_float_counter
         global_string_count = global_func.local_string_counter
+        global_object_attr_count = global_func.local_object_attr_counter
         global_temp_int_count = global_func.temp_int_counter 
         global_temp_float_count = global_func.temp_float_counter 
         global_temp_string_count = global_func.temp_string_counter 
@@ -34,6 +35,7 @@ class VirtualMachine:
         self.global_mem = MemorySegment(global_int_count,
                                         global_float_count, 
                                         global_string_count,
+                                        global_object_attr_count,
                                         global_temp_int_count,
                                         global_temp_float_count,
                                         global_temp_string_count)
@@ -52,6 +54,10 @@ class VirtualMachine:
             return self.global_mem.local_float[addr - GLOBAL_FLOAT_START]
         elif addr >= GLOBAL_STRING_START and addr < GLOBAL_STRING_START + GLOBAL_STRING_FREE:
             return self.global_mem.local_string[addr - GLOBAL_STRING_START]
+
+        # globales objetos
+        if addr >= LOCAL_OBJECT_START and addr < GLOBAL_OBJECT_START + GLOBAL_OBJECT_FREE:
+            return self.global_mem.local_obj_attr[addr - GLOBAL_OBJECT_START]
 
         # locales
         if addr >= LOCAL_INT_START and addr < LOCAL_INT_START + LOCAL_INT_FREE:
@@ -86,6 +92,10 @@ class VirtualMachine:
             self.global_mem.local_float[addr - GLOBAL_FLOAT_START] = float(val)
         elif addr >= GLOBAL_STRING_START and addr < GLOBAL_STRING_START + GLOBAL_STRING_FREE:
             self.global_mem.local_string[addr - GLOBAL_STRING_START] = val
+
+        if addr >= LOCAL_OBJECT_START and addr < GLOBAL_OBJECT_START + GLOBAL_OBJECT_FREE:
+            self.global_mem.local_obj_attr[addr - GLOBAL_OBJECT_START] = val
+
 
         # locales
         if addr >= LOCAL_INT_START and addr < LOCAL_INT_START + LOCAL_INT_FREE:
@@ -264,12 +274,13 @@ class VirtualMachine:
                 li = func.local_int_counter
                 lf = func.local_float_counter
                 ls = func.local_string_counter
+                loa = func.local_object_attr_counter
 
                 # crear memoria
                 # pero sin actualizar la memoria actual
                 # esa se va a actualizar
 
-                new_mem = MemorySegment(li, lf, ls, ti, tf, ts)
+                new_mem = MemorySegment(li, lf, ls, loa, ti, tf, ts)
 
                 self.execution_stack.push(new_mem)
 
