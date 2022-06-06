@@ -13,13 +13,17 @@ class B {
     attributes {
         int : bx, by;
         float : bf;
+        string : s;
     }
 };
 
 vars {
     int : A[10], i;
     B : globalb;
+    string : s;
 }
+
+
 func void ff(int : x) {
     vars {
         B: bbbb;
@@ -41,6 +45,11 @@ func int f() {
 }
 
 main() {
-    i = 4 && 3;
-    print(i);
+    globalb.bx = 5 * 100;
+    print(globalb.bx);
+    globalb.s = "holi";
+
+    print(s.a + "troll");
+
+
 }

@@ -56,8 +56,12 @@ class VirtualMachine:
             return self.global_mem.local_string[addr - GLOBAL_STRING_START]
 
         # globales objetos
-        if addr >= LOCAL_OBJECT_START and addr < GLOBAL_OBJECT_START + GLOBAL_OBJECT_FREE:
+        if addr >= GLOBAL_OBJECT_START and addr < GLOBAL_OBJECT_START + GLOBAL_OBJECT_FREE:
             return self.global_mem.local_obj_attr[addr - GLOBAL_OBJECT_START]
+
+        # locales objetos
+        if addr >= LOCAL_OBJECT_START and addr < LOCAL_OBJECT_START + LOCAL_OBJECT_FREE:
+            return self.current_memory.local_obj_attr[addr - LOCAL_OBJECT_START]
 
         # locales
         if addr >= LOCAL_INT_START and addr < LOCAL_INT_START + LOCAL_INT_FREE:
@@ -93,8 +97,14 @@ class VirtualMachine:
         elif addr >= GLOBAL_STRING_START and addr < GLOBAL_STRING_START + GLOBAL_STRING_FREE:
             self.global_mem.local_string[addr - GLOBAL_STRING_START] = val
 
-        if addr >= LOCAL_OBJECT_START and addr < GLOBAL_OBJECT_START + GLOBAL_OBJECT_FREE:
+        # globales objetos
+        if addr >= GLOBAL_OBJECT_START and addr < GLOBAL_OBJECT_START + GLOBAL_OBJECT_FREE:
             self.global_mem.local_obj_attr[addr - GLOBAL_OBJECT_START] = val
+        
+        # locales objetos
+        if addr >= LOCAL_OBJECT_START and addr < LOCAL_OBJECT_START + LOCAL_OBJECT_FREE:
+            self.current_memory.local_obj_attr[addr - LOCAL_OBJECT_START] = val
+
 
 
         # locales

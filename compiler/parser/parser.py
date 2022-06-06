@@ -201,28 +201,66 @@ def p_var(p):
     p[0]=p[1]
 
 
+def p_var_attribute(p):
+    '''
+        var_attribute : attr_id x_process_obj_attribute
+    '''
+    pass
+
+
+def p_attr_id(p):
+    '''
+        attr_id : ID DOT ID
+    '''
+    p[0] = (p[1], p[3])
+
+
 def p_var_id(p):
     '''
         var_id : ID
-               | ID DOT ID x_object_attribute
     '''
     p[0]=p[1]
-    if len(p) > 2:
-        # pasar una tupla con id variable y id atributo
-        p[0] = (p[1], p[3])
 
 
 
-def p_x_object_attribute(p):
-    'x_object_attribute :'
+def p_x_process_obj_attribute(p):
+    'x_process_obj_attribute :'
 
     # se descompone la tupla
     var_name, attr_name = p[-1]
 
     # primero se checa que exista la variable y que sea objeto
+    if current_vars_table.has_var(var_name):
+        var_data = current_vars_table.search_var(var_name)
+    else:
+
+        # obtener variables globales (tabla)
+        global_func = function_directory.search_function(prog_name)
+        global_vars = global_func.get_vars_table()
+
+        if global_vars.has_var(var_name):
+            var_data = global_vars.search_var(var_name)
+        else:
+            Error("Variable \"" + var_name + "\" no existe.")
+
+    # tenemos que checar que esa variable sea un objeto
+    if not var_data.is_object:
+        Error("Variable \"" + var_name + "\" no es objeto.")
+
+    # revisar que exista el atributo y guardar su info
+    if not attr_name in var_data.obj_attributes:
+        Error("Objeto \"" + var_name + "\" no tiene atributo \"" + attr_name + "\".")
+    attr_data = var_data.obj_attributes[attr_name]
+
+    # se anade el operando y el type a los stacks
+    print("HOLAAAAAA",attr_data.__dict__)
+    operands_stack.push(attr_data.address)
+    types_stack.push(attr_data.type)
 
 
-    # despues se checa que ese objeto tenga ese atributo
+    # TODO actualizar current_var y current_var name
+
+
 
 
 def p_var_brackets(p):
@@ -233,7 +271,10 @@ def p_var_brackets(p):
     pass
 
 def p_assign(p):
-    'assign : var EQUAL x_add_op_to_stack expression x_assignment_op SEMICOLON'
+    '''
+        assign : var EQUAL x_add_op_to_stack expression x_assignment_op SEMICOLON
+               | var_attribute EQUAL x_add_op_to_stack expression x_assignment_op SEMICOLON
+    '''
     pass
 
 
@@ -252,6 +293,7 @@ def p_factor_val(p):
                    | var_cte
                    | call
                    | var
+                   | var_attribute
     '''
     pass
 
