@@ -24,6 +24,7 @@ main() {
     bb.a = 10;
     bb.s = "hola desde b";
     aa.a = 50;
+    print(!0);
     print(bb.a);
     print(aa.a * 1000);
 }

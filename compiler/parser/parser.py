@@ -281,10 +281,12 @@ def p_assign(p):
 def p_factor(p):
     '''
         factor : MINUS factor x_generate_neg_quad
-               | PLUS factor_val
+               | NOT factor_val x_generate_not_quad
                | factor_val 
     '''
     pass
+
+
 
 
 def p_factor_val(p):
@@ -1488,6 +1490,29 @@ def p_x_generate_neg_quad(p):
     q = Quadruple('-', addr_0, op, addr)
     quadruples.append(q)
 
+    operands_stack.push(addr)
+    types_stack.push(t)
+
+
+def p_x_generate_not_quad(p):
+    'x_generate_not_quad :'
+
+    # obtener operando y tipo
+    op = operands_stack.pop()
+    t = types_stack.pop()
+
+    if t == 'string':
+        Error("No se puede aplicar el operador ! en strings.")
+    elif t == 'int':
+        current_function.temp_int_counter += 1
+        addr = addr_manager.get_temp_int(1)
+    elif t == 'float':
+        Error("No se puede aplicar el operador ! en floats.")
+
+    print("XDDDDD")
+    q = Quadruple('!', None, op, addr)
+    quadruples.append(q)
+    print(q.__dict__)
     operands_stack.push(addr)
     types_stack.push(t)
 

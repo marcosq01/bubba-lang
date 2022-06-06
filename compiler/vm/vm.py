@@ -223,8 +223,9 @@ class VirtualMachine:
                 self.ip += 1
 
             elif quad.op == '!':
-                result = self.binary_operation(quad.left, quad.right, not_)
-                self.set_value_in_address(result, quad.result)
+                val = not self.get_value_from_address(quad.right)
+                
+                self.set_value_in_address(val, quad.result)
                 self.ip += 1
 
             elif quad.op == 'print':

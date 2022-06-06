@@ -1,0 +1,98 @@
+Marcos Quintero, 2022-06-06 : herencia de atributos
+Marcos Quintero, 2022-06-05 : acceso a atributos de objetos
+Marcos Quintero, 2022-06-05 : Merge pull request #28 from marcosq01/temp
+Marcos Quintero, 2022-06-05 : pequeno fix de error
+Marcos Quintero, 2022-06-05 : declaracion objetos globales
+Marcos Quintero, 2022-06-05 : Merge pull request #27 from marcosq01/obj-declaration
+Marcos Quintero, 2022-06-05 : declaracion de objetos locales
+Marcos Quintero, 2022-06-05 : reglas grammar de class y declaracion de clases y atributos
+Marcos Quintero, 2022-06-05 : Merge pull request #26 from marcosq01/cambios-simples
+Marcos Quintero, 2022-06-05 : pequenos fixes
+Karen Rios, 2022-06-05 : erase unnecesary rule in output
+Karen Rios, 2022-06-03 : Update README.md
+Marcos Quintero, 2022-06-03 : cuadruplo y ejecucion de operacion INPUT'
+Marcos Quintero, 2022-06-03 : operador unario negativo
+Marcos Quintero, 2022-06-03 : constante string
+Marcos Quintero, 2022-06-03 : execution stack overflow
+Marcos Quintero, 2022-06-03 : return en void
+Marcos Quintero, 2022-06-03 : fix llamada void
+Marcos Quintero, 2022-06-03 : llamadas a funciones anidadas e.g. f(g(h()))
+Marcos Quintero, 2022-06-03 : ejecucion de funciones (aun no esta el return value)
+Marcos Quintero, 2022-06-02 : maquina virtual resuelve expresiones simples, estatutos no lineales (while), arreglos y matrices
+Marcos Quintero, 2022-06-01 : ejecucion de expresiones simples
+karenrios22, 2022-06-01 : add constants
+Marcos Quintero, 2022-06-01 : global temp in global memory
+Marcos Quintero, 2022-06-01 : goto a main
+Marcos Quintero, 2022-06-01 : directorio ply
+Marcos Quintero, 2022-05-31 : contabilizacion correcta de variables globales, arrays y matrices
+Marcos Quintero, 2022-05-31 : ajuste estructura de directorios
+Marcos Quintero, 2022-05-31 : stack de tipos fix en arrays y matriz
+karenrios22, 2022-05-31 : Create quadruples for return
+Marcos Quintero, 2022-05-31 : valores default en memoria
+Marcos Quintero, 2022-05-30 : Update README.md
+Marcos Quintero, 2022-05-30 : memoria y vm creados
+Karen Rios, 2022-05-30 : Merge pull request #18 from marcosq01/FixFunc
+karenrios22, 2022-05-30 : Check return type and other bugs
+Karen Rios, 2022-05-24 : Update README.md
+Karen Rios, 2022-05-24 : Update README.md
+Marcos Quintero, 2022-05-24 : arreglos y matrices cuadruplos, etc
+Marcos Quintero, 2022-05-23 : arreglos declaracion
+Karen Rios, 2022-05-23 : Merge pull request #14 from marcosq01/outputs
+karenrios22, 2022-05-21 : delete unused function
+karenrios22, 2022-05-21 : Check that there must be a return on non void functions
+karenrios22, 2022-05-21 : Generate quadruples for outputs(adress)
+Marcos Quintero, 2022-05-16 : Update README.md
+Karen Rios, 2022-05-16 : Update README.md
+Marcos Quintero, 2022-05-16 : Merge pull request #13 from marcosq01/functions
+Marcos Quintero, 2022-05-16 : llamada a funciones bien
+karenrios22, 2022-05-16 : function calls
+Marcos Quintero, 2022-05-16 : Merge pull request #12 from marcosq01/modules
+Marcos Quintero, 2022-05-16 : function declaration
+Karen Rios, 2022-05-08 : Update README.md
+Karen Rios, 2022-05-08 : Update README.md
+Marcos Quintero, 2022-05-08 : Merge pull request #9 from marcosq01/delete_prints
+Marcos Quintero, 2022-05-08 : borrar prints innecesarios
+Marcos Quintero, 2022-05-05 : conflicts
+Marcos Quintero, 2022-05-05 : Merge pull request #8 from marcosq01/funciones
+karenrios22, 2022-05-05 : Merge remote-tracking branch 'origin/condicionales' into funciones
+karenrios22, 2022-05-05 : Add constants to the table
+karenrios22, 2022-05-05 : save parameter types on the function directory
+Karen Rios, 2022-05-05 : Merge pull request #7 from marcosq01/condicionales
+karenrios22, 2022-05-05 : Create quadruples for while stmnt
+karenrios22, 2022-05-05 : if quadruples implemented
+Karen Rios, 2022-05-05 : Merge pull request #6 from marcosq01/expressions
+karenrios22, 2022-05-05 : Generate quadruples for simple expressions
+karenrios22, 2022-05-04 : start generating first quadruples
+Marcos Quintero, 2022-05-03 : Merge pull request #1 from marcosq01/marcos
+Marcos Quintero, 2022-05-03 : direcciones virtuales
+Marcos Quintero, 2022-05-03 : update readme
+Marcos Quintero, 2022-05-03 : sin conflicts shift/reduce y tablas de simbolos terminados
+Marcos Quintero, 2022-05-01 : carpeta ply
+Marcos Quintero, 2022-05-01 : acomodar directorios
+Marcos Quintero, 2022-05-01 : gitignore added
+Marcos Quintero, 2022-05-01 : algunas variables globales anadidas
+Marcos Quintero, 2022-05-01 : muchos conflictos shift reduce resueltos (aun quedan 3)
+Marcos Quintero, 2022-05-01 : archivos borrados de antlr
+Marcos Quintero, 2022-05-01 : directorio de funciones creado
+Marcos Quintero, 2022-05-01 : lexer creado
+Marcos Quintero, 2022-05-01 : parser creado
+Marcos Quintero, 2022-05-01 : clase cuadruplo anadida
+Marcos Quintero, 2022-05-01 : tabla de variables anadida
+Marcos Quintero, 2022-05-01 : stack fix
+Marcos Quintero, 2022-05-01 : cubo semantico fix
+Marcos Quintero, 2022-04-28 : tests folder
+Marcos Quintero, 2022-04-28 : stack added
+Karen Rios, 2022-04-24 : Update README.md
+karenrios22, 2022-04-24 : Fix access to array values in grammar
+Marcos Quintero, 2022-04-24 : modif cubo
+Marcos Quintero, 2022-04-24 : modif cubo
+Marcos Quintero, 2022-04-24 : cubo semantico
+Marcos Quintero, 2022-04-13 : fix expresion
+Marcos Quintero, 2022-04-13 : Update bubbaGrammar.g4
+karenrios22, 2022-04-13 : Add comments to the test file
+karenrios22, 2022-04-13 : Add option to ignore comments
+karenrios22, 2022-04-13 : Create the parser and test files
+Marcos Quintero, 2022-04-13 : Create test4.txt
+Karen Rios, 2022-04-13 : Update README.md
+Marcos Quintero, 2022-04-13 : Create README.md
+Marcos Quintero, 2022-04-12 : Initial commit
