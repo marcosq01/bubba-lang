@@ -207,20 +207,19 @@ def p_var_id(p):
                | ID DOT ID x_object_attribute
     '''
     p[0]=p[1]
-    if len(p > 2):
+    if len(p) > 2:
         # pasar una tupla con id variable y id atributo
         p[0] = (p[1], p[3])
 
 
 
 def p_x_object_attribute(p):
-    'x_object_attrbute :'
+    'x_object_attribute :'
 
     # se descompone la tupla
     var_name, attr_name = p[-1]
 
     # primero se checa que exista la variable y que sea objeto
-    if 
 
 
     # despues se checa que ese objeto tenga ese atributo
