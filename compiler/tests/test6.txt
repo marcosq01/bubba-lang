@@ -18,6 +18,7 @@ class B {
 
 vars {
     int : A[10], i;
+    B : globalb;
 }
 func void ff(int : x) {
     vars {
@@ -32,7 +33,7 @@ func void ff(int : x) {
 
 func int f() {
     vars {
-        A : aa;
+        A : aa, aaaa;
         int : xxx;
         float : fffff;
     }

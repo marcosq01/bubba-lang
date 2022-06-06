@@ -204,9 +204,26 @@ def p_var(p):
 def p_var_id(p):
     '''
         var_id : ID
-               | ID DOT ID
+               | ID DOT ID x_object_attribute
     '''
     p[0]=p[1]
+    if len(p > 2):
+        # pasar una tupla con id variable y id atributo
+        p[0] = (p[1], p[3])
+
+
+
+def p_x_object_attribute(p):
+    'x_object_attrbute :'
+
+    # se descompone la tupla
+    var_name, attr_name = p[-1]
+
+    # primero se checa que exista la variable y que sea objeto
+    if 
+
+
+    # despues se checa que ese objeto tenga ese atributo
 
 
 def p_var_brackets(p):
@@ -633,15 +650,19 @@ def p_x_declare_variable(p):
             obj_ctx.is_object = True
 
             obj_attrs = obj_ctx.obj_attributes
-
+            current_function.local_object_attr_counter += cl.int_count + cl.float_count + cl.string_count
             for a in cl_attrs:
                 x_attr = cl_attrs[a]
-                x_attr_address = addr_manager.get_local_object_attr(1)
+                if t_func == 'program':
+                    x_attr_address = addr_manager.get_global_object_attr(1)
+                else:
+                    
+                    x_attr_address = addr_manager.get_local_object_attr(1)
+                print("ADDRESSSSSS", x_attr_address)
                 at = Attribute(x_attr.name, x_attr.type, x_attr_address)
                 obj_attrs[a] = at
 
             var = obj_ctx
-            print("VAARRRRRR", var.__dict__)
 
         current_vars_table.insert_var(var)
     
