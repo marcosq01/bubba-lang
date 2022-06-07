@@ -167,9 +167,18 @@ while (expresion) {
 }
 ```
 
+##### for
+La estructura de ```for``` es la siguiente:
+
+```
+for VAR in FACTORVAL .. expresion step FACTORVAL {[estatutos]}
+}
+```
+Donde  ```FACTORVAL ``` puede ser ```(expresion)``` , ```llamada```, ```VAR``` o ```ID.ID```
+
 #### Llamadas a funciones
 
-Puede haber llamadas a funciones como estatutos. No es necesario que la función sea ```void```.
+Puede haber llamadas a funciones como estatutos. No es necesario que la función sea ```void```
 
 La estructura es la siguiente:
 
