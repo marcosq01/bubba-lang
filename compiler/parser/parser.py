@@ -1,3 +1,5 @@
+from inspect import currentframe
+from numpy import var
 from parser.tools.semantics.constants_table import Constant, ConstantsTable
 
 from parser.ply import yacc
@@ -98,8 +100,8 @@ def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
     # function_directory.print()
 
-    # for i in range(len(quadruples)):
-    #     print(i, quadruples[i].__dict__)
+    for i in range(len(quadruples)):
+        print(i, quadruples[i].__dict__)
     # for i in constants_table.table:
     #     print(constants_table.table[i].__dict__)
     # class_directory.print()
@@ -145,23 +147,124 @@ def p_whiler(p):
     pass
 
 def p_forr(p):
-    'forr : FOR foraux TO foraux foraux2 LBRACE stmts RBRACE'
+    'forr : FOR var x_exists_for_var IN factor_val x_for_init_value DDOT x_for_start expression x_cond_for STEP factor_val x_save_for_increment LBRACE stmts RBRACE x_for_end'
     pass
 
-def p_foraux(p):
-    '''
-        foraux : VINTEGER
-               | ID
-    '''
-    pass
 
-def p_foraux2(p):
-    '''
-        foraux2 : STEP
-                | foraux
-                | empty
-    '''
-    pass
+# esta cosa guarda una tupla (var, step)
+for_var_stack = Stack()
+var_for = None
+
+def p_x_exists_for_var(p):
+    'x_exists_for_var :'
+    
+    # la variable esta en top de los stacks
+
+    var_addr = operands_stack.pop()
+    var_type = types_stack.pop()
+
+    if var_type != 'int':
+        Error("Variable de for debe ser tipo int.")
+
+
+    global var_for
+    var_for = var_addr
+
+
+def p_x_for_init_value(p):
+    'x_for_init_value :'
+
+    c = p[-1]
+
+    init_addr = operands_stack.pop()
+    init_type = types_stack.pop()
+
+    if init_type != 'int':
+        Error("Valor inicial de variable de for deber ser int")
+
+    
+    
+    # generar cuadruplo de asignacion a la var de for
+
+    q = Quadruple('=', init_addr, None, var_for)
+    quadruples.append(q)
+
+
+def p_x_for_start(p):
+    'x_for_start :'
+    jumps_stack.push(len(quadruples))
+
+
+def p_x_cond_for(p):
+    'x_cond_for :'
+
+    # generar cuadruplo de <=
+
+    expr_addr = operands_stack.pop()
+    expr_t = types_stack.pop()
+
+    if expr_t != 'int':
+        Error("Expresion de condicion de for debe ser int.")
+
+
+    temp_addr = addr_manager.get_temp_int(1)
+    current_function.temp_int_counter += 1
+
+    q = Quadruple('<=', var_for, expr_addr, temp_addr)
+    quadruples.append(q)
+
+    quadruples.append(Quadruple("gotof", temp_addr, None, None))
+    jumps_stack.push(len(quadruples) - 1)
+
+
+def p_x_save_for_increment(p):
+    'x_save_for_increment :'
+    c = p[-1]
+    # checamos si tenemos la constante
+    # if not constants_table.has_constant(c):
+    #     const_addr = addr_manager.get_const_int(1)
+    #     constants_table.add_constant(c, const_addr)
+    # else:
+    #     const_c = constants_table.get_constant(c)
+    #     const_addr = const_c.address
+
+
+    inc_addr = operands_stack.pop()
+    inc_type = types_stack.pop()
+
+    if inc_type != 'int':
+        Error("Incremento de variable de for debe ser tipo int.")
+
+    
+
+    # guardar el address del step
+
+    for_var_stack.push((var_for, inc_addr))
+
+
+def p_x_for_end(p):
+    'x_for_end :'
+    (var_addr, step_addr) = for_var_stack.pop()
+
+
+
+    global var_for
+    var_for = var_addr
+
+    # generar el cuadruplo de incremento a la var del for
+
+    q_inc = Quadruple('+', var_addr, step_addr, var_addr)
+    quadruples.append(q_inc)
+    # sacamos el salto
+
+    end = jumps_stack.pop()
+    return_for = jumps_stack.pop()
+
+    quadruples.append(Quadruple("goto", None, None, return_for))
+    q = quadruples[end]
+    q.set_result(len(quadruples))
+
+
 
 def p_statement(p):
     '''
@@ -1505,10 +1608,7 @@ def p_x_generate_not_quad(p):
     elif t == 'float':
         Error("No se puede aplicar el operador ! en floats.")
 
-    print("XDDDDD")
     q = Quadruple('-', None, op, addr)
-    quadruples.append(q)
-    print(q.__dict__)
     operands_stack.push(addr)
     types_stack.push(t)
 

@@ -28,7 +28,8 @@ reserved = {
     'func' : 'FUNC',
     'void' : 'VOID',
     'input' : 'INPUT',
-    'to' : 'TO'
+    'to' : 'TO',
+    'in' : 'IN'
 }
 
 tokens = [
@@ -76,7 +77,9 @@ tokens = [
     'ID',
 
     # comment lines
-    'COMMENT'
+    'COMMENT',
+
+    'DDOT'
 ] + list(reserved.values())
 
 
@@ -106,7 +109,7 @@ t_OR = r'\|\|'
 t_NOT = r'!'
 t_EQEQUAL = r'=='
 t_NOTEQUAL = r'!='
-
+t_DDOT = r'\.\.'
 
 
 # para comentarios

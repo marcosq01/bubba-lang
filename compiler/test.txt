@@ -1,7 +1,7 @@
 prog Factorial:
 
 vars {
-    int : recursive, iterative, n;
+    int : recursive, iterative, n, x, y, z, a;
 }
 
 func int factorialRecursion(int : n) {
@@ -29,9 +29,13 @@ func int factorialIterative(int : n) {
 }
 
 main() {
-    input(n);
-    iterative = factorialIterative(n);
-    recursive = factorialRecursion(n);
-    print(iterative);
-    print(recursive);
+    y = 1;
+    n = 4;
+    a = 2;
+    for x in 1..n+1 step y {
+        for z in 1..6 step a {
+            print(z);
+        }
+        print("-----");
+    }
 }
