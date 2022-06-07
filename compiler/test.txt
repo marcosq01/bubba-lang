@@ -1,41 +1,34 @@
-prog Factorial:
+prog clases:
+
+
+class Animal {
+    attributes {
+        int : edad;
+        string : sonido;
+    }
+};
+
+
+class Perro extends Animal {
+    attributes {
+        int : numColmillos;
+    }
+};
 
 vars {
-    int : recursive, iterative, n, x, y, z, a;
-}
-
-func int factorialRecursion(int : n) {
-    if (n <= 1) {
-        return 1;
-    };
-    return n * factorialRecursion(n - 1);
-}
-
-
-func int factorialIterative(int : n) {
-    vars {
-        int : i, res;
-    }
-
-    i = 1;
-    res = 1;
-
-    while (i <= n) {
-        res = res * i;
-        i = i + 1;
-    }
-
-    return res;
+    Perro : supercan;
 }
 
 main() {
-    y = 1;
-    n = 4;
-    a = 2;
-    for x in 1..n+1 step y {
-        for z in 1..6 step a {
-            print(z);
-        }
-        print("-----");
-    }
+    supercan.edad = 100;
+    supercan.sonido = "guau";
+    supercan.numColmillos = 20 * 2;
+
+    print(supercan.edad);
+    print("\n");
+    print(supercan.sonido);
+    print("\n");
+    print(supercan.numColmillos);
+    print("\n");
+
 }

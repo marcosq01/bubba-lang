@@ -230,7 +230,10 @@ class VirtualMachine:
 
             elif quad.op == 'print':
                 val = self.get_value_from_address(quad.result)
-                print(val)
+                if val == "\\n":
+                    print()
+                else:
+                    print(val, end="")
                 self.ip += 1
             
             elif quad.op == 'input':

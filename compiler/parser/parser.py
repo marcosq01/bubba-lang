@@ -100,8 +100,8 @@ def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
     # function_directory.print()
 
-    for i in range(len(quadruples)):
-        print(i, quadruples[i].__dict__)
+    # for i in range(len(quadruples)):
+    #     print(i, quadruples[i].__dict__)
     # for i in constants_table.table:
     #     print(constants_table.table[i].__dict__)
     # class_directory.print()
@@ -220,14 +220,8 @@ def p_x_cond_for(p):
 def p_x_save_for_increment(p):
     'x_save_for_increment :'
     c = p[-1]
-    # checamos si tenemos la constante
-    # if not constants_table.has_constant(c):
-    #     const_addr = addr_manager.get_const_int(1)
-    #     constants_table.add_constant(c, const_addr)
-    # else:
-    #     const_c = constants_table.get_constant(c)
-    #     const_addr = const_c.address
 
+    # guardar incremento y variable del for
 
     inc_addr = operands_stack.pop()
     inc_type = types_stack.pop()
