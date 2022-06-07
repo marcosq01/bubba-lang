@@ -1,5 +1,4 @@
-
-prog x:
+prog bubba:
 
 class A {
     attributes {
@@ -20,11 +19,22 @@ vars {
     A : aa;
 }
 
+func int suma(int : a, int : b) {
+
+    if (a > 0) {
+        return a + b;
+    };
+   
+    return b;
+
+}
+
+
 main() {
     bb.a = 10;
     bb.s = "hola desde b";
     aa.a = 50;
-    print(!0);
     print(bb.a);
     print(aa.a * 1000);
+    print(suma(bb.a + aa.a);
 }

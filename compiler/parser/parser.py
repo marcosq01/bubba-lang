@@ -97,13 +97,12 @@ prog_name = None
 def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
     # function_directory.print()
-    print("    OPERATION   LEFT                  RIGHT          RESULT")    
 
-    for i in range(len(quadruples)):
-        print(i, quadruples[i].__dict__)
+    # for i in range(len(quadruples)):
+    #     print(i, quadruples[i].__dict__)
     # for i in constants_table.table:
     #     print(constants_table.table[i].__dict__)
-    class_directory.print()
+    # class_directory.print()
 
 def p_paux(p):
     '''
@@ -698,9 +697,6 @@ def p_x_declare_variable(p):
             # si es una declaracion de objeto....
 
             # obtenemos primero la clase y el dict de attributes
-            print("TVAR" , t_var)
-            print(class_directory.__dict__)
-            class_directory.print()
             cl = class_directory.get_class(t_var)
             cl_attrs = cl.attributes
 
@@ -1510,7 +1506,7 @@ def p_x_generate_not_quad(p):
         Error("No se puede aplicar el operador ! en floats.")
 
     print("XDDDDD")
-    q = Quadruple('!', None, op, addr)
+    q = Quadruple('-', None, op, addr)
     quadruples.append(q)
     print(q.__dict__)
     operands_stack.push(addr)
