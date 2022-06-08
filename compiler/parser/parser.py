@@ -658,7 +658,7 @@ def p_call_id(p):
 def p_args(p):
     '''
         args : expression x_check_parameters
-             | expression x_check_parameters COMMA args
+             | args COMMA expression x_check_parameters
     '''
     pass
 
@@ -1199,20 +1199,25 @@ def p_x_add_endfunc(p):
 def p_x_verify_func(p):
     'x_verify_func :'
     if function_directory.has_function(p[-1]):
+
         global current_function_call_name
-        global function_args_pointer
+        global function_args_pointer, args_pointer_stack
         function_args_pointer = 0
         current_function_call_name = p[-1]
 
         # se agrega el nombre al stack de llamadas
         call_stack.push(p[-1])
+        args_pointer_stack.push(function_args_pointer)
         quadruples.append(Quadruple('era', None, None, p[-1]))
     else:
         Error("Función no existe")
 
+args_pointer_stack = Stack()
+
 def p_x_check_parameters(p):
     'x_check_parameters :'
-    global function_args_pointer
+    global function_args_pointer, args_pointer_stack
+    function_args_pointer = args_pointer_stack.pop()
     argument= operands_stack.pop()
     argumentType= types_stack.pop()
     f = function_directory.search_function(current_function_call_name)
@@ -1224,13 +1229,15 @@ def p_x_check_parameters(p):
         addr = p_a[function_args_pointer]
         quadruples.append(Quadruple('parameter', argument, None, addr))
         function_args_pointer +=1
+        args_pointer_stack.push(function_args_pointer)
+
     else:
         Error("Tipos incompatibles en llamada a funcion \"" + f.name + "\"")
 
 def p_x_points_null(p):
     'x_points_null :'
     f = function_directory.search_function(current_function_call_name)
-    if not function_args_pointer >= len(f.signature):
+    if function_args_pointer != len(f.signature):
         Error("Numero de argumentos inconsistente en llamada a funcion \"" + f.name + "\"")
     quadruples.append(Quadruple('gosub', current_function_call_name, None,f.initial_address))
 
@@ -1634,6 +1641,8 @@ def p_x_pop_par(p):
 
 def p_x_push_call_value(p):
     'x_push_call_value :'
+    global args_pointer_stack
+    args_pointer_stack.pop()
     global_func = function_directory.search_function(prog_name)
     global_vars_table = global_func.get_vars_table()
 
