@@ -454,12 +454,14 @@ def p_funcr(p):
 
 def p_x_add_attributes(p):
     'x_add_attributes :'
+    if current_class:
 
-    attrs = current_class.attributes
+      attrs = current_class.attributes
+      
+  
+      for attr in attrs:
+          declare_variable(attrs[attr].name, attrs[attr].type)
 
-    for attr in attrs:
-        declare_variable(attrs[attr].name, attrs[attr].type)
-    
 
 def p_params(p):
     '''
@@ -492,6 +494,10 @@ def p_x_set_false_class(p):
     'x_set_false_class :'
     global in_class
     in_class = False
+    global current_class
+    current_class = None
+    global current_function
+    current_function = function_directory.search_function(prog_name)
 
 def p_methods(p):
     '''
@@ -590,7 +596,6 @@ def p_attr_dec(p):
 def p_x_declare_attr(p):
     'x_declare_attr :'
     attr_name = p[-1]
-
 
     # revisar que si existe el atributo 
     if current_class.has_attribute(attr_name):
@@ -791,6 +796,7 @@ def declare_variable(var_name, var_type):
         # del directorio sacar el tipo
         t_func = current_function.type
         t_var = var_type
+
         # estas son las globales
         if t_var in ['int', 'float', 'string']:
             if t_func == 'program':
@@ -828,6 +834,7 @@ def declare_variable(var_name, var_type):
 
             # obtenemos primero la clase y el dict de attributes
             cl = class_directory.get_class(t_var)
+        
             cl_attrs = cl.attributes
 
             # tendremos que asignar direcciones a cada uno de los atributos
@@ -850,7 +857,7 @@ def declare_variable(var_name, var_type):
             var = obj_ctx
 
         current_vars_table.insert_var(var)
-    
+      
     global current_var
     current_var = var
 
@@ -1329,7 +1336,6 @@ def p_x_verify_func(p):
         func = function_directory.search_function(func_name)
         global_func = function_directory.search_function(prog_name)
         global_vars_table = global_func.get_vars_table()
-        print(var_name)
 
         if current_vars_table.has_var(var_name):
             var = current_vars_table.search_var(var_name)
