@@ -1,4 +1,5 @@
-from inspect import currentframe
+
+
 from numpy import var
 from parser.tools.semantics.constants_table import Constant, ConstantsTable
 
@@ -98,7 +99,7 @@ prog_name = None
 
 def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
-    # function_directory.print()
+    function_directory.print()
 
     # for i in range(len(quadruples)):
     #     print(i, quadruples[i].__dict__)
@@ -446,12 +447,18 @@ def p_expression(p):
 
 def p_funcr(p):
     '''
-        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc 
-              | FUNC func_type x_set_current_function_type ID x_insert_new_function LPAR x_set_true_params params x_set_false_params RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
+        funcr : FUNC func_type x_set_current_function_type ID x_insert_new_function x_add_attributes LPAR RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc 
+              | FUNC func_type x_set_current_function_type ID x_insert_new_function x_add_attributes LPAR x_set_true_params params x_set_false_params RPAR x_func_init_addr LBRACE body RBRACE x_add_endfunc
     '''
     pass
 
+def p_x_add_attributes(p):
+    'x_add_attributes :'
 
+    attrs = current_class.attributes
+
+    for attr in attrs:
+        declare_variable(attrs[attr].name, attrs[attr].type)
     
 
 def p_params(p):
@@ -470,18 +477,44 @@ def p_func_type(p):
     '''
     p[0] = p[1]
 
+
+
+in_class = False
+
 def p_classr(p):
     '''
-    classr : CLASS ID x_insert_new_class LBRACE attributes RBRACE SEMICOLON
-           | CLASS ID x_insert_new_class EXTENDS ID x_inherit_attrs LBRACE attributes RBRACE SEMICOLON
+    classr : CLASS ID x_insert_new_class LBRACE attributes methods RBRACE SEMICOLON x_set_false_class
+           | CLASS ID x_insert_new_class EXTENDS ID x_inherit_attrs LBRACE attributes methods RBRACE SEMICOLON x_set_false_class
     '''
     pass
+
+def p_x_set_false_class(p):
+    'x_set_false_class :'
+    global in_class
+    in_class = False
+
+def p_methods(p):
+    '''
+        methods : methods_a
+                | empty 
+    '''
+    pass
+
+def p_methods_a(p):
+    '''
+        methods_a : funcr
+                  | methods_a funcr
+    '''
+    pass
+
+
 
 
 def p_x_insert_new_class(p):
     'x_insert_new_class :'
     class_name = p[-1]
-
+    global in_class
+    in_class = True
     # revisar si existe la clase
     if class_directory.has_class(class_name):
         Error("Clase \"" + class_name + "\" ya existe.")
@@ -653,7 +686,10 @@ def p_call_id(p):
         call_id : ID
                 | ID DOT ID
     '''
-    p[0]=p[1]
+    if len(p) > 2:
+        p[0] = (p[1], p[3]) 
+    else:
+        p[0]=p[1]
 
 def p_args(p):
     '''
@@ -739,6 +775,86 @@ def p_x_var_dec_set_curr_type(p):
     global current_type_var_declaration
     current_type_var_declaration = p[-1]
 
+def declare_variable(var_name, var_type):
+    global current_var_name
+    current_var_name = var_name
+    # Esto por mientras es para variables que no son arreglos
+    # Tenemos que buscar la variable en la tabla de variables actual
+    # Si ya existe, marcamos error
+    if current_vars_table.has_var(var_name):
+        Error("Variable doblemente declarada.")
+    elif current_function.name == var_name:
+        Error("Variable "+var_name+ " no se puede llamar igual que la función.")
+    else:
+        # Ponemos la variable en la tabla de variables
+        addr = None
+        # del directorio sacar el tipo
+        t_func = current_function.type
+        t_var = var_type
+        # estas son las globales
+        if t_var in ['int', 'float', 'string']:
+            if t_func == 'program':
+                if t_var == 'int':
+                    addr = addr_manager.get_global_int(1)
+                    current_function.local_int_counter += 1
+                elif t_var == 'float':
+                    addr = addr_manager.get_global_float(1)
+                    current_function.local_float_counter += 1
+                elif t_var == 'string':
+                    current_function.local_string_counter += 1
+                    addr = addr_manager.get_global_string(1)
+
+            # estas son las locales
+            else:
+
+                if t_var == 'int':
+                    addr = addr_manager.get_local_int(1)
+                    current_function.local_int_counter += 1
+
+                elif t_var == 'float':
+                    addr = addr_manager.get_local_float(1)
+                    current_function.local_float_counter += 1
+                elif t_var == 'string':
+                    addr = addr_manager.get_local_string(1)
+                    current_function.local_string_counter += 1
+                if in_params:
+                    params_addresses = current_function.params_addresses
+                    params_addresses.append(addr)
+            var = VariableContext(var_name, current_type_var_declaration, addr) 
+
+
+        else:
+            # si es una declaracion de objeto....
+
+            # obtenemos primero la clase y el dict de attributes
+            cl = class_directory.get_class(t_var)
+            cl_attrs = cl.attributes
+
+            # tendremos que asignar direcciones a cada uno de los atributos
+            # y poner esos atributos en el var_context del objeto
+            obj_ctx = VariableContext(var_name, t_var, None)
+            obj_ctx.is_object = True
+
+            obj_attrs = obj_ctx.obj_attributes
+            current_function.local_object_attr_counter += cl.int_count + cl.float_count + cl.string_count
+            for a in cl_attrs:
+                x_attr = cl_attrs[a]
+                if t_func == 'program':
+                    x_attr_address = addr_manager.get_global_object_attr(1)
+                else:
+                    
+                    x_attr_address = addr_manager.get_local_object_attr(1)
+                at = Attribute(x_attr.name, x_attr.type, x_attr_address)
+                obj_attrs[a] = at
+
+            var = obj_ctx
+
+        current_vars_table.insert_var(var)
+    
+    global current_var
+    current_var = var
+
+ 
 
 def p_x_declare_variable(p):
     'x_declare_variable :'
@@ -849,9 +965,11 @@ def p_x_insert_new_function(p):
     global current_vars_table
     global current_function
     current_vars_table = VarsTable()
-    current_function = FunctionContext(func_name, current_function_type, current_vars_table)
+    current_function = FunctionContext(func_name, current_function_type, current_vars_table, )
     function_directory.insert_function(current_function)
 
+    if in_class:
+        current_function.class_ = current_class.name
     # declarar la variable global si no es void
     if current_function_type != 'void':
 
@@ -1196,19 +1314,50 @@ def p_x_add_endfunc(p):
         Error("La función no regresa ningún valor")
     quadruples.append(Quadruple('endfunc', None, None, None))
 
+
 def p_x_verify_func(p):
     'x_verify_func :'
-    if function_directory.has_function(p[-1]):
+
+    if isinstance(p[-1], tuple):
+        func_name = p[-1][1]
+        var_name = p[-1][0]
+        # verificar que el objeto sea de la misma clase que la clase del metodo
+
+        if not function_directory.has_function(func_name):
+            Error("no existe")
+
+        func = function_directory.search_function(func_name)
+        global_func = function_directory.search_function(prog_name)
+        global_vars_table = global_func.get_vars_table()
+        print(var_name)
+
+        if current_vars_table.has_var(var_name):
+            var = current_vars_table.search_var(var_name)
+        elif global_vars_table.has_var(var_name):
+            var = global_vars_table.search_var(var_name)
+        else:
+            global_vars_table.print()
+            current_vars_table.print()
+            Error("No existe ese objeto")
+
+        if func.class_ != var.type:
+            Error("La variable no tiene ese metodo")
+        
+
+
+    else:
+        func_name = p[-1]
+    if function_directory.has_function(func_name):
 
         global current_function_call_name
         global function_args_pointer, args_pointer_stack
         function_args_pointer = 0
-        current_function_call_name = p[-1]
+        current_function_call_name = func_name
 
         # se agrega el nombre al stack de llamadas
         call_stack.push(p[-1])
         args_pointer_stack.push(function_args_pointer)
-        quadruples.append(Quadruple('era', None, None, p[-1]))
+        quadruples.append(Quadruple('era', None, None, func_name))
     else:
         Error("Función no existe")
 

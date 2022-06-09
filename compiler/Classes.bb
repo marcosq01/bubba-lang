@@ -6,10 +6,6 @@ class Animal {
         int : edad;
         string : sonido;
     }
-
-    func int ff() {
-        return 0;
-    }
 };
 
 
@@ -17,28 +13,10 @@ class Perro extends Animal {
     attributes {
         int : numColmillos;
     }
-    func int gg() {
-        return 1;
-    }
 };
 
 vars {
     Perro : supercan;
-    int : a;
-}
-
-
-func int f(int : x) {
-    return x;
-}
-
-
-func int g(int : x) {
-    return x;
-}
-
-func int h(int : x, int : y) {
-    return x + y;
 }
 
 main() {
@@ -46,8 +24,12 @@ main() {
     supercan.sonido = "guau";
     supercan.numColmillos = 20 * 2;
 
-    a = f(2 + g(h(f(2), 3)) + 1);
-    print(a);
+    print(supercan.edad);
+    print("\n");
+    print(supercan.sonido);
+    print("\n");
+    print(supercan.numColmillos);
     print("\n");
 
 }
+
