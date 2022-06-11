@@ -99,7 +99,7 @@ prog_name = None
 
 def p_program(p):
     'program : PROG ID x_add_prog_to_funcdir COLON paux program_vars program_funcs'
-    function_directory.print()
+  
 
     # for i in range(len(quadruples)):
     #     print(i, quadruples[i].__dict__)
@@ -1342,14 +1342,18 @@ def p_x_verify_func(p):
         elif global_vars_table.has_var(var_name):
             var = global_vars_table.search_var(var_name)
         else:
-            global_vars_table.print()
-            current_vars_table.print()
+           
             Error("No existe ese objeto")
 
         if func.class_ != var.type:
             Error("La variable no tiene ese metodo")
-        
 
+        xs = var.obj_attributes
+        for x in xs:
+          fv=func.vars_table.search_var(x)
+          quadruples.append(Quadruple('=',xs[x].address, None, fv.address))
+          
+        
 
     else:
         func_name = p[-1]

@@ -7,8 +7,7 @@ class A {
     }
 
     func int f(int : x) {
-        osr =3;
-        return x * osr;
+        return x * 3;
     }
 };
 
@@ -21,15 +20,18 @@ func int pelos(int : cabello) {
 }
 
 func int patito(int : pato, int : pata) {
+
     return pelos(pato + pata) * 2;
 }
 
 
 main() {
+    a.osr=6;
     print(a.f(3));
     print("\n");
     print(a.f(3)*b.f(2));
     print("\n");
     print(b.f(2));
     print("\n");
+    print(a.osr);
 }
