@@ -21,6 +21,7 @@ class FunctionContext:
         self.local_float_counter = 0
         self.local_string_counter = 0
         self.local_object_attr_counter = 0
+        self.class_ = None
     
     def get_vars_table(self):
         return self.vars_table
@@ -67,7 +68,7 @@ class FunctionDirectory:
             print("Temp int", self.directory[f].temp_int_counter)
             print("Temp float", self.directory[f].temp_float_counter)
             print("Temp string", self.directory[f].temp_string_counter)
-
+            print("Class",self.directory[f].class_ )
             # print tabla variables
             self.directory[f].vars_table.print()
             print(" ")

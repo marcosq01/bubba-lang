@@ -1,0 +1,37 @@
+prog profe:
+
+class A {
+
+    attributes { 
+        int : osr;
+    }
+
+    func int f(int : x) {
+        return x * 3;
+    }
+};
+
+vars {
+    A : a,b;
+}
+
+func int pelos(int : cabello) {
+    return cabello * 2;
+}
+
+func int patito(int : pato, int : pata) {
+
+    return pelos(pato + pata) * 2;
+}
+
+
+main() {
+    a.osr=6;
+    print(a.f(3));
+    print("\n");
+    print(a.f(3)*b.f(2));
+    print("\n");
+    print(b.f(2));
+    print("\n");
+    print(a.osr);
+}
