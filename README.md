@@ -55,6 +55,10 @@ class NOMBRE_CLASE {
     TIPO_SIMPLE_1 : ATRIBUTO_1;
     TIPO_SIMPLE_2 : ATRIBUTO_2, ATRIBUTO_3, ...;
   }
+  func TIPO_RETORNO NOMBRE_FUNCION (TIPO_PARAMETRO : NOMBRE_PARAMETRO_1, ...) {
+    [variables locales]
+    [estatutos]
+ }
 };
 ```
 
@@ -65,6 +69,8 @@ class A extends B {
  ...
 };
 ```
+
+Las clases soportan métodos pero sin modificar atributos del objeto.
 
 ### Declaración de variables (sirve para locales tambien)
 
